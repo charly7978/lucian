@@ -1,0 +1,16 @@
+REPARAR Y ABRIR LUCIAN DE PRUEBA (GitHub PR #5)
+=================================================
+1. Extrae este ZIP donde quieras (NO dentro de LUCIAN-LISTO).
+2. Ejecuta REPARAR-Y-ABRIR-PRUEBA.cmd.
+3. El reparador detecta la copia ya descargada en Descargas.
+4. Hace una copia de seguridad del archivo server.mjs de PRUEBA.
+5. Corrige solo la importacion duplicada de generateJson.
+6. Comprueba sintaxis y pruebas comerciales ANTES de abrir la app.
+7. Abre http://127.0.0.1:48621.
+8. En Ventas entra a Director Comercial IA.
+
+NO re-descarga todo, NO cambia LUCIAN-LISTO, NO altera data, ni
+claves, correos o productos del Lucian habitual.
+
+La PR #5 en GitHub ya contiene la correccion para descargas nuevas.
+No fusionar el PR sin pruebas completas: GitHub Actions no obtuvo runner.

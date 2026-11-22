@@ -1,0 +1,19 @@
+LUCIAN V8.1.2 - CORRECCION DE DEPENDENCIA DE PRUEBA
+
+Este parche arregla el error ERR_MODULE_NOT_FOUND de lib/outreach-audit.mjs
+que podia aparecer al instalar V8.1 en versiones anteriores a V8.
+
+PASOS:
+1. Cerrá las ventanas negras del servidor Lucian.
+2. Extraé COMPLETAMENTE este ZIP.
+3. Ejecutá ACTUALIZAR-LUCIAN.cmd desde la carpeta extraída.
+4. Seleccioná tu INICIAR-LUCIAN.cmd habitual.
+5. Comprobá que detecte al menos las 33 lámparas y confirmá SI.
+
+No instala otra copia, ni borra data, ni envía mensajes comerciales.
+Se respalda el código modificado y se revierte si falla alguna prueba.
+Las pruebas de Resend están diseñadas para funcionar SIN outreach-audit.mjs.
+No reinstales V8 ni agregues manualmente outreach-audit.mjs.
+
+Después: reiniciá Lucian y abrí Ventas > Comprobar entregas en Resend.
+Requiere una clave Resend real con permisos para consultar correos.

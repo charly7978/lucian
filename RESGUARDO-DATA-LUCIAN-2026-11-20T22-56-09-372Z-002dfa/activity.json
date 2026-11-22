@@ -1,0 +1,4596 @@
+[
+  {
+    "id": "act_0e4187073db6",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T22:36:14.149Z"
+  },
+  {
+    "id": "act_5c5bc3a05145",
+    "type": "mission",
+    "text": "Misión iniciada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_7daf49d1b347",
+      "demo": false
+    },
+    "at": "2026-11-20T22:07:18.867Z"
+  },
+  {
+    "id": "act_875f106a95d3",
+    "type": "mission",
+    "text": "Misión reintentada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_7daf49d1b347"
+    },
+    "at": "2026-11-20T22:07:18.772Z"
+  },
+  {
+    "id": "act_5c04c0ecca28",
+    "type": "mission",
+    "text": "Misión con error: Siri - Lámpara de techo · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_7daf49d1b347",
+      "demo": false
+    },
+    "at": "2026-11-20T21:29:36.795Z"
+  },
+  {
+    "id": "act_56acb263c2d4",
+    "type": "mission",
+    "text": "Misión iniciada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_7daf49d1b347",
+      "demo": false
+    },
+    "at": "2026-11-20T21:29:18.750Z"
+  },
+  {
+    "id": "act_276a497ab691",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_7363602bb8b5",
+      "demo": false
+    },
+    "at": "2026-11-20T21:29:18.202Z"
+  },
+  {
+    "id": "act_4cf4c339ee3d",
+    "type": "mission",
+    "text": "Misión con error: MIZU Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_e93dddb935ab",
+      "demo": false
+    },
+    "at": "2026-11-20T21:29:17.602Z"
+  },
+  {
+    "id": "act_4b15c913ef07",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_7363602bb8b5",
+      "demo": false
+    },
+    "at": "2026-11-20T21:29:00.151Z"
+  },
+  {
+    "id": "act_8c41ccf6cab3",
+    "type": "mission",
+    "text": "Misión iniciada: MIZU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_e93dddb935ab",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:59.573Z"
+  },
+  {
+    "id": "act_34e7d511fc8f",
+    "type": "mission",
+    "text": "Misión con error: IONIX Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_0fab65c7320a",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:59.292Z"
+  },
+  {
+    "id": "act_db21767a216f",
+    "type": "mission",
+    "text": "Misión con error: NEGELE - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_411da066f8b1",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:58.424Z"
+  },
+  {
+    "id": "act_274685772653",
+    "type": "mission",
+    "text": "Misión iniciada: IONIX Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_0fab65c7320a",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:41.246Z"
+  },
+  {
+    "id": "act_cc1fa0ad9294",
+    "type": "mission",
+    "text": "Misión iniciada: NEGELE - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_411da066f8b1",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:40.394Z"
+  },
+  {
+    "id": "act_084b2f14292f",
+    "type": "mission",
+    "text": "Misión con error: AWASA - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_3ae7c8e7aaa4",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:40.368Z"
+  },
+  {
+    "id": "act_946b3d0e783f",
+    "type": "mission",
+    "text": "Misión con error: TEPI - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_812c3a23906b",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:39.546Z"
+  },
+  {
+    "id": "act_ee5f69a2e11c",
+    "type": "mission",
+    "text": "Misión iniciada: AWASA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_3ae7c8e7aaa4",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:22.322Z"
+  },
+  {
+    "id": "act_f88459e12cbd",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_812c3a23906b",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:21.490Z"
+  },
+  {
+    "id": "act_7af4bbec55d6",
+    "type": "mission",
+    "text": "Misión con error: BURAO - Lámpara de pie · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_c0836906f73b",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:21.425Z"
+  },
+  {
+    "id": "act_9e34d608c918",
+    "type": "mission",
+    "text": "Misión con error: JIMA - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_0294acc159ca",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:20.620Z"
+  },
+  {
+    "id": "act_c411e2a7ce25",
+    "type": "mission",
+    "text": "Misión iniciada: BURAO - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_c0836906f73b",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:03.389Z"
+  },
+  {
+    "id": "act_2546fc2b2ae2",
+    "type": "mission",
+    "text": "Misión iniciada: JIMA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_0294acc159ca",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:02.593Z"
+  },
+  {
+    "id": "act_df0493dda1a0",
+    "type": "mission",
+    "text": "Misión con error: MICH - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_8cb47be220e7",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:02.525Z"
+  },
+  {
+    "id": "act_16e0d4b3b578",
+    "type": "mission",
+    "text": "Misión con error: GAMBELA - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_55beeef7ccd5",
+      "demo": false
+    },
+    "at": "2026-11-20T21:28:01.452Z"
+  },
+  {
+    "id": "act_41087a08f608",
+    "type": "mission",
+    "text": "Misión iniciada: MICH - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_8cb47be220e7",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:44.476Z"
+  },
+  {
+    "id": "act_50303288e352",
+    "type": "mission",
+    "text": "Misión iniciada: GAMBELA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_55beeef7ccd5",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:43.432Z"
+  },
+  {
+    "id": "act_3b4fc3388e37",
+    "type": "mission",
+    "text": "Misión con error: DANAR - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_1d03b023fcf6",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:43.335Z"
+  },
+  {
+    "id": "act_9ae8ce5b68b8",
+    "type": "mission",
+    "text": "Misión con error: BALMA - Lámpara de pie · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_7339438bfe08",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:42.308Z"
+  },
+  {
+    "id": "act_7dc1c373ebc8",
+    "type": "mission",
+    "text": "Misión iniciada: DANAR - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_1d03b023fcf6",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:25.305Z"
+  },
+  {
+    "id": "act_747388e858b1",
+    "type": "mission",
+    "text": "Misión iniciada: BALMA - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_7339438bfe08",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:24.283Z"
+  },
+  {
+    "id": "act_6dc6264cb219",
+    "type": "mission",
+    "text": "Misión con error: GORE - Lámpara de mesa · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_be01bdf4d169",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:24.164Z"
+  },
+  {
+    "id": "act_de98c0a409e8",
+    "type": "mission",
+    "text": "Misión con error: TANA - Lámpara de mesa · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_35963a0a0ebb",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:23.777Z"
+  },
+  {
+    "id": "act_ad25a63ae36b",
+    "type": "mission",
+    "text": "Misión iniciada: GORE - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_be01bdf4d169",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:06.130Z"
+  },
+  {
+    "id": "act_869268e9dfc5",
+    "type": "mission",
+    "text": "Misión iniciada: TANA - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_35963a0a0ebb",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:05.724Z"
+  },
+  {
+    "id": "act_640ab6eee2d5",
+    "type": "mission",
+    "text": "Misión con error: MENDI - Lámpara colgante x3 unidades · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_240f33ae7b20",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:05.008Z"
+  },
+  {
+    "id": "act_a4147c4fdbae",
+    "type": "mission",
+    "text": "Misión con error: DIRE - Lámpara colgante x3 unidades · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_b0e4b1a7a091",
+      "demo": false
+    },
+    "at": "2026-11-20T21:27:04.576Z"
+  },
+  {
+    "id": "act_f8714d0e6052",
+    "type": "mission",
+    "text": "Misión iniciada: MENDI - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_240f33ae7b20",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:46.982Z"
+  },
+  {
+    "id": "act_f9fbf6fc9d35",
+    "type": "mission",
+    "text": "Misión con error: MEGA - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_3b20dba7acc0",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:46.585Z"
+  },
+  {
+    "id": "act_0c8bb8f4e88b",
+    "type": "mission",
+    "text": "Misión iniciada: DIRE - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_b0e4b1a7a091",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:46.536Z"
+  },
+  {
+    "id": "act_b5f5af03cdb6",
+    "type": "mission",
+    "text": "Misión con error: DESE - ADIS - Lámpara de pie · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_8f835586750f",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:46.154Z"
+  },
+  {
+    "id": "act_4fa922ffa3ed",
+    "type": "mission",
+    "text": "Misión iniciada: MEGA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_3b20dba7acc0",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:28.553Z"
+  },
+  {
+    "id": "act_35492c87d6c5",
+    "type": "mission",
+    "text": "Misión con error: REMBÁ - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_c28a7a49390e",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:28.152Z"
+  },
+  {
+    "id": "act_ed263f7141f8",
+    "type": "mission",
+    "text": "Misión iniciada: DESE - ADIS - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_8f835586750f",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:28.129Z"
+  },
+  {
+    "id": "act_abe15c17e3a3",
+    "type": "mission",
+    "text": "Misión con error: DIBRE - Lámpara colgante · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_81c4cf502d30",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:27.250Z"
+  },
+  {
+    "id": "act_fb1b9dcee147",
+    "type": "mission",
+    "text": "Misión iniciada: REMBÁ - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_c28a7a49390e",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:10.111Z"
+  },
+  {
+    "id": "act_41c2d4cd0f9c",
+    "type": "mission",
+    "text": "Misión iniciada: DIBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_81c4cf502d30",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:09.225Z"
+  },
+  {
+    "id": "act_56c3d3eb8bc9",
+    "type": "mission",
+    "text": "Misión con error: ADIS - Lámpara colgante · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_ef8361ba481e",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:09.214Z"
+  },
+  {
+    "id": "act_aadae3190505",
+    "type": "mission",
+    "text": "Misión con error: DEBRE - Lámpara colgante · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_1449bf817026",
+      "demo": false
+    },
+    "at": "2026-11-20T21:26:08.363Z"
+  },
+  {
+    "id": "act_2a194d1a3ffd",
+    "type": "mission",
+    "text": "Misión iniciada: ADIS - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_ef8361ba481e",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:51.178Z"
+  },
+  {
+    "id": "act_1ef2e8d93e27",
+    "type": "mission",
+    "text": "Misión iniciada: DEBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_1449bf817026",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:50.312Z"
+  },
+  {
+    "id": "act_85a468c4c35b",
+    "type": "mission",
+    "text": "Misión con error: TAMWA - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_39c9998ae7b3",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:50.296Z"
+  },
+  {
+    "id": "act_d7d998d83228",
+    "type": "mission",
+    "text": "Misión con error: TAMWA L - Lampara de mesa · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_40ba21607f25",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:49.175Z"
+  },
+  {
+    "id": "act_8d549b33bd1d",
+    "type": "mission",
+    "text": "Misión iniciada: TAMWA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_39c9998ae7b3",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:32.265Z"
+  },
+  {
+    "id": "act_3abaad98682e",
+    "type": "mission",
+    "text": "Misión con error: MENDIR - Lámapara colgande · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_7f83343d8efa",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:31.892Z"
+  },
+  {
+    "id": "act_066c1a3681d8",
+    "type": "mission",
+    "text": "Misión iniciada: TAMWA L - Lampara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_40ba21607f25",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:31.139Z"
+  },
+  {
+    "id": "act_c1ad3e2ab92d",
+    "type": "mission",
+    "text": "Misión con error: DESE - DEBRE - Lampara de Pie · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_c389bba4715f",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:30.274Z"
+  },
+  {
+    "id": "act_81d3cf2a9e8d",
+    "type": "mission",
+    "text": "Misión iniciada: MENDIR - Lámapara colgande · Argentina.",
+    "meta": {
+      "missionId": "mis_7f83343d8efa",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:13.842Z"
+  },
+  {
+    "id": "act_754f1b13eafe",
+    "type": "mission",
+    "text": "Misión con error: TEPI 2 - Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_8d4ea765b241",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:13.454Z"
+  },
+  {
+    "id": "act_0a160b18a5ed",
+    "type": "mission",
+    "text": "Misión iniciada: DESE - DEBRE - Lampara de Pie · Argentina.",
+    "meta": {
+      "missionId": "mis_c389bba4715f",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:12.245Z"
+  },
+  {
+    "id": "act_10b5784355da",
+    "type": "mission",
+    "text": "Misión con error: CIRE - velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_ce202889736d",
+      "demo": false
+    },
+    "at": "2026-11-20T21:25:11.352Z"
+  },
+  {
+    "id": "act_839b6555d45b",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI 2 - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_8d4ea765b241",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:55.423Z"
+  },
+  {
+    "id": "act_7704dfd1c8d2",
+    "type": "mission",
+    "text": "Misión con error: IZUMI Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_a77b39e9c665",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:54.301Z"
+  },
+  {
+    "id": "act_01e322f6d087",
+    "type": "mission",
+    "text": "Misión iniciada: CIRE - velador · Argentina.",
+    "meta": {
+      "missionId": "mis_ce202889736d",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:53.318Z"
+  },
+  {
+    "id": "act_4eaabbbd5a48",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mercado y competencia: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_7cda92546c85",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:52.397Z"
+  },
+  {
+    "id": "act_74d7599e47a3",
+    "type": "mission",
+    "text": "Misión iniciada: IZUMI Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_a77b39e9c665",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:36.272Z"
+  },
+  {
+    "id": "act_8319b490c733",
+    "type": "mission",
+    "text": "Misión con error: YAMA velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_a876920aaa45",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:35.149Z"
+  },
+  {
+    "id": "act_d37aff0cca2f",
+    "type": "mission",
+    "text": "Misión iniciada: YAMA velador · Argentina.",
+    "meta": {
+      "missionId": "mis_a876920aaa45",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:17.107Z"
+  },
+  {
+    "id": "act_eae2f15204b9",
+    "type": "mission",
+    "text": "Misión con error: BORU Velador · Argentina. Brief y tesis comercial: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_262c2ddb0a47",
+      "demo": false
+    },
+    "at": "2026-11-20T21:24:16.229Z"
+  },
+  {
+    "id": "act_d83a88777ee8",
+    "type": "mission",
+    "text": "Campaña creada: Catálogo · 2026-11-20. 33 misiones en cola.",
+    "meta": {
+      "campaignId": "cmp_4c29134a59e9"
+    },
+    "at": "2026-11-20T21:23:57.532Z"
+  },
+  {
+    "id": "act_fc110eb43362",
+    "type": "mission",
+    "text": "Misión creada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_7daf49d1b347",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.532Z"
+  },
+  {
+    "id": "act_0dfff5199683",
+    "type": "mission",
+    "text": "Misión creada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_7363602bb8b5",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.530Z"
+  },
+  {
+    "id": "act_a3ca25041a59",
+    "type": "mission",
+    "text": "Misión creada: MIZU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_e93dddb935ab",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.527Z"
+  },
+  {
+    "id": "act_dd00fc38aebe",
+    "type": "mission",
+    "text": "Misión creada: IONIX Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_0fab65c7320a",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.520Z"
+  },
+  {
+    "id": "act_5d22b1d5f332",
+    "type": "mission",
+    "text": "Misión creada: NEGELE - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_411da066f8b1",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.518Z"
+  },
+  {
+    "id": "act_aac2177b7312",
+    "type": "mission",
+    "text": "Misión creada: AWASA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_3ae7c8e7aaa4",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.515Z"
+  },
+  {
+    "id": "act_d2e960b3082d",
+    "type": "mission",
+    "text": "Misión creada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_812c3a23906b",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.512Z"
+  },
+  {
+    "id": "act_a92c3bee4f71",
+    "type": "mission",
+    "text": "Misión creada: BURAO - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_c0836906f73b",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.508Z"
+  },
+  {
+    "id": "act_692e0428500e",
+    "type": "mission",
+    "text": "Misión creada: JIMA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_0294acc159ca",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.503Z"
+  },
+  {
+    "id": "act_f8ecbb37aead",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_7cda92546c85",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.500Z"
+  },
+  {
+    "id": "act_d631cca35e31",
+    "type": "mission",
+    "text": "Misión iniciada: BORU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_262c2ddb0a47",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.496Z"
+  },
+  {
+    "id": "act_43bfd20e9f6b",
+    "type": "mission",
+    "text": "Misión creada: MICH - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_8cb47be220e7",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.493Z"
+  },
+  {
+    "id": "act_cf4036c5aafc",
+    "type": "mission",
+    "text": "Misión creada: GAMBELA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_55beeef7ccd5",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.490Z"
+  },
+  {
+    "id": "act_85ca1d00a29d",
+    "type": "mission",
+    "text": "Misión creada: DANAR - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_1d03b023fcf6",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.486Z"
+  },
+  {
+    "id": "act_cb74aec97c89",
+    "type": "mission",
+    "text": "Misión creada: BALMA - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_7339438bfe08",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.483Z"
+  },
+  {
+    "id": "act_b9ad8d43e319",
+    "type": "mission",
+    "text": "Misión creada: GORE - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_be01bdf4d169",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.479Z"
+  },
+  {
+    "id": "act_72bc3c360fca",
+    "type": "mission",
+    "text": "Misión creada: TANA - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_35963a0a0ebb",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.476Z"
+  },
+  {
+    "id": "act_2cc02e5c402a",
+    "type": "mission",
+    "text": "Misión creada: MENDI - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_240f33ae7b20",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.469Z"
+  },
+  {
+    "id": "act_c528d75775d1",
+    "type": "mission",
+    "text": "Misión creada: DIRE - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_b0e4b1a7a091",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.466Z"
+  },
+  {
+    "id": "act_10b2a50484d4",
+    "type": "mission",
+    "text": "Misión creada: MEGA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_3b20dba7acc0",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.463Z"
+  },
+  {
+    "id": "act_324998455fd8",
+    "type": "mission",
+    "text": "Misión creada: DESE - ADIS - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_8f835586750f",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.460Z"
+  },
+  {
+    "id": "act_bd192cbf837b",
+    "type": "mission",
+    "text": "Misión creada: REMBÁ - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_c28a7a49390e",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.455Z"
+  },
+  {
+    "id": "act_b1c977edf3e4",
+    "type": "mission",
+    "text": "Misión creada: DIBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_81c4cf502d30",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.452Z"
+  },
+  {
+    "id": "act_2ac295154a28",
+    "type": "mission",
+    "text": "Misión creada: ADIS - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_ef8361ba481e",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.449Z"
+  },
+  {
+    "id": "act_f2a223d0cbbd",
+    "type": "mission",
+    "text": "Misión creada: DEBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_1449bf817026",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.446Z"
+  },
+  {
+    "id": "act_14651fa41f4e",
+    "type": "mission",
+    "text": "Misión creada: TAMWA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_39c9998ae7b3",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.442Z"
+  },
+  {
+    "id": "act_56cbfe0adb59",
+    "type": "mission",
+    "text": "Misión creada: TAMWA L - Lampara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_40ba21607f25",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.437Z"
+  },
+  {
+    "id": "act_3b19cbe6e933",
+    "type": "mission",
+    "text": "Misión creada: MENDIR - Lámapara colgande · Argentina.",
+    "meta": {
+      "missionId": "mis_7f83343d8efa",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.435Z"
+  },
+  {
+    "id": "act_0c53485569dd",
+    "type": "mission",
+    "text": "Misión creada: DESE - DEBRE - Lampara de Pie · Argentina.",
+    "meta": {
+      "missionId": "mis_c389bba4715f",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.432Z"
+  },
+  {
+    "id": "act_d26b8846ed13",
+    "type": "mission",
+    "text": "Misión creada: TEPI 2 - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_8d4ea765b241",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.429Z"
+  },
+  {
+    "id": "act_f25402c2c79c",
+    "type": "mission",
+    "text": "Misión creada: CIRE - velador · Argentina.",
+    "meta": {
+      "missionId": "mis_ce202889736d",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.427Z"
+  },
+  {
+    "id": "act_9409fb3ea0fb",
+    "type": "mission",
+    "text": "Misión creada: IZUMI Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_a77b39e9c665",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.423Z"
+  },
+  {
+    "id": "act_38fe29317293",
+    "type": "mission",
+    "text": "Misión creada: YAMA velador · Argentina.",
+    "meta": {
+      "missionId": "mis_a876920aaa45",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.419Z"
+  },
+  {
+    "id": "act_ad6c9722eb7e",
+    "type": "mission",
+    "text": "Misión creada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_7cda92546c85",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.417Z"
+  },
+  {
+    "id": "act_521f97927bb7",
+    "type": "mission",
+    "text": "Misión creada: BORU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_262c2ddb0a47",
+      "demo": false
+    },
+    "at": "2026-11-20T21:23:57.414Z"
+  },
+  {
+    "id": "act_51315947be8a",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Plan final para el dueño: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T21:16:00.137Z"
+  },
+  {
+    "id": "act_75198762d9ac",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T21:15:28.349Z"
+  },
+  {
+    "id": "act_8a7677bc3d65",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T21:15:28.256Z"
+  },
+  {
+    "id": "act_1fd38db45367",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Plan final para el dueño: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T21:10:03.607Z"
+  },
+  {
+    "id": "act_c4398bcaeb1c",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T21:09:14.233Z"
+  },
+  {
+    "id": "act_5b83de9a3edf",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T21:09:14.149Z"
+  },
+  {
+    "id": "act_0d61e4b7a734",
+    "type": "mission",
+    "text": "Misión terminada con avisos: SORA Velador · Argentina. 10 compradores verificados. 0 hilos en la bandeja.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false,
+      "warnings": 3,
+      "prospects": 10
+    },
+    "at": "2026-11-20T20:52:50.699Z"
+  },
+  {
+    "id": "act_6ad6f0900baf",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T20:51:24.353Z"
+  },
+  {
+    "id": "act_6a14b4e4c1fa",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T20:51:24.268Z"
+  },
+  {
+    "id": "act_c9fab0885b1a",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Plan final para el dueño: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T20:20:48.660Z"
+  },
+  {
+    "id": "act_5875e6877849",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T20:19:23.655Z"
+  },
+  {
+    "id": "act_8a83cea2bb7a",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T20:19:23.570Z"
+  },
+  {
+    "id": "act_07ea53e358d1",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Ajustamos la profundidad a profundo y aumentamos prospectos a 60 para cubrir mejor el catálogo; ampliamos mercados a los cuatro países, cambiamos el tono a cercano y establecimos un cooldown de 3 días",
+    "meta": {},
+    "at": "2026-11-20T20:05:52.505Z"
+  },
+  {
+    "id": "act_7dae00b91a54",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T20:03:04.590Z"
+  },
+  {
+    "id": "act_5e0fc519076e",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T20:02:46.548Z"
+  },
+  {
+    "id": "act_75e4379b0ed0",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T20:02:46.465Z"
+  },
+  {
+    "id": "act_a1ec6155d74f",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T20:01:42.215Z"
+  },
+  {
+    "id": "act_c43fa18b600c",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T20:01:24.176Z"
+  },
+  {
+    "id": "act_8aa80c92b763",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T20:01:24.083Z"
+  },
+  {
+    "id": "act_531c78712945",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:58:57.069Z"
+  },
+  {
+    "id": "act_73d1f33a9e9d",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Aumenté los mercados y la profundidad para captar más clientes, subí el número de prospectos y el límite de correos. Ajusté el tono a más cercano y habilité el autopiloto con un espaciamiento de 15 mi",
+    "meta": {},
+    "at": "2026-11-20T19:58:53.739Z"
+  },
+  {
+    "id": "act_59ba1004a9ac",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:57:36.937Z"
+  },
+  {
+    "id": "act_88d3cfbd5a7c",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:56:57.758Z"
+  },
+  {
+    "id": "act_e47e335d8e63",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T19:56:57.672Z"
+  },
+  {
+    "id": "act_2c3166f9efec",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:56:03.276Z"
+  },
+  {
+    "id": "act_a9d70e1b1682",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:55:48.824Z"
+  },
+  {
+    "id": "act_34e2c69ae2fe",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:55:47.934Z"
+  },
+  {
+    "id": "act_df472dd2835d",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:54:51.832Z"
+  },
+  {
+    "id": "act_55cbb5a7874f",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:54:33.788Z"
+  },
+  {
+    "id": "act_645be5ad2db8",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T19:54:33.698Z"
+  },
+  {
+    "id": "act_c8e53c117158",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:52:53.820Z"
+  },
+  {
+    "id": "act_40866fd19728",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:52:49.003Z"
+  },
+  {
+    "id": "act_ef3dd9afb02e",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:52:16.479Z"
+  },
+  {
+    "id": "act_d7559a3d0bdf",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:51:34.735Z"
+  },
+  {
+    "id": "act_dd48a2ec5182",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:50:55.528Z"
+  },
+  {
+    "id": "act_53cb7541fe27",
+    "type": "system",
+    "text": "Agente respondió en modo sin IA: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:50:38.426Z"
+  },
+  {
+    "id": "act_0fe91dcda3d4",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:50:37.489Z"
+  },
+  {
+    "id": "act_5708fa39130f",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T19:50:37.393Z"
+  },
+  {
+    "id": "act_e529eb29b3fa",
+    "type": "system",
+    "text": "Agente Director Comercial usando IA de respaldo: Proveedor principal con cuota agotada: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:50:20.396Z"
+  },
+  {
+    "id": "act_08c85165e7b3",
+    "type": "system",
+    "text": "Agente respondió en modo sin IA: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:50:10.780Z"
+  },
+  {
+    "id": "act_da959b03bb2d",
+    "type": "reply",
+    "text": "Respuesta analizada: Interlight (fuera_de_oficina).",
+    "meta": {
+      "threadId": "thr_a8e5e58962d3",
+      "score": 0
+    },
+    "at": "2026-11-20T19:50:08.027Z"
+  },
+  {
+    "id": "act_d5d8695f49d6",
+    "type": "system",
+    "text": "Agente Director Comercial usando IA de respaldo: Proveedor principal con cuota agotada: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:49:52.751Z"
+  },
+  {
+    "id": "act_c470cbbd8456",
+    "type": "system",
+    "text": "Agente respondió en modo sin IA: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:49:50.225Z"
+  },
+  {
+    "id": "act_5225338cc331",
+    "type": "system",
+    "text": "Agente Director Comercial usando IA de respaldo: Proveedor principal con cuota agotada: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:49:32.187Z"
+  },
+  {
+    "id": "act_21705b935d6b",
+    "type": "reply",
+    "text": "Respuesta analizada: Interlight (rebote).",
+    "meta": {
+      "threadId": "thr_a8e5e58962d3",
+      "score": 0
+    },
+    "at": "2026-11-20T19:49:24.771Z"
+  },
+  {
+    "id": "act_7d0321f4e71c",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:49:14.940Z"
+  },
+  {
+    "id": "act_bffe2b98808d",
+    "type": "reply",
+    "text": "Respuesta recibida de Interlight.",
+    "meta": {
+      "threadId": "thr_a8e5e58962d3"
+    },
+    "at": "2026-11-20T19:48:37.633Z"
+  },
+  {
+    "id": "act_9d6db06e0f62",
+    "type": "system",
+    "text": "Agente respondió en modo sin IA: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:48:24.984Z"
+  },
+  {
+    "id": "act_ecb35670b551",
+    "type": "system",
+    "text": "Agente Director Comercial usando IA de respaldo: Proveedor principal con cuota agotada: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {},
+    "at": "2026-11-20T19:48:06.959Z"
+  },
+  {
+    "id": "act_ab3cfab49e34",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:47:51.550Z"
+  },
+  {
+    "id": "act_088e75819c42",
+    "type": "reply",
+    "text": "Respuesta recibida de Interlight.",
+    "meta": {
+      "threadId": "thr_a8e5e58962d3"
+    },
+    "at": "2026-11-20T19:47:48.800Z"
+  },
+  {
+    "id": "act_c0e552734455",
+    "type": "outreach",
+    "text": "Mensaje marcado como enviado a Scultura Luminosa.",
+    "meta": {
+      "threadId": "thr_96aaf882327a",
+      "channel": "manual"
+    },
+    "at": "2026-11-20T19:47:02.341Z"
+  },
+  {
+    "id": "act_e97c081a4d72",
+    "type": "outreach",
+    "text": "Mensaje marcado como enviado a Ideas Luz.",
+    "meta": {
+      "threadId": "thr_c99f59a85162",
+      "channel": "manual"
+    },
+    "at": "2026-11-20T19:46:39.561Z"
+  },
+  {
+    "id": "act_e2c4725a863b",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T19:46:21.123Z"
+  },
+  {
+    "id": "act_e39239c40b7c",
+    "type": "outreach",
+    "text": "Mensaje marcado como enviado a Años Luz.",
+    "meta": {
+      "threadId": "thr_ebed58beda99",
+      "channel": "manual"
+    },
+    "at": "2026-11-20T19:45:17.849Z"
+  },
+  {
+    "id": "act_e80cc27a3425",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:44:28.714Z"
+  },
+  {
+    "id": "act_4d4ce6794b56",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T19:44:28.627Z"
+  },
+  {
+    "id": "act_d3a8d20a806e",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:27:40.125Z"
+  },
+  {
+    "id": "act_108237d6a738",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:24:17.078Z"
+  },
+  {
+    "id": "act_cce4ecbe61d8",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T19:24:16.996Z"
+  },
+  {
+    "id": "act_2c42abb096cc",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Mensajes de apertura: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:18:41.725Z"
+  },
+  {
+    "id": "act_fe5549c0bb06",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T19:15:18.903Z"
+  },
+  {
+    "id": "act_cad7deb6607a",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T19:15:18.817Z"
+  },
+  {
+    "id": "act_e464e908dfa5",
+    "type": "system",
+    "text": "Se liberaron 1 misión interrumpida por un cierre de Lucian.",
+    "meta": {},
+    "at": "2026-11-20T19:15:06.648Z"
+  },
+  {
+    "id": "act_ef2bf140a603",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Reduje el límite diario y la profundidad para priorizar calidad sobre cantidad. Cambié el tono para eliminar explicaciones defensivas y centrarme en la primera línea. Desactivé el autopilot para revis",
+    "meta": {},
+    "at": "2026-11-20T18:46:58.361Z"
+  },
+  {
+    "id": "act_68a9556bf5f7",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Amplié los mercados para incluir España según el contexto del pedido. Cambié el tono para eliminar justificaciones defensivas y forzar la estructura de agendar reuniones cuando falten datos de envío.",
+    "meta": {},
+    "at": "2026-11-20T18:46:52.781Z"
+  },
+  {
+    "id": "act_42449c5d1f32",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Ajusté el tono para eliminar la justificación defensiva y centrarme en la acción directa. Si falta el flete, el borrador solo pedirá una reunión o dejará el detalle pendiente sin cargar al comprador. ",
+    "meta": {},
+    "at": "2026-11-20T18:46:40.750Z"
+  },
+  {
+    "id": "act_9f9b5aff7671",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Ajusté el tono para que sea directo y evite justificaciones defensivas, tal como pidió el dueño. Mantuve los mercados y límites actuales, pero reforcé la instrucción de no enviar correos de venta si f",
+    "meta": {},
+    "at": "2026-11-20T18:46:12.877Z"
+  },
+  {
+    "id": "act_e803e1cd549b",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:39:09.980Z"
+  },
+  {
+    "id": "act_e44140181f5f",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Reduje los mercados a los tres más cercanos para asegurar logística eficiente y aumenté la profundidad de investigación para encontrar compradores de diseño. Subí el límite de prospectos a 60 pero baj",
+    "meta": {},
+    "at": "2026-11-20T18:39:05.277Z"
+  },
+  {
+    "id": "act_d104b8533a07",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:38:58.846Z"
+  },
+  {
+    "id": "act_f0ca7ebfad25",
+    "type": "reply",
+    "text": "Nueva conversación: Cliente potencial.",
+    "meta": {
+      "threadId": "thr_b75cee7d2a28"
+    },
+    "at": "2026-11-20T18:37:45.592Z"
+  },
+  {
+    "id": "act_0e65920bf394",
+    "type": "reply",
+    "text": "Nueva conversación: Cliente potencial.",
+    "meta": {
+      "threadId": "thr_2a6c1ef9cde1"
+    },
+    "at": "2026-11-20T18:37:38.476Z"
+  },
+  {
+    "id": "act_805871ab4540",
+    "type": "reply",
+    "text": "Nueva conversación: Cliente potencial.",
+    "meta": {
+      "threadId": "thr_75e128ed87d0"
+    },
+    "at": "2026-11-20T18:36:43.779Z"
+  },
+  {
+    "id": "act_6a68d291e5a5",
+    "type": "reply",
+    "text": "Nueva conversación: Cliente potencial.",
+    "meta": {
+      "threadId": "thr_47938029c074"
+    },
+    "at": "2026-11-20T18:36:22.756Z"
+  },
+  {
+    "id": "act_b7fb63f269d6",
+    "type": "reply",
+    "text": "Nueva conversación: Cliente potencial.",
+    "meta": {
+      "threadId": "thr_b1867c36ab8c"
+    },
+    "at": "2026-11-20T18:35:20.868Z"
+  },
+  {
+    "id": "act_fdfa5047e568",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T18:33:16.916Z"
+  },
+  {
+    "id": "act_5151ef292bbf",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T18:33:16.823Z"
+  },
+  {
+    "id": "act_c95de21119c3",
+    "type": "system",
+    "text": "Se liberaron 1 misión interrumpida por un cierre de Lucian.",
+    "meta": {},
+    "at": "2026-11-20T18:32:42.642Z"
+  },
+  {
+    "id": "act_167eeb1b1516",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:15:14.739Z"
+  },
+  {
+    "id": "act_d582cf3712a1",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Aumentamos la cobertura de mercados añadiendo Colombia y Perú, redujimos la profundidad a media y ampliamos prospectos a 60. Ajustamos el tono a un estilo cercano y reducimos el cooldown a 3 días. En ",
+    "meta": {},
+    "at": "2026-11-20T18:15:08.776Z"
+  },
+  {
+    "id": "act_c8942cf44951",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Amplié los prospectos a 65 y el límite diario a 45 para escalar sin saturar, manteniendo el tono cercano por ser un producto de diseño. Ajusté el cooldown a 14 días para no incomodar y habilité el aut",
+    "meta": {},
+    "at": "2026-11-20T18:15:02.539Z"
+  },
+  {
+    "id": "act_e3e403c87081",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:14:57.888Z"
+  },
+  {
+    "id": "act_c0f8a7fc6fc0",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:14:47.622Z"
+  },
+  {
+    "id": "act_585b80eba567",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:14:04.093Z"
+  },
+  {
+    "id": "act_15f40642858d",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:13:40.398Z"
+  },
+  {
+    "id": "act_6ae0e812d388",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T18:12:17.860Z"
+  },
+  {
+    "id": "act_aaf75be00b91",
+    "type": "mission",
+    "text": "Misión reintentada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127"
+    },
+    "at": "2026-11-20T18:12:17.765Z"
+  },
+  {
+    "id": "act_76b6cc0ad52c",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:12:02.198Z"
+  },
+  {
+    "id": "act_4a10cd7e5acf",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Se ampliaron los mercados a los de mayor potencial y se añadió Uruguay. Se pasó a una profundidad profunda y se aumentó a 60 prospectos para cubrir los 33 productos. El tono se ajustó a profesional y ",
+    "meta": {},
+    "at": "2026-11-20T18:11:57.485Z"
+  },
+  {
+    "id": "act_40dcd9778f61",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:11:40.378Z"
+  },
+  {
+    "id": "act_c42facd5b6fa",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:11:07.943Z"
+  },
+  {
+    "id": "act_f078c62e2a2b",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:11:06.736Z"
+  },
+  {
+    "id": "act_1ad40e5f1c0f",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T18:09:46.419Z"
+  },
+  {
+    "id": "act_55c49306b18f",
+    "type": "system",
+    "text": "Agente respondió en modo sin IA: 500 llama-server reported out-of-memory during startup: ggml_backend_cpu_buffer_type_alloc_buffer: failed to allocate bu",
+    "meta": {},
+    "at": "2026-11-20T18:07:15.896Z"
+  },
+  {
+    "id": "act_a44a5d084235",
+    "type": "system",
+    "text": "Se liberaron 1 misión interrumpida por un cierre de Lucian.",
+    "meta": {},
+    "at": "2026-11-20T18:06:11.046Z"
+  },
+  {
+    "id": "act_f4ff5d9b9338",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:59:51.989Z"
+  },
+  {
+    "id": "act_5ed4abf642ba",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:59:05.616Z"
+  },
+  {
+    "id": "act_3c0e2d823f6f",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:58:43.328Z"
+  },
+  {
+    "id": "act_63b143788076",
+    "type": "mission",
+    "text": "Misión completada: SORA Velador · México. 2 compradores verificados. 2 hilos en la bandeja.",
+    "meta": {
+      "missionId": "mis_317038da6b41",
+      "demo": false,
+      "warnings": 0,
+      "prospects": 2
+    },
+    "at": "2026-11-20T17:44:12.362Z"
+  },
+  {
+    "id": "act_0734734ef827",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T17:43:55.176Z"
+  },
+  {
+    "id": "act_92489399f297",
+    "type": "mission",
+    "text": "Misión completada: BORU Velador · Argentina. 2 compradores verificados. 0 hilos en la bandeja.",
+    "meta": {
+      "missionId": "mis_9b3e26cd624e",
+      "demo": false,
+      "warnings": 0,
+      "prospects": 2
+    },
+    "at": "2026-11-20T17:43:54.261Z"
+  },
+  {
+    "id": "act_a00d6b35cdfa",
+    "type": "mission",
+    "text": "Misión creada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_698f1a919127",
+      "demo": false
+    },
+    "at": "2026-11-20T17:39:21.863Z"
+  },
+  {
+    "id": "act_df38300616f4",
+    "type": "mission",
+    "text": "Se borraron todas las misiones (64).",
+    "meta": {},
+    "at": "2026-11-20T17:36:12.051Z"
+  },
+  {
+    "id": "act_0f79837302ee",
+    "type": "mission",
+    "text": "Campaña creada: Catálogo · 2026-11-20. 32 misiones en cola.",
+    "meta": {
+      "campaignId": "cmp_334eca698e24"
+    },
+    "at": "2026-11-20T17:36:04.067Z"
+  },
+  {
+    "id": "act_67f84fc04132",
+    "type": "mission",
+    "text": "Misión creada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_177db4889048",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:04.066Z"
+  },
+  {
+    "id": "act_b92e795d0875",
+    "type": "mission",
+    "text": "Misión creada: SIRI Velador (base alta) · Chile.",
+    "meta": {
+      "missionId": "mis_f57245c4a5cd",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:04.058Z"
+  },
+  {
+    "id": "act_412391b232f8",
+    "type": "mission",
+    "text": "Misión creada: IONIX Velador · México.",
+    "meta": {
+      "missionId": "mis_e89f4291b91c",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:04.003Z"
+  },
+  {
+    "id": "act_97c4154592d5",
+    "type": "mission",
+    "text": "Misión creada: NEGELE - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_f5ce8a8736a7",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.996Z"
+  },
+  {
+    "id": "act_c9c632e4a1c2",
+    "type": "mission",
+    "text": "Misión creada: AWASA - Velador · Chile.",
+    "meta": {
+      "missionId": "mis_8176dbc0b200",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.988Z"
+  },
+  {
+    "id": "act_5c6417b57635",
+    "type": "mission",
+    "text": "Misión creada: TEPI - Velador · España.",
+    "meta": {
+      "missionId": "mis_2761dc4770fa",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.981Z"
+  },
+  {
+    "id": "act_50e38ee2cda3",
+    "type": "mission",
+    "text": "Misión creada: BURAO - Lámpara de pie · México.",
+    "meta": {
+      "missionId": "mis_e70d37120f52",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.974Z"
+  },
+  {
+    "id": "act_71b58663d329",
+    "type": "mission",
+    "text": "Misión creada: JIMA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_9933022af494",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.967Z"
+  },
+  {
+    "id": "act_533ef3509bec",
+    "type": "mission",
+    "text": "Misión creada: MICH - Velador · Chile.",
+    "meta": {
+      "missionId": "mis_337a1464d928",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.956Z"
+  },
+  {
+    "id": "act_e7737de8fcc4",
+    "type": "mission",
+    "text": "Misión creada: GAMBELA - Velador · España.",
+    "meta": {
+      "missionId": "mis_09ef8512e897",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.948Z"
+  },
+  {
+    "id": "act_02c71e693ad5",
+    "type": "mission",
+    "text": "Misión creada: DANAR - Velador · México.",
+    "meta": {
+      "missionId": "mis_40a625e4d0a6",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.940Z"
+  },
+  {
+    "id": "act_816762bf08d4",
+    "type": "mission",
+    "text": "Misión creada: BALMA - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_583076731bf2",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.933Z"
+  },
+  {
+    "id": "act_4c71cd373588",
+    "type": "mission",
+    "text": "Misión creada: GORE - Lámpara de mesa · Chile.",
+    "meta": {
+      "missionId": "mis_04cb8d5ea7b0",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.925Z"
+  },
+  {
+    "id": "act_f1c7df4fe53e",
+    "type": "mission",
+    "text": "Misión creada: TANA - Lámpara de mesa · España.",
+    "meta": {
+      "missionId": "mis_8c35934d1a4d",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.918Z"
+  },
+  {
+    "id": "act_f26cbe49c305",
+    "type": "mission",
+    "text": "Misión creada: MENDI - Lámpara colgante x3 unidades · México.",
+    "meta": {
+      "missionId": "mis_8a9d66a69a19",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.910Z"
+  },
+  {
+    "id": "act_85bbe5bc8f4e",
+    "type": "mission",
+    "text": "Misión creada: DIRE - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_70997880bb86",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.902Z"
+  },
+  {
+    "id": "act_a563177d2571",
+    "type": "mission",
+    "text": "Misión creada: MEGA - Velador · Chile.",
+    "meta": {
+      "missionId": "mis_51d3a8e7bd5b",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.891Z"
+  },
+  {
+    "id": "act_acd8d6d0026a",
+    "type": "mission",
+    "text": "Misión creada: DESE - ADIS - Lámpara de pie · España.",
+    "meta": {
+      "missionId": "mis_03131a04dc1a",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.884Z"
+  },
+  {
+    "id": "act_a2f4d53fa3f8",
+    "type": "mission",
+    "text": "Misión creada: REMBÁ - Velador · México.",
+    "meta": {
+      "missionId": "mis_f0b89ec162ff",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.874Z"
+  },
+  {
+    "id": "act_7fcd751e6562",
+    "type": "mission",
+    "text": "Misión creada: DIBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_e021e7909580",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.866Z"
+  },
+  {
+    "id": "act_483f1955db34",
+    "type": "mission",
+    "text": "Misión creada: ADIS - Lámpara colgante · Chile.",
+    "meta": {
+      "missionId": "mis_52e862625f31",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.859Z"
+  },
+  {
+    "id": "act_6692073797f5",
+    "type": "mission",
+    "text": "Misión creada: DEBRE - Lámpara colgante · España.",
+    "meta": {
+      "missionId": "mis_1aebc0ce1cfe",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.847Z"
+  },
+  {
+    "id": "act_df926e472830",
+    "type": "mission",
+    "text": "Misión creada: TAMWA - Velador · México.",
+    "meta": {
+      "missionId": "mis_3cc34f435bee",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.840Z"
+  },
+  {
+    "id": "act_ef83eb35a47e",
+    "type": "mission",
+    "text": "Misión creada: TAMWA L - Lampara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_e1db175354a2",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.833Z"
+  },
+  {
+    "id": "act_2d35925bbe9b",
+    "type": "mission",
+    "text": "Misión creada: MENDIR - Lámapara colgande · Chile.",
+    "meta": {
+      "missionId": "mis_b27b83000fcc",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.824Z"
+  },
+  {
+    "id": "act_a4e1fa3f9868",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · México.",
+    "meta": {
+      "missionId": "mis_317038da6b41",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.800Z"
+  },
+  {
+    "id": "act_b9c0f46b44bf",
+    "type": "mission",
+    "text": "Misión iniciada: BORU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_9b3e26cd624e",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.797Z"
+  },
+  {
+    "id": "act_776459e9c28c",
+    "type": "mission",
+    "text": "Misión creada: DESE - DEBRE - Lampara de Pie · España.",
+    "meta": {
+      "missionId": "mis_58dd2808c6c1",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.763Z"
+  },
+  {
+    "id": "act_972fa8131a63",
+    "type": "mission",
+    "text": "Misión creada: TEPI 2 - Velador · México.",
+    "meta": {
+      "missionId": "mis_1be800960306",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.749Z"
+  },
+  {
+    "id": "act_931505583a75",
+    "type": "mission",
+    "text": "Misión creada: CIRE - velador · Argentina.",
+    "meta": {
+      "missionId": "mis_739f8321c51e",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.739Z"
+  },
+  {
+    "id": "act_0fff27b52491",
+    "type": "mission",
+    "text": "Misión creada: IZUMI Velador · Chile.",
+    "meta": {
+      "missionId": "mis_f22675dafd8d",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.731Z"
+  },
+  {
+    "id": "act_14027694cd91",
+    "type": "mission",
+    "text": "Misión creada: YAMA velador · España.",
+    "meta": {
+      "missionId": "mis_59cd46a68e8b",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.724Z"
+  },
+  {
+    "id": "act_70dad3d17a47",
+    "type": "mission",
+    "text": "Misión creada: SORA Velador · México.",
+    "meta": {
+      "missionId": "mis_317038da6b41",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.717Z"
+  },
+  {
+    "id": "act_71b42cdaa754",
+    "type": "mission",
+    "text": "Misión creada: BORU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_9b3e26cd624e",
+      "demo": false
+    },
+    "at": "2026-11-20T17:36:03.710Z"
+  },
+  {
+    "id": "act_e52bd3022fc3",
+    "type": "mission",
+    "text": "Misión eliminada: NEGELE - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_4afc65ddc820"
+    },
+    "at": "2026-11-20T17:35:45.741Z"
+  },
+  {
+    "id": "act_793567f68788",
+    "type": "mission",
+    "text": "Misión eliminada: IONIX Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_5aece770184c"
+    },
+    "at": "2026-11-20T17:35:29.878Z"
+  },
+  {
+    "id": "act_0e47c31ca24c",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:30:42.852Z"
+  },
+  {
+    "id": "act_cf835997be4a",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Afiné los mercados priorizando Argentina, México y España, que son los de mayor volumen para decoración de diseño, y bajé Uruguay por tamaño de mercado. Subí la profundidad a 'profundo' y los prospect",
+    "meta": {},
+    "at": "2026-11-20T17:30:35.734Z"
+  },
+  {
+    "id": "act_487fcd28822e",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:30:19.768Z"
+  },
+  {
+    "id": "act_a8611408df20",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:30:15.745Z"
+  },
+  {
+    "id": "act_b07ebc13b2fa",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Con 33 productos y 34 misiones ya tenés catálogo y tracción suficiente para subir la intensidad: aumenté prospectos a 30 y pasé a profundidad profunda para calificar mejor en un rubro de diseño donde ",
+    "meta": {},
+    "at": "2026-11-20T17:30:05.098Z"
+  },
+  {
+    "id": "act_7b10d140d9e0",
+    "type": "mission",
+    "text": "Misión iniciada: MIZU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_64eeb0d77d45",
+      "demo": false
+    },
+    "at": "2026-11-20T17:16:32.060Z"
+  },
+  {
+    "id": "act_26d32a3adb1b",
+    "type": "mission",
+    "text": "Misión reintentada: MIZU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_64eeb0d77d45"
+    },
+    "at": "2026-11-20T17:16:31.968Z"
+  },
+  {
+    "id": "act_dc2feef6b81b",
+    "type": "mission",
+    "text": "Misión completada: SIRI Velador (base alta) · Argentina. 18 compradores verificados. 0 hilos en la bandeja.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e",
+      "demo": false,
+      "warnings": 0,
+      "prospects": 18
+    },
+    "at": "2026-11-20T17:16:22.701Z"
+  },
+  {
+    "id": "act_b640ff46735f",
+    "type": "mission",
+    "text": "Misión completada: Siri - Lámpara de techo · Argentina. 17 compradores verificados. 6 hilos en la bandeja.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205",
+      "demo": false,
+      "warnings": 0,
+      "prospects": 17
+    },
+    "at": "2026-11-20T17:15:27.826Z"
+  },
+  {
+    "id": "act_40fb985e75ed",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:14:56.659Z"
+  },
+  {
+    "id": "act_51316365bcfc",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Subí la profundidad de investigación a 'profundo' y bajé prospectos a 25 para priorizar calidad de los mensajes por encima de la cantidad. Reescribí el tono para que se adapte a cada país (rioplatense",
+    "meta": {},
+    "at": "2026-11-20T17:14:02.049Z"
+  },
+  {
+    "id": "act_fa9007263b84",
+    "type": "outreach",
+    "text": "Mensaje marcado como enviado a Iluminar Peusso.",
+    "meta": {
+      "threadId": "thr_7ff61b96d738",
+      "channel": "manual"
+    },
+    "at": "2026-11-20T17:08:50.702Z"
+  },
+  {
+    "id": "act_77d0be870a99",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e",
+      "demo": false
+    },
+    "at": "2026-11-20T17:06:48.627Z"
+  },
+  {
+    "id": "act_df53d97d85da",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e"
+    },
+    "at": "2026-11-20T17:06:48.539Z"
+  },
+  {
+    "id": "act_154cb66aa9a9",
+    "type": "outreach",
+    "text": "Mensaje enviado a Iluminación Kolor.",
+    "meta": {
+      "threadId": "thr_e2626ed5a8b4",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T17:06:40.196Z"
+  },
+  {
+    "id": "act_8048dfe2224c",
+    "type": "outreach",
+    "text": "Mensaje enviado a Febri Iluminación.",
+    "meta": {
+      "threadId": "thr_4f44dea89e31",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T17:06:16.720Z"
+  },
+  {
+    "id": "act_a1c481c13837",
+    "type": "mission",
+    "text": "Misión completada: Contenido automático · BORU Velador. 4 compradores verificados. 4 hilos en la bandeja.",
+    "meta": {
+      "missionId": "mis_b39c11286b3c",
+      "demo": false,
+      "warnings": 0,
+      "prospects": 4
+    },
+    "at": "2026-11-20T17:05:54.832Z"
+  },
+  {
+    "id": "act_fcc93f58d674",
+    "type": "mission",
+    "text": "Misión iniciada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205",
+      "demo": false
+    },
+    "at": "2026-11-20T17:04:20.420Z"
+  },
+  {
+    "id": "act_0ec498cb6f1c",
+    "type": "mission",
+    "text": "Misión reintentada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205"
+    },
+    "at": "2026-11-20T17:04:20.335Z"
+  },
+  {
+    "id": "act_4e79f7263ff7",
+    "type": "mission",
+    "text": "Misión iniciada: Contenido automático · BORU Velador.",
+    "meta": {
+      "missionId": "mis_b39c11286b3c",
+      "demo": false
+    },
+    "at": "2026-11-20T17:04:03.859Z"
+  },
+  {
+    "id": "act_51f5778f7734",
+    "type": "mission",
+    "text": "Misión reintentada: Contenido automático · BORU Velador.",
+    "meta": {
+      "missionId": "mis_b39c11286b3c"
+    },
+    "at": "2026-11-20T17:04:03.765Z"
+  },
+  {
+    "id": "act_439ba927b91e",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:03:50.678Z"
+  },
+  {
+    "id": "act_451ae0d680e9",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Subí el límite diario a 60 mails y prendí el autopiloto con espaciado de 8 minutos para maximizar ritmo de envío. Puse la profundidad en 'amplia' y dupliqué los prospectos a 80, bajando el cooldown de",
+    "meta": {},
+    "at": "2026-11-20T17:03:42.904Z"
+  },
+  {
+    "id": "act_fda0a8993840",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Para maximizar volumen y velocidad subí el límite diario de 30 a 60 mails y activé el autopiloto con espaciado corto de 8 minutos. Cambié la profundidad de búsqueda a 'amplia' y dupliqué los prospecto",
+    "meta": {},
+    "at": "2026-11-20T17:02:44.076Z"
+  },
+  {
+    "id": "act_d5cd1436e9f5",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Prioricé volumen y velocidad: dupliqué el límite diario a 60 mails, activé el autopiloto con espaciado corto y desactivé el warmup para mover más rápido (ojo con la reputación del dominio). Subí los p",
+    "meta": {},
+    "at": "2026-11-20T17:02:41.959Z"
+  },
+  {
+    "id": "act_28be31131961",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T17:01:42.713Z"
+  },
+  {
+    "id": "act_3d84c2ec5678",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Con 33 productos y buen volumen de misiones, sumé México como mercado y pasé a profundidad alta para prospectar mejor. Subí el límite diario de mails y prospectos máximos ya que el warmup está activo ",
+    "meta": {},
+    "at": "2026-11-20T16:59:27.760Z"
+  },
+  {
+    "id": "act_c99e5ee36826",
+    "type": "outreach",
+    "text": "Mensaje enviado a Mar de Cava.",
+    "meta": {
+      "threadId": "thr_a6e787a91b2c",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T16:58:41.873Z"
+  },
+  {
+    "id": "act_33155fb9dbde",
+    "type": "outreach",
+    "text": "Mensaje enviado a GA Iluminación.",
+    "meta": {
+      "threadId": "thr_1ba442390bdf",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T16:58:23.920Z"
+  },
+  {
+    "id": "act_2b71fa191142",
+    "type": "mission",
+    "text": "Misión con error: Contenido automático · BORU Velador. Precios y márgenes: El modelo no devolvió texto (max_tokens)",
+    "meta": {
+      "missionId": "mis_b39c11286b3c",
+      "demo": false
+    },
+    "at": "2026-11-20T16:36:56.337Z"
+  },
+  {
+    "id": "act_d061bddbcf4a",
+    "type": "mission",
+    "text": "Misión iniciada: Contenido automático · BORU Velador.",
+    "meta": {
+      "missionId": "mis_b39c11286b3c",
+      "demo": false
+    },
+    "at": "2026-11-20T16:29:55.460Z"
+  },
+  {
+    "id": "act_16506e54c1a9",
+    "type": "mission",
+    "text": "Misión creada: Contenido automático · BORU Velador.",
+    "meta": {
+      "missionId": "mis_b39c11286b3c",
+      "demo": false
+    },
+    "at": "2026-11-20T16:29:55.369Z"
+  },
+  {
+    "id": "act_fc4e15942784",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T16:27:12.090Z"
+  },
+  {
+    "id": "act_6fb844befaba",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:51:31.840Z"
+  },
+  {
+    "id": "act_7ab96d04422a",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:51:30.502Z"
+  },
+  {
+    "id": "act_4fa2511068f4",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:50:59.670Z"
+  },
+  {
+    "id": "act_ceb389326cd3",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:50:43.075Z"
+  },
+  {
+    "id": "act_fdb70e2ed8c3",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:50:41.589Z"
+  },
+  {
+    "id": "act_771d95725f29",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:50:23.238Z"
+  },
+  {
+    "id": "act_3c9b8a748c93",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:50:22.243Z"
+  },
+  {
+    "id": "act_9bd046612378",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:47:46.039Z"
+  },
+  {
+    "id": "act_0202ee686a5e",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:47:38.262Z"
+  },
+  {
+    "id": "act_b995d2609bc9",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:47:04.462Z"
+  },
+  {
+    "id": "act_59f47c016610",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:46:26.288Z"
+  },
+  {
+    "id": "act_b0f125ec7d25",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:41:32.117Z"
+  },
+  {
+    "id": "act_48eae60a2e5f",
+    "type": "outreach",
+    "text": "Mensaje enviado a Barcelona LED.",
+    "meta": {
+      "threadId": "thr_479ab719102e",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T15:26:35.193Z"
+  },
+  {
+    "id": "act_b63662091375",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:16:33.994Z"
+  },
+  {
+    "id": "act_0ad759139e04",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:16:19.674Z"
+  },
+  {
+    "id": "act_95fe9b6ab98a",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:15:55.720Z"
+  },
+  {
+    "id": "act_a4e63dffc7f9",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. Brief y tesis comercial: El proveedor de IA está limitando las consultas (cuota gratuita agotada o demasiadas seguidas). Esperá un minuto o configurá un proveedor con clave.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e",
+      "demo": false
+    },
+    "at": "2026-11-20T15:13:27.786Z"
+  },
+  {
+    "id": "act_877b4ec00b1c",
+    "type": "mission",
+    "text": "Misión con error: Siri - Lámpara de techo · Argentina. Brief y tesis comercial: El proveedor de IA está limitando las consultas (cuota gratuita agotada o demasiadas seguidas). Esperá un minuto o configurá un proveedor con clave.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205",
+      "demo": false
+    },
+    "at": "2026-11-20T15:12:18.410Z"
+  },
+  {
+    "id": "act_1d5398c879c0",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e",
+      "demo": false
+    },
+    "at": "2026-11-20T15:11:54.675Z"
+  },
+  {
+    "id": "act_b62e31b737e2",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e"
+    },
+    "at": "2026-11-20T15:11:54.579Z"
+  },
+  {
+    "id": "act_548e95422fc8",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:11:44.775Z"
+  },
+  {
+    "id": "act_5d7614d4713f",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:11:33.679Z"
+  },
+  {
+    "id": "act_5f7e5c74dc1e",
+    "type": "mission",
+    "text": "Misión iniciada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205",
+      "demo": false
+    },
+    "at": "2026-11-20T15:10:45.444Z"
+  },
+  {
+    "id": "act_067a2b23afb6",
+    "type": "mission",
+    "text": "Misión reintentada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205"
+    },
+    "at": "2026-11-20T15:10:45.355Z"
+  },
+  {
+    "id": "act_c9bde6ebe0a8",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:10:31.559Z"
+  },
+  {
+    "id": "act_a3365bbebbd5",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:10:30.529Z"
+  },
+  {
+    "id": "act_094115062bc8",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:10:03.701Z"
+  },
+  {
+    "id": "act_c2f66f0dd7d8",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:10:02.863Z"
+  },
+  {
+    "id": "act_0d08a3086961",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:09:35.866Z"
+  },
+  {
+    "id": "act_b18b47ec9a3f",
+    "type": "mission",
+    "text": "Misión con error: Siri - Lámpara de techo · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205"
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_483cfbdaa9a3",
+    "type": "mission",
+    "text": "Misión iniciada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_5210d985fcf4",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e"
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_14cf1dcfe644",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_325b2e1e6d40",
+    "type": "mission",
+    "text": "Misión con error: MIZU Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_64eeb0d77d45"
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_d212779eba2f",
+    "type": "mission",
+    "text": "Misión iniciada: MIZU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_64eeb0d77d45",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_1f61771425f0",
+    "type": "mission",
+    "text": "Misión con error: IONIX Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_5aece770184c"
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_1f88be4be431",
+    "type": "mission",
+    "text": "Misión iniciada: IONIX Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_5aece770184c",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_856a316b328d",
+    "type": "mission",
+    "text": "Misión con error: NEGELE - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_4afc65ddc820"
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_1305bf4665c2",
+    "type": "mission",
+    "text": "Misión iniciada: NEGELE - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_4afc65ddc820",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_7c3c0cb8c4de",
+    "type": "mission",
+    "text": "Misión con error: AWASA - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_0992a41f94be"
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_25cd05a19c53",
+    "type": "mission",
+    "text": "Misión iniciada: AWASA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_0992a41f94be",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.797Z"
+  },
+  {
+    "id": "act_3edbe544e101",
+    "type": "mission",
+    "text": "Misión con error: TEPI - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_3ef33657e181"
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_e0f8814b4430",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_3ef33657e181",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_715328b99380",
+    "type": "mission",
+    "text": "Misión con error: BURAO - Lámpara de pie · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_4bc9fab3c6b5"
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_f8e5fe308b87",
+    "type": "mission",
+    "text": "Misión iniciada: BURAO - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_4bc9fab3c6b5",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_3b5559bc25be",
+    "type": "mission",
+    "text": "Misión con error: JIMA - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_ec380a27f270"
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_006ba811ce3f",
+    "type": "mission",
+    "text": "Misión iniciada: JIMA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_ec380a27f270",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_f653a4c84ca0",
+    "type": "mission",
+    "text": "Misión con error: MICH - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_7f23664d7f11"
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_148074067c33",
+    "type": "mission",
+    "text": "Misión iniciada: MICH - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_7f23664d7f11",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_90b4e9bb647d",
+    "type": "mission",
+    "text": "Misión con error: GAMBELA - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_01c77a16e107"
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_ec235effb46e",
+    "type": "mission",
+    "text": "Misión iniciada: GAMBELA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_01c77a16e107",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_e27dfc6db2da",
+    "type": "mission",
+    "text": "Misión con error: DANAR - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_2dfbcbfab4d5"
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_0c54c2cb4114",
+    "type": "mission",
+    "text": "Misión iniciada: DANAR - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_2dfbcbfab4d5",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_6a303ba95a71",
+    "type": "mission",
+    "text": "Misión con error: BALMA - Lámpara de pie · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_c587da45e2ec"
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_5295d7de2d56",
+    "type": "mission",
+    "text": "Misión iniciada: BALMA - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_c587da45e2ec",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.796Z"
+  },
+  {
+    "id": "act_94fffa4ee3aa",
+    "type": "mission",
+    "text": "Misión con error: GORE - Lámpara de mesa · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_923f16e210ce"
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_17727ba36f39",
+    "type": "mission",
+    "text": "Misión iniciada: GORE - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_923f16e210ce",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_a6c8745d591c",
+    "type": "mission",
+    "text": "Misión con error: TANA - Lámpara de mesa · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_4882e14490a7"
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_436b7f105021",
+    "type": "mission",
+    "text": "Misión iniciada: TANA - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_4882e14490a7",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_5670e5c94d85",
+    "type": "mission",
+    "text": "Misión con error: MENDI - Lámpara colgante x3 unidades · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_2d2223de98a0"
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_3cf42571823d",
+    "type": "mission",
+    "text": "Misión iniciada: MENDI - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_2d2223de98a0",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_ee1eb627560d",
+    "type": "mission",
+    "text": "Misión con error: DIRE - Lámpara colgante x3 unidades · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_ec8a078c0c4f"
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_27a42e4d16e0",
+    "type": "mission",
+    "text": "Misión iniciada: DIRE - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_ec8a078c0c4f",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_b585be8b5f21",
+    "type": "mission",
+    "text": "Misión con error: MEGA - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_61192c801ec3"
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_7370b118e7c7",
+    "type": "mission",
+    "text": "Misión iniciada: MEGA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_61192c801ec3",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_b8313a49546f",
+    "type": "mission",
+    "text": "Misión con error: DESE - ADIS - Lámpara de pie · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_33a2f602b4df"
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_b151fc4227db",
+    "type": "mission",
+    "text": "Misión iniciada: DESE - ADIS - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_33a2f602b4df",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_5c79e44217fb",
+    "type": "mission",
+    "text": "Misión con error: REMBÁ - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_fb0ff4282c70"
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_45f93b5f305e",
+    "type": "mission",
+    "text": "Misión iniciada: REMBÁ - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_fb0ff4282c70",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.795Z"
+  },
+  {
+    "id": "act_271f6c021f0f",
+    "type": "mission",
+    "text": "Misión con error: DIBRE - Lámpara colgante · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_6426c6b315d3"
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_b9200509f944",
+    "type": "mission",
+    "text": "Misión iniciada: DIBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_6426c6b315d3",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_7fcdeae03cfa",
+    "type": "mission",
+    "text": "Misión con error: ADIS - Lámpara colgante · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_07fc33a2cda1"
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_752dd3543d1b",
+    "type": "mission",
+    "text": "Misión iniciada: ADIS - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_07fc33a2cda1",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_a5320bbb3b9d",
+    "type": "mission",
+    "text": "Misión con error: DEBRE - Lámpara colgante · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_915f29350e05"
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_c32bc39e7162",
+    "type": "mission",
+    "text": "Misión iniciada: DEBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_915f29350e05",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_2260eb078aa3",
+    "type": "mission",
+    "text": "Misión con error: TAMWA - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_04ba8d713d62"
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_4e8505f0825f",
+    "type": "mission",
+    "text": "Misión iniciada: TAMWA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_04ba8d713d62",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_8413ffb35f33",
+    "type": "mission",
+    "text": "Misión con error: TAMWA L - Lampara de mesa · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_35e08d6d8267"
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_baba74b9f53c",
+    "type": "mission",
+    "text": "Misión iniciada: TAMWA L - Lampara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_35e08d6d8267",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_29a2d47c27ee",
+    "type": "mission",
+    "text": "Misión con error: MENDIR - Lámapara colgande · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_d72775a1f732"
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_f1aa5d06b03e",
+    "type": "mission",
+    "text": "Misión iniciada: MENDIR - Lámapara colgande · Argentina.",
+    "meta": {
+      "missionId": "mis_d72775a1f732",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_1d603fa2f94c",
+    "type": "mission",
+    "text": "Misión con error: DESE - DEBRE - Lampara de Pie · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_d1589f7ffe45"
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_b1b4ae272012",
+    "type": "mission",
+    "text": "Misión iniciada: DESE - DEBRE - Lampara de Pie · Argentina.",
+    "meta": {
+      "missionId": "mis_d1589f7ffe45",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.794Z"
+  },
+  {
+    "id": "act_ebdbd4f8230f",
+    "type": "mission",
+    "text": "Misión con error: TEPI 2 - Velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_51198f144524"
+    },
+    "at": "2026-11-20T15:09:00.793Z"
+  },
+  {
+    "id": "act_d8be9bed0b55",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI 2 - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_51198f144524",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.793Z"
+  },
+  {
+    "id": "act_57e051ee6b3b",
+    "type": "mission",
+    "text": "Misión con error: CIRE - velador · Argentina. Falta IA.",
+    "meta": {
+      "missionId": "mis_47fdffdb2a89"
+    },
+    "at": "2026-11-20T15:09:00.793Z"
+  },
+  {
+    "id": "act_1221aad6c069",
+    "type": "mission",
+    "text": "Misión iniciada: CIRE - velador · Argentina.",
+    "meta": {
+      "missionId": "mis_47fdffdb2a89",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.793Z"
+  },
+  {
+    "id": "act_d38f078f98f2",
+    "type": "mission",
+    "text": "Misión con error: IZUMI Velador · Argentina. Brief y tesis comercial: El proveedor de IA está limitando las consultas (cuota gratuita agotada o demasiadas seguidas). Esperá un minuto o configurá un proveedor con clave.",
+    "meta": {
+      "missionId": "mis_b5214c2a4808",
+      "demo": false
+    },
+    "at": "2026-11-20T15:09:00.272Z"
+  },
+  {
+    "id": "act_d13e4948b163",
+    "type": "mission",
+    "text": "Misión con error: YAMA velador · Argentina. Brief y tesis comercial: El proveedor de IA está limitando las consultas (cuota gratuita agotada o demasiadas seguidas). Esperá un minuto o configurá un proveedor con clave.",
+    "meta": {
+      "missionId": "mis_5f13d181ba8b",
+      "demo": false
+    },
+    "at": "2026-11-20T15:08:59.897Z"
+  },
+  {
+    "id": "act_0fe27bbb186b",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:07:35.019Z"
+  },
+  {
+    "id": "act_1fc88bbe07ab",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:07:34.141Z"
+  },
+  {
+    "id": "act_0c6e2f7aa6e0",
+    "type": "mission",
+    "text": "Misión iniciada: IZUMI Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_b5214c2a4808",
+      "demo": false
+    },
+    "at": "2026-11-20T15:07:27.253Z"
+  },
+  {
+    "id": "act_7704d860f06d",
+    "type": "mission",
+    "text": "Misión iniciada: YAMA velador · Argentina.",
+    "meta": {
+      "missionId": "mis_5f13d181ba8b",
+      "demo": false
+    },
+    "at": "2026-11-20T15:07:26.730Z"
+  },
+  {
+    "id": "act_e5c828294888",
+    "type": "mission",
+    "text": "Misión con error: BORU Velador · Argentina. Brief y tesis comercial: El proveedor de IA está limitando las consultas (cuota gratuita agotada o demasiadas seguidas). Esperá un minuto o configurá un proveedor con clave.",
+    "meta": {
+      "missionId": "mis_82ed41fab3c6",
+      "demo": false
+    },
+    "at": "2026-11-20T15:07:26.133Z"
+  },
+  {
+    "id": "act_28aefc3ad982",
+    "type": "mission",
+    "text": "Misión con error: SORA Velador · Argentina. Brief y tesis comercial: El proveedor de IA está limitando las consultas (cuota gratuita agotada o demasiadas seguidas). Esperá un minuto o configurá un proveedor con clave.",
+    "meta": {
+      "missionId": "mis_6b666c349262",
+      "demo": false
+    },
+    "at": "2026-11-20T15:07:25.857Z"
+  },
+  {
+    "id": "act_d3cf25dc7a11",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:07:15.297Z"
+  },
+  {
+    "id": "act_bb6048e244c0",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:07:05.189Z"
+  },
+  {
+    "id": "act_8df58399c56c",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:06:47.616Z"
+  },
+  {
+    "id": "act_99a99221abb8",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:06:46.678Z"
+  },
+  {
+    "id": "act_1185da4243c0",
+    "type": "mission",
+    "text": "Campaña creada: GAL1. 33 misiones en cola.",
+    "meta": {
+      "campaignId": "cmp_1913f7c51afb"
+    },
+    "at": "2026-11-20T15:05:53.027Z"
+  },
+  {
+    "id": "act_1b0ca6391672",
+    "type": "mission",
+    "text": "Misión creada: Siri - Lámpara de techo · Argentina.",
+    "meta": {
+      "missionId": "mis_af0dc82c8205",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.027Z"
+  },
+  {
+    "id": "act_032894bb0835",
+    "type": "mission",
+    "text": "Misión creada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_6accfc64bc7e",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.024Z"
+  },
+  {
+    "id": "act_0d847748b16b",
+    "type": "mission",
+    "text": "Misión creada: MIZU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_64eeb0d77d45",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.019Z"
+  },
+  {
+    "id": "act_9c48d713bac2",
+    "type": "mission",
+    "text": "Misión creada: IONIX Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_5aece770184c",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.017Z"
+  },
+  {
+    "id": "act_3a5cdf4286d2",
+    "type": "mission",
+    "text": "Misión creada: NEGELE - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_4afc65ddc820",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.015Z"
+  },
+  {
+    "id": "act_d043eb504c45",
+    "type": "mission",
+    "text": "Misión creada: AWASA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_0992a41f94be",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.012Z"
+  },
+  {
+    "id": "act_50481d618cc0",
+    "type": "mission",
+    "text": "Misión creada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_3ef33657e181",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.009Z"
+  },
+  {
+    "id": "act_1e9133dd0f1c",
+    "type": "mission",
+    "text": "Misión creada: BURAO - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_4bc9fab3c6b5",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.006Z"
+  },
+  {
+    "id": "act_af3574a24dc9",
+    "type": "mission",
+    "text": "Misión creada: JIMA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_ec380a27f270",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.003Z"
+  },
+  {
+    "id": "act_70636443ea08",
+    "type": "mission",
+    "text": "Misión creada: MICH - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_7f23664d7f11",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:53.001Z"
+  },
+  {
+    "id": "act_263e3a232987",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_6b666c349262",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.997Z"
+  },
+  {
+    "id": "act_52fe41e38552",
+    "type": "mission",
+    "text": "Misión iniciada: BORU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_82ed41fab3c6",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.990Z"
+  },
+  {
+    "id": "act_a737e1345fd5",
+    "type": "mission",
+    "text": "Misión creada: GAMBELA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_01c77a16e107",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.987Z"
+  },
+  {
+    "id": "act_4850eb7d2498",
+    "type": "mission",
+    "text": "Misión creada: DANAR - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_2dfbcbfab4d5",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.984Z"
+  },
+  {
+    "id": "act_d11616704ecd",
+    "type": "mission",
+    "text": "Misión creada: BALMA - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_c587da45e2ec",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.981Z"
+  },
+  {
+    "id": "act_ae4dd171db54",
+    "type": "mission",
+    "text": "Misión creada: GORE - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_923f16e210ce",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.979Z"
+  },
+  {
+    "id": "act_a9682e45b905",
+    "type": "mission",
+    "text": "Misión creada: TANA - Lámpara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_4882e14490a7",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.978Z"
+  },
+  {
+    "id": "act_d75b3412417a",
+    "type": "mission",
+    "text": "Misión creada: MENDI - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_2d2223de98a0",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.976Z"
+  },
+  {
+    "id": "act_bc279dc32cba",
+    "type": "mission",
+    "text": "Misión creada: DIRE - Lámpara colgante x3 unidades · Argentina.",
+    "meta": {
+      "missionId": "mis_ec8a078c0c4f",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.974Z"
+  },
+  {
+    "id": "act_e00501ea264f",
+    "type": "mission",
+    "text": "Misión creada: MEGA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_61192c801ec3",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.971Z"
+  },
+  {
+    "id": "act_dffa8c4b7e22",
+    "type": "mission",
+    "text": "Misión creada: DESE - ADIS - Lámpara de pie · Argentina.",
+    "meta": {
+      "missionId": "mis_33a2f602b4df",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.956Z"
+  },
+  {
+    "id": "act_6f067145d881",
+    "type": "mission",
+    "text": "Misión creada: REMBÁ - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_fb0ff4282c70",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.953Z"
+  },
+  {
+    "id": "act_c0c3225ce49b",
+    "type": "mission",
+    "text": "Misión creada: DIBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_6426c6b315d3",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.951Z"
+  },
+  {
+    "id": "act_574c8d3f3f5f",
+    "type": "mission",
+    "text": "Misión creada: ADIS - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_07fc33a2cda1",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.947Z"
+  },
+  {
+    "id": "act_e9401ca9e189",
+    "type": "mission",
+    "text": "Misión creada: DEBRE - Lámpara colgante · Argentina.",
+    "meta": {
+      "missionId": "mis_915f29350e05",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.935Z"
+  },
+  {
+    "id": "act_e2a0dc093576",
+    "type": "mission",
+    "text": "Misión creada: TAMWA - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_04ba8d713d62",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.933Z"
+  },
+  {
+    "id": "act_e266af2d9208",
+    "type": "mission",
+    "text": "Misión creada: TAMWA L - Lampara de mesa · Argentina.",
+    "meta": {
+      "missionId": "mis_35e08d6d8267",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.930Z"
+  },
+  {
+    "id": "act_c2db0c0fac19",
+    "type": "mission",
+    "text": "Misión creada: MENDIR - Lámapara colgande · Argentina.",
+    "meta": {
+      "missionId": "mis_d72775a1f732",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.928Z"
+  },
+  {
+    "id": "act_182ce7f0c758",
+    "type": "mission",
+    "text": "Misión creada: DESE - DEBRE - Lampara de Pie · Argentina.",
+    "meta": {
+      "missionId": "mis_d1589f7ffe45",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.926Z"
+  },
+  {
+    "id": "act_3be1f3e684ef",
+    "type": "mission",
+    "text": "Misión creada: TEPI 2 - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_51198f144524",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.923Z"
+  },
+  {
+    "id": "act_a3fab839e7c8",
+    "type": "mission",
+    "text": "Misión creada: CIRE - velador · Argentina.",
+    "meta": {
+      "missionId": "mis_47fdffdb2a89",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.920Z"
+  },
+  {
+    "id": "act_429617961ed3",
+    "type": "mission",
+    "text": "Misión creada: IZUMI Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_b5214c2a4808",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.917Z"
+  },
+  {
+    "id": "act_bce80077ff4c",
+    "type": "mission",
+    "text": "Misión creada: YAMA velador · Argentina.",
+    "meta": {
+      "missionId": "mis_5f13d181ba8b",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.914Z"
+  },
+  {
+    "id": "act_0fd6f291d565",
+    "type": "mission",
+    "text": "Misión creada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_6b666c349262",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.911Z"
+  },
+  {
+    "id": "act_5ece6b397df1",
+    "type": "mission",
+    "text": "Misión creada: BORU Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_82ed41fab3c6",
+      "demo": false
+    },
+    "at": "2026-11-20T15:05:52.907Z"
+  },
+  {
+    "id": "act_659ff90f0866",
+    "type": "mission",
+    "text": "Se borraron todas las misiones (9).",
+    "meta": {},
+    "at": "2026-11-20T15:05:05.277Z"
+  },
+  {
+    "id": "act_7911c3c7eb7a",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:04:50.228Z"
+  },
+  {
+    "id": "act_6a5895b3ffe7",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:04:48.514Z"
+  },
+  {
+    "id": "act_64d09f8d65bf",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:04:24.441Z"
+  },
+  {
+    "id": "act_e445a6e820d7",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T15:04:22.021Z"
+  },
+  {
+    "id": "act_7e317e67ef66",
+    "type": "system",
+    "text": "Se liberaron 1 misión interrumpida por un cierre de Lucian.",
+    "meta": {},
+    "at": "2026-11-20T14:53:03.215Z"
+  },
+  {
+    "id": "act_61318c5f4108",
+    "type": "outreach",
+    "text": "Mensaje enviado a Pilight Shop.",
+    "meta": {
+      "threadId": "thr_f3cd54a106bb",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T14:35:22.885Z"
+  },
+  {
+    "id": "act_0161aa18081d",
+    "type": "outreach",
+    "text": "Mensaje enviado a Lámparas Barcelona.",
+    "meta": {
+      "threadId": "thr_fba184b09857",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T14:34:09.860Z"
+  },
+  {
+    "id": "act_aa15a3d5ea56",
+    "type": "outreach",
+    "text": "Mensaje enviado a Insolit BCN.",
+    "meta": {
+      "threadId": "thr_0db09a9dac37",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T14:33:57.777Z"
+  },
+  {
+    "id": "act_12c717e9f9ae",
+    "type": "outreach",
+    "text": "Mensaje enviado a MINIM.",
+    "meta": {
+      "threadId": "thr_3b88e10cc41d",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T14:33:32.303Z"
+  },
+  {
+    "id": "act_19f095c98268",
+    "type": "outreach",
+    "text": "Mensaje enviado a Iluminación Agüero.",
+    "meta": {
+      "threadId": "thr_1656258f0ae0",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T14:32:53.481Z"
+  },
+  {
+    "id": "act_6a12b629f8ff",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T13:35:41.352Z"
+  },
+  {
+    "id": "act_2aa239ea5c9b",
+    "type": "mission",
+    "text": "Misión reintentada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b"
+    },
+    "at": "2026-11-20T13:35:41.268Z"
+  },
+  {
+    "id": "act_1bbf089a7089",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:35:32.720Z"
+  },
+  {
+    "id": "act_149d2f864f0a",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:20:01.895Z"
+  },
+  {
+    "id": "act_77bc41164500",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:14:13.849Z"
+  },
+  {
+    "id": "act_b13ee87965a4",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:13:49.987Z"
+  },
+  {
+    "id": "act_115e5feb16fe",
+    "type": "mission",
+    "text": "Misión con error: TEPI - Velador · Argentina. Mensajes de apertura: La consulta tardó demasiado. Puede ser mala conexión o un proveedor lento.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T13:13:07.743Z"
+  },
+  {
+    "id": "act_cf06ac82e047",
+    "type": "mission",
+    "text": "Misión completada: SIRI Velador (base alta) · Argentina. 9 compradores verificados. 9 hilos en la bandeja.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false,
+      "warnings": 0,
+      "prospects": 9
+    },
+    "at": "2026-11-20T13:12:29.837Z"
+  },
+  {
+    "id": "act_5f9fb49f9b3f",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:10:19.498Z"
+  },
+  {
+    "id": "act_b06e8570721d",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T13:09:55.891Z"
+  },
+  {
+    "id": "act_982665accb35",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T13:09:55.807Z"
+  },
+  {
+    "id": "act_012cdea5e93d",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:09:40.663Z"
+  },
+  {
+    "id": "act_9bf59ea87032",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. El proveedor de IA no tiene saldo suficiente. Cargá crédito o cambiá de proveedor.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T13:09:24.273Z"
+  },
+  {
+    "id": "act_fbf1314c9cac",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T13:09:24.067Z"
+  },
+  {
+    "id": "act_0b557795ed91",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T13:09:23.984Z"
+  },
+  {
+    "id": "act_a003494f0654",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. El proveedor de IA no tiene saldo suficiente. Cargá crédito o cambiá de proveedor.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T13:09:14.568Z"
+  },
+  {
+    "id": "act_ddf1b9ef21b9",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T13:09:14.425Z"
+  },
+  {
+    "id": "act_59edbd5be0e8",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T13:09:14.339Z"
+  },
+  {
+    "id": "act_c0a72d111f42",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:08:56.686Z"
+  },
+  {
+    "id": "act_19961f785ca6",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:05:00.869Z"
+  },
+  {
+    "id": "act_1e651062ec09",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T13:04:46.745Z"
+  },
+  {
+    "id": "act_5a7b01917d5f",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T13:04:02.290Z"
+  },
+  {
+    "id": "act_c074706407ba",
+    "type": "mission",
+    "text": "Misión reintentada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b"
+    },
+    "at": "2026-11-20T13:04:02.192Z"
+  },
+  {
+    "id": "act_c2a5da338f24",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. Plan final para el dueño: La consulta tardó demasiado. Puede ser mala conexión o un proveedor lento.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T13:01:48.596Z"
+  },
+  {
+    "id": "act_87b4fb5d8e31",
+    "type": "mission",
+    "text": "Misión cancelada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_c11f0ca7857d"
+    },
+    "at": "2026-11-20T12:58:31.546Z"
+  },
+  {
+    "id": "act_a311f7e8d6f5",
+    "type": "mission",
+    "text": "Misión iniciada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_c11f0ca7857d",
+      "demo": false
+    },
+    "at": "2026-11-20T12:55:52.201Z"
+  },
+  {
+    "id": "act_0475d4e896c6",
+    "type": "mission",
+    "text": "Misión creada: SORA Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_c11f0ca7857d",
+      "demo": false
+    },
+    "at": "2026-11-20T12:55:52.120Z"
+  },
+  {
+    "id": "act_8f57f83a414a",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T12:52:43.159Z"
+  },
+  {
+    "id": "act_17809f32c458",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T12:52:43.066Z"
+  },
+  {
+    "id": "act_93a1c315d33d",
+    "type": "system",
+    "text": "Se liberaron 1 misión interrumpida por un cierre de Lucian.",
+    "meta": {},
+    "at": "2026-11-20T12:41:03.779Z"
+  },
+  {
+    "id": "act_776eab7f02db",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T12:24:00.178Z"
+  },
+  {
+    "id": "act_b9412de964fc",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T12:24:00.094Z"
+  },
+  {
+    "id": "act_ba667f287500",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. Plan final para el dueño: La consulta tardó demasiado. Puede ser mala conexión o un proveedor lento.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T12:16:02.262Z"
+  },
+  {
+    "id": "act_bcc4b9e266f1",
+    "type": "mission",
+    "text": "Misión cancelada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b"
+    },
+    "at": "2026-11-20T12:06:06.633Z"
+  },
+  {
+    "id": "act_083228888479",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T12:05:55.437Z"
+  },
+  {
+    "id": "act_e7525b3e32ce",
+    "type": "mission",
+    "text": "Misión cancelada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_f025722c18d1"
+    },
+    "at": "2026-11-20T12:05:55.435Z"
+  },
+  {
+    "id": "act_3d3bf007ff5a",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T12:05:21.978Z"
+  },
+  {
+    "id": "act_eb3ac7a9b713",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T12:05:13.202Z"
+  },
+  {
+    "id": "act_d5f84cc1e3af",
+    "type": "mission",
+    "text": "Misión reintentada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b"
+    },
+    "at": "2026-11-20T12:05:13.115Z"
+  },
+  {
+    "id": "act_ccf30226e983",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_f025722c18d1",
+      "demo": false
+    },
+    "at": "2026-11-20T12:04:55.068Z"
+  },
+  {
+    "id": "act_976a3be5fd85",
+    "type": "mission",
+    "text": "Misión creada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_f025722c18d1",
+      "demo": false
+    },
+    "at": "2026-11-20T12:04:54.974Z"
+  },
+  {
+    "id": "act_f902c42d3c45",
+    "type": "mission",
+    "text": "Misión con error: TEPI - Velador · Argentina. Mensajes de apertura: La consulta tardó demasiado. Puede ser mala conexión o un proveedor lento.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T12:04:04.073Z"
+  },
+  {
+    "id": "act_66aa345719f1",
+    "type": "mission",
+    "text": "Misión con error: SIRI Velador (base alta) · Argentina. Plan final para el dueño: La consulta tardó demasiado. Puede ser mala conexión o un proveedor lento.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T12:03:53.010Z"
+  },
+  {
+    "id": "act_58d22d9874f9",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T11:54:58.630Z"
+  },
+  {
+    "id": "act_071f8a2f38a3",
+    "type": "mission",
+    "text": "Misión reintentada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b"
+    },
+    "at": "2026-11-20T11:54:58.543Z"
+  },
+  {
+    "id": "act_3f14ce03b71c",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T11:54:47.559Z"
+  },
+  {
+    "id": "act_37d91390b7c2",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T11:54:47.474Z"
+  },
+  {
+    "id": "act_51081af1b90c",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T11:46:49.000Z"
+  },
+  {
+    "id": "act_3e0fadcf58b1",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T11:46:48.918Z"
+  },
+  {
+    "id": "act_ceb45c882d5c",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T11:46:37.198Z"
+  },
+  {
+    "id": "act_6a3ff9d79734",
+    "type": "mission",
+    "text": "Misión reintentada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b"
+    },
+    "at": "2026-11-20T11:46:37.102Z"
+  },
+  {
+    "id": "act_7a06865613c1",
+    "type": "reply",
+    "text": "Se borraron todas las conversaciones (11).",
+    "meta": {},
+    "at": "2026-11-20T11:46:16.479Z"
+  },
+  {
+    "id": "act_af8a17821402",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Optimizamos los mercados, profundidad y cantidad de prospectos para Argentina, Uruguay y Chile, y mejoramos la estrategia de email y ventas.",
+    "meta": {},
+    "at": "2026-11-20T11:46:00.842Z"
+  },
+  {
+    "id": "act_3e06282a37bc",
+    "type": "system",
+    "text": "Se liberaron 2 misiónes interrumpidas por un cierre de Lucian.",
+    "meta": {},
+    "at": "2026-11-20T11:45:32.965Z"
+  },
+  {
+    "id": "act_a3fdd27a9067",
+    "type": "reply",
+    "text": "CASA & SAMIC pasó a etapa nuevo.",
+    "meta": {
+      "threadId": "thr_c6ecf2eb4fbf"
+    },
+    "at": "2026-11-20T11:44:02.389Z"
+  },
+  {
+    "id": "act_e9e830f66ac1",
+    "type": "mission",
+    "text": "Borradores revalidados: SORA Velador · Argentina. 0 actualizados.",
+    "meta": {
+      "missionId": "mis_ba312550738a"
+    },
+    "at": "2026-11-20T11:41:55.091Z"
+  },
+  {
+    "id": "act_f6aade5dc783",
+    "type": "mission",
+    "text": "Borradores revalidados: SORA Velador · Argentina. 0 actualizados.",
+    "meta": {
+      "missionId": "mis_ba312550738a"
+    },
+    "at": "2026-11-20T11:41:42.844Z"
+  },
+  {
+    "id": "act_d0ed4933e15e",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-20T11:41:19.049Z"
+  },
+  {
+    "id": "act_721cf9dac485",
+    "type": "settings",
+    "text": "Configuración asistida por IA: Optimicé los mercados, profundidad y cantidad de prospectos para una mayor cobertura. Ajusté el tono para ser más persuasivo y mantuve los límites de correo sin cambios. Configuré el onboarding en el ",
+    "meta": {},
+    "at": "2026-11-20T11:41:15.447Z"
+  },
+  {
+    "id": "act_58358f3342a4",
+    "type": "product",
+    "text": "Producto eliminado: Nube.",
+    "meta": {
+      "productId": "prod_demo_nube"
+    },
+    "at": "2026-11-20T11:39:03.229Z"
+  },
+  {
+    "id": "act_3e6b18697c8b",
+    "type": "product",
+    "text": "Producto eliminado: Aurora 01.",
+    "meta": {
+      "productId": "prod_demo_aurora"
+    },
+    "at": "2026-11-20T11:38:58.045Z"
+  },
+  {
+    "id": "act_e16b48e522ee",
+    "type": "product",
+    "text": "Producto eliminado: Filo.",
+    "meta": {
+      "productId": "prod_demo_filo"
+    },
+    "at": "2026-11-20T11:38:50.531Z"
+  },
+  {
+    "id": "act_ba7cba728ef1",
+    "type": "mission",
+    "text": "Misión eliminada: Aurora 01 · España y México.",
+    "meta": {
+      "missionId": "mis_demo_aurora"
+    },
+    "at": "2026-11-20T11:38:12.424Z"
+  },
+  {
+    "id": "act_1b6e5d098fe3",
+    "type": "reply",
+    "text": "Conversación eliminada: Luz de Autor.",
+    "meta": {
+      "threadId": "thr_demo_1"
+    },
+    "at": "2026-11-20T11:37:57.727Z"
+  },
+  {
+    "id": "act_09944625ac28",
+    "type": "reply",
+    "text": "Conversación eliminada: Atelier Bruma.",
+    "meta": {
+      "threadId": "thr_demo_4"
+    },
+    "at": "2026-11-20T11:37:50.126Z"
+  },
+  {
+    "id": "act_a484861239e1",
+    "type": "reply",
+    "text": "Conversación eliminada: Casa Nórdica.",
+    "meta": {
+      "threadId": "thr_demo_2"
+    },
+    "at": "2026-11-20T11:37:44.310Z"
+  },
+  {
+    "id": "act_e0e50b1f5cab",
+    "type": "reply",
+    "text": "Conversación eliminada: Forma Living.",
+    "meta": {
+      "threadId": "thr_demo_5"
+    },
+    "at": "2026-11-20T11:37:38.339Z"
+  },
+  {
+    "id": "act_def38903ceae",
+    "type": "outreach",
+    "text": "Mensaje enviado a ILUMINICA.",
+    "meta": {
+      "threadId": "thr_e270028081de",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T11:36:33.507Z"
+  },
+  {
+    "id": "act_08a3e9b57db2",
+    "type": "outreach",
+    "text": "Mensaje enviado a Iluminación Agüero.",
+    "meta": {
+      "threadId": "thr_2ca9cfe105d5",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T11:36:15.220Z"
+  },
+  {
+    "id": "act_57abaac2cb62",
+    "type": "outreach",
+    "text": "Mensaje enviado a CASA & SAMIC.",
+    "meta": {
+      "threadId": "thr_c6ecf2eb4fbf",
+      "channel": "gmail"
+    },
+    "at": "2026-11-20T11:35:30.553Z"
+  },
+  {
+    "id": "act_d3094535535f",
+    "type": "mission",
+    "text": "Misión iniciada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6",
+      "demo": false
+    },
+    "at": "2026-11-20T11:29:57.431Z"
+  },
+  {
+    "id": "act_eb2e7de76fbb",
+    "type": "mission",
+    "text": "Misión reintentada: SIRI Velador (base alta) · Argentina.",
+    "meta": {
+      "missionId": "mis_20e6644737b6"
+    },
+    "at": "2026-11-20T11:29:57.336Z"
+  },
+  {
+    "id": "act_cf95468a1c01",
+    "type": "mission",
+    "text": "Misión iniciada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T11:29:48.181Z"
+  },
+  {
+    "id": "act_8a3878b8c77f",
+    "type": "mission",
+    "text": "Misión reintentada: TEPI - Velador · Argentina.",
+    "meta": {
+      "missionId": "mis_23cca547405b"
+    },
+    "at": "2026-11-20T11:29:48.097Z"
+  },
+  {
+    "id": "act_12374a6cb1b4",
+    "type": "mission",
+    "text": "Misión con error: TEPI - Velador · Argentina. Mensajes de apertura: La consulta tardó demasiado. Puede ser mala conexión o un proveedor lento.",
+    "meta": {
+      "missionId": "mis_23cca547405b",
+      "demo": false
+    },
+    "at": "2026-11-20T11:12:20.918Z"
+  },
+  {
+    "id": "act_e4e53d2a09c8",
+    "type": "system",
+    "text": "Se cargaron datos de ejemplo.",
+    "meta": {
+      "demo": true
+    },
+    "at": "2026-11-20T10:58:21.265Z"
+  },
+  {
+    "id": "act_199fe390789d",
+    "type": "system",
+    "text": "Datos de ejemplo cargados.",
+    "meta": {
+      "demo": true
+    },
+    "at": "2026-11-20T10:58:21.264Z"
+  },
+  {
+    "id": "act_2cc3ee535657",
+    "type": "reply",
+    "text": "Luz de Autor respondió: pidió ficha y plazo para 4 unidades.",
+    "meta": {
+      "threadId": "thr_demo_1"
+    },
+    "at": "2026-11-18T10:58:21.247Z"
+  }
+]

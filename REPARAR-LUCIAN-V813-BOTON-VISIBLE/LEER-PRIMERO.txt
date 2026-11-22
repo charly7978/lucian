@@ -1,0 +1,24 @@
+LUCIAN V8.1.3 - RESEND VISIBLE EN VENTAS
+
+SOLUCIONADO: el boton de Resend antes solo aparecia si Resend era el proveedor seleccionado.
+V8.1.3 muestra la accion en Ventas aunque tu proveedor actual sea Gmail, Manual o Webhook.
+NO cambia la configuracion de correo, NO envia mensajes y NO toca data.
+
+INSTALACION:
+1. Cerrar Lucian y su ventana negra.
+2. Extraer TODO este ZIP.
+3. Ejecutar ACTUALIZAR-LUCIAN.cmd.
+4. Elegir tu INICIAR-LUCIAN.cmd habitual y confirmar que detecta las 33 lamparas.
+5. Escribir SI. Al finalizar debe informar [OK].
+6. Abrir Lucian > Ventas y hacer Ctrl+F5; ver boton 'Comprobar entregas en Resend'.
+
+La consulta solo recupera estados de correos enviados mediante Resend y
+requiere una clave Resend autorizada en la configuracion. Si los envios
+fueron por Gmail no habra datos en Resend. NO cambies el proveedor a Resend
+para realizar la comprobacion.
+
+El parche agrega/actualiza solo server.mjs, public/app.js y el modulo de
+conciliacion de Resend; guarda respaldo del codigo y revierte ante errores.
+
+Si el boton sigue sin mostrarse, confirma que la consola imprimio [OK],
+y que estas abriendo la misma instalacion de Lucian.

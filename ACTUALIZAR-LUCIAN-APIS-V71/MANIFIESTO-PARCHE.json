@@ -1,0 +1,59 @@
+{
+  "version": "7.1-apis",
+  "base": "Lucian V7",
+  "noData": true,
+  "archivos": [
+    {
+      "archivo": "server.mjs",
+      "sha256": "db315f4611beec832e793fac035e46526911ebde304a2ec026ea03de6676b542"
+    },
+    {
+      "archivo": "public/app.js",
+      "sha256": "f9b64a3add0789a9782c40815103e24448962e702c84e00599c3cbe6ae25c17b"
+    },
+    {
+      "archivo": "package.json",
+      "sha256": "d3f959630640c83ca30fea44ac2322f5d91e01166d1d57a2d9b23e5b22758328"
+    },
+    {
+      "archivo": "lib/ai.mjs",
+      "sha256": "66cd8daccc608de9c9298319e53ea1a81d42243b8af5a365268347d3f7d44205"
+    },
+    {
+      "archivo": "lib/connections.mjs",
+      "sha256": "6ee66172f5f60bb7ef2b882ea01dc8f917750857dd3d01bdfad077fc5e30eca1"
+    },
+    {
+      "archivo": "lib/email.mjs",
+      "sha256": "7f121a82e1c0a80afdccf81d7cd6348f807e0541e4782cf14938cc7221412ce5"
+    },
+    {
+      "archivo": "lib/imap.mjs",
+      "sha256": "6e3c6fce044aad83764b0bb2f5d4c1e4c145260fdd323f88ff989ce79a7f8406"
+    },
+    {
+      "archivo": "lib/notify.mjs",
+      "sha256": "43915e0df7ed6eb7dfb50f9e8a90716849da312d8cbd75dec015c0e24d86654e"
+    },
+    {
+      "archivo": "lib/search.mjs",
+      "sha256": "e62479020670e14e10b9b00daea1b6d6b59c8e8ccc997ba10c26a377cf930e3e"
+    },
+    {
+      "archivo": "lib/smtp.mjs",
+      "sha256": "ef9e3c7be898a3701b9b94992195301d08c68df37a5f197425eaf931673c412c"
+    },
+    {
+      "archivo": "tools/test-api-diagnostics.mjs",
+      "sha256": "a559da17c608152e1fada606bbdfda539e5c315ba28a40469a806b5a6d8679b4"
+    },
+    {
+      "archivo": "tools/test-api-diagnostics-http.mjs",
+      "sha256": "d1d6a03995ec8024c12244ef13e6363a99b3d39abd5550e97ee4b664e272d0f0"
+    },
+    {
+      "archivo": "tools/test-search.mjs",
+      "sha256": "0e59591cca69d7634cbee92a46520e471ef66a64cd56ad577b3feaa0a63cc77d"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+LUCIAN - ACTUALIZACION DE AGENDA V3: CONTADOR CORREGIDO
+=======================================================
+
+IMPORTANTE: la version anterior podia mostrar 1 lampara aunque hubiera 33,
+por un error de conteo de arrays JSON en PowerShell. No implicaba perdida.
+
+1. Cerrar la ventana negra del servidor Lucian.
+2. Extraer TODO el ZIP a una carpeta.
+3. Ejecutar ACTUALIZAR-LUCIAN.cmd.
+4. Elegir el INICIAR-LUCIAN.cmd QUE ABRE las 33 lamparas reales.
+5. El contador lee los JSON con Node.js y muestra las cifras reales.
+6. Si indica menos de 33, la actualizacion SE CANCELA SIN CAMBIOS.
+7. Solo si muestra AL MENOS 33, escribir SI para actualizar codigo.
+8. Abrir tu Lucian de siempre y revisar /#/ventas. Usar Ctrl+F5.
+
+Esta actualizacion NO borra ni crea productos; NO cambia data.
+Hace respaldo del codigo anterior y verifica hashes de los archivos.
+Si las cifras son incorrectas, NO procedas y pasame la ruta mostrada.

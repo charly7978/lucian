@@ -1,0 +1,1250 @@
+﻿[
+  {
+    "id": "thr_596d0ce0b496",
+    "demo": true,
+    "missionId": "mis_a3a2aea99b59",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "diseÃ±o de interiores",
+      "company": "Casa NÃ³rdica",
+      "role": "diseÃ±o de interiores",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Estados Unidos",
+      "city": "Ciudad de MÃ©xico",
+      "website": "https://example.com/casa-nordica",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/casa-nordica",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T05:24:21.082Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 78,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "Su cliente compra diseÃ±o accesible; tienen vidriera en Roma Norte y venden online.",
+    "drafts": [
+      {
+        "id": "drf_166484bf0488",
+        "channel": "formulario",
+        "language": "en",
+        "subject": "Aurora 01: a small series for Casa NÃ³rdica",
+        "body": "Hi Casa NÃ³rdica team,\n\nI saw your selection of design pieces for compact interiors and thought Aurora 01 might fit.\n\nIt is a 3D-printed pendant lamp with a warm, dimmable light (standard 220â€“240 V; check 110 V and local certification before ordering) and a geometric shade that casts a distinct shadow. Each piece is made to order in a small series and can be finished in a custom color.\n\nRetail is USD 240; wholesale starts at 4 units. I can send a one-page spec sheet with dimensions, materials and lead time.\n\nWould it make sense to send it over?\n\nâ€” Lucian",
+        "status": "listo",
+        "createdAt": "2026-11-20T05:24:21.082Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Enviar por formulario o LinkedIn y marcarlo como enviado.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T05:24:21.082Z",
+    "createdAt": "2026-11-20T05:24:21.082Z",
+    "updatedAt": "2026-11-20T05:24:21.082Z"
+  },
+  {
+    "id": "thr_e94d5e9eed49",
+    "demo": true,
+    "missionId": "mis_718cffa21e9f",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "hotel boutique",
+      "company": "Hotel Alba",
+      "role": "hotel boutique",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "EspaÃ±a",
+      "city": "Menorca",
+      "website": "https://example.com/hotel-alba",
+      "type": "hotel"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/hotel-alba",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T02:57:34.501Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 42,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "Reforma de 18 habitaciones; necesitan lÃ¡mparas resistentes y repetibles.",
+    "drafts": [
+      {
+        "id": "drf_bde62207bed9",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Hotel Alba",
+        "body": "Hola,\n\nVi la selecciÃ³n de Hotel Alba y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable (versiÃ³n estÃ¡ndar 220â€“240 V; consultar versiÃ³n 110 V y certificaciÃ³n local antes de comprar) y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian",
+        "status": "listo",
+        "createdAt": "2026-11-20T02:57:34.501Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Enviar por formulario o LinkedIn y marcarlo como enviado.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:57:34.501Z",
+    "createdAt": "2026-11-20T02:57:34.501Z",
+    "updatedAt": "2026-11-20T02:57:34.501Z"
+  },
+  {
+    "id": "thr_e75b467d2fae",
+    "demo": true,
+    "missionId": "mis_718cffa21e9f",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "concept store",
+      "company": "Casa Flora",
+      "role": "concept store",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Portugal",
+      "city": "Lisboa",
+      "website": "https://example.com/casa-flora",
+      "type": "concept store"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/casa-flora",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T02:57:34.501Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 42,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "Mezcla cerÃ¡mica, textiles y luz; entrada mÃ¡s lenta pero afinidad estÃ©tica alta.",
+    "drafts": [
+      {
+        "id": "drf_717b86785ca9",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Casa Flora",
+        "body": "Hola,\n\nVi la selecciÃ³n de Casa Flora y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable (versiÃ³n estÃ¡ndar 220â€“240 V; consultar versiÃ³n 110 V y certificaciÃ³n local antes de comprar) y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian",
+        "status": "listo",
+        "createdAt": "2026-11-20T02:57:34.501Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Enviar por formulario o LinkedIn y marcarlo como enviado.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:57:34.501Z",
+    "createdAt": "2026-11-20T02:57:34.501Z",
+    "updatedAt": "2026-11-20T02:57:34.501Z"
+  },
+  {
+    "id": "thr_28af41f6484f",
+    "demo": true,
+    "missionId": "mis_718cffa21e9f",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "estudio de arquitectura",
+      "company": "Mesa Alta",
+      "role": "estudio de arquitectura",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Estados Unidos",
+      "city": "Miami",
+      "website": "https://example.com/mesa-alta",
+      "type": "interiorista"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/mesa-alta",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T02:57:34.501Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 60,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "Proyectos de hospitality; pueden pedir 20 unidades para un hotel boutique.",
+    "drafts": [
+      {
+        "id": "drf_29c3507d8e58",
+        "channel": "formulario",
+        "language": "en",
+        "subject": "Aurora 01: a small series for Mesa Alta",
+        "body": "Hi Mesa Alta team,\n\nI saw your selection of design pieces for compact interiors and thought Aurora 01 might fit.\n\nIt is a 3D-printed pendant lamp with a warm, dimmable light (standard 220â€“240 V; check 110 V and local certification before ordering) and a geometric shade that casts a distinct shadow. Each piece is made to order in a small series and can be finished in a custom color.\n\nRetail is USD 240; wholesale starts at 4 units. I can send a one-page spec sheet with dimensions, materials and lead time.\n\nWould it make sense to send it over?\n\nâ€” Lucian",
+        "status": "listo",
+        "createdAt": "2026-11-20T02:57:34.501Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Enviar por formulario o LinkedIn y marcarlo como enviado.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:57:34.501Z",
+    "createdAt": "2026-11-20T02:57:34.501Z",
+    "updatedAt": "2026-11-20T02:57:34.501Z"
+  },
+  {
+    "id": "thr_71ad4e129256",
+    "demo": true,
+    "missionId": "mis_718cffa21e9f",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "marketplace de diseÃ±o",
+      "company": "The Design Edit",
+      "role": "marketplace de diseÃ±o",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Reino Unido",
+      "city": "Londres",
+      "website": "https://example.com/the-design-edit",
+      "type": "marketplace"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/the-design-edit",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T02:57:34.501Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 60,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "CuradurÃ­a editorial y venta online; piden fichas tÃ©cnicas completas.",
+    "drafts": [
+      {
+        "id": "drf_78ede8e3871d",
+        "channel": "formulario",
+        "language": "en",
+        "subject": "Aurora 01: a small series for The Design Edit",
+        "body": "Hi The Design Edit team,\n\nI saw your selection of sculptural lighting and small-series objects and thought Aurora 01 might fit.\n\nIt is a 3D-printed pendant lamp with a warm, dimmable light (standard 220â€“240 V; check 110 V and local certification before ordering) and a geometric shade that casts a distinct shadow. Each piece is made to order in a small series and can be finished in a custom color.\n\nRetail is USD 240; wholesale starts at 4 units. I can send a one-page spec sheet with dimensions, materials and lead time.\n\nWould it make sense to send it over?\n\nâ€” Lucian",
+        "status": "listo",
+        "createdAt": "2026-11-20T02:57:34.501Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Enviar por formulario o LinkedIn y marcarlo como enviado.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:57:34.501Z",
+    "createdAt": "2026-11-20T02:57:34.501Z",
+    "updatedAt": "2026-11-20T02:57:34.501Z"
+  },
+  {
+    "id": "thr_60256968269c",
+    "demo": true,
+    "missionId": "mis_718cffa21e9f",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "concept store",
+      "company": "Objeto Casa",
+      "role": "concept store",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Colombia",
+      "city": "BogotÃ¡",
+      "website": "https://example.com/objeto-casa",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/objeto-casa",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T02:57:34.501Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 78,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "PÃºblico joven con interÃ©s en diseÃ±o latinoamericano; buen canal de entrada regional.",
+    "drafts": [
+      {
+        "id": "drf_9162c458e69a",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Objeto Casa",
+        "body": "Hola,\n\nVi la selecciÃ³n de Objeto Casa y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable (versiÃ³n estÃ¡ndar 220â€“240 V; consultar versiÃ³n 110 V y certificaciÃ³n local antes de comprar) y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian",
+        "status": "listo",
+        "createdAt": "2026-11-20T02:57:34.501Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Enviar por formulario o LinkedIn y marcarlo como enviado.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:57:34.501Z",
+    "createdAt": "2026-11-20T02:57:34.501Z",
+    "updatedAt": "2026-11-20T02:57:34.501Z"
+  },
+  {
+    "id": "thr_168f45d6a097",
+    "demo": true,
+    "missionId": "mis_718cffa21e9f",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "iluminaciÃ³n",
+      "company": "Nord & Light",
+      "role": "iluminaciÃ³n",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Dinamarca",
+      "city": "Copenhague",
+      "website": "https://example.com/nord-light",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/nord-light",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T02:57:34.501Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 60,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "Surtido muy curado; exigen documentaciÃ³n de materiales y packaging sin plÃ¡stico.",
+    "drafts": [
+      {
+        "id": "drf_5b9f621f4592",
+        "channel": "formulario",
+        "language": "en",
+        "subject": "Aurora 01: a small series for Nord & Light",
+        "body": "Hi Nord & Light team,\n\nI saw your selection of sculptural lighting and small-series objects and thought Aurora 01 might fit.\n\nIt is a 3D-printed pendant lamp with a warm, dimmable light (standard 220â€“240 V; check 110 V and local certification before ordering) and a geometric shade that casts a distinct shadow. Each piece is made to order in a small series and can be finished in a custom color.\n\nRetail is USD 240; wholesale starts at 4 units. I can send a one-page spec sheet with dimensions, materials and lead time.\n\nWould it make sense to send it over?\n\nâ€” Lucian",
+        "status": "listo",
+        "createdAt": "2026-11-20T02:57:34.501Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Enviar por formulario o LinkedIn y marcarlo como enviado.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:57:34.501Z",
+    "createdAt": "2026-11-20T02:57:34.501Z",
+    "updatedAt": "2026-11-20T02:57:34.501Z"
+  },
+  {
+    "id": "thr_c36165297227",
+    "demo": true,
+    "missionId": "mis_718cffa21e9f",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "distribuciÃ³n de diseÃ±o",
+      "company": "Habitar",
+      "role": "distribuciÃ³n de diseÃ±o",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Argentina",
+      "city": "Buenos Aires",
+      "website": "https://example.com/habitar",
+      "type": "distribuidor"
+    },
+    "verification": {
+      "webEstado": "no_responde",
+      "webTitulo": "",
+      "webUrl": "https://example.com/habitar",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://example.com/directorio-diseno",
+      "at": "2026-11-20T02:57:34.501Z"
+    },
+    "unverified": false,
+    "stage": "contactado",
+    "score": 60,
+    "source": "MisiÃ³n Aurora 01 Â· EspaÃ±a",
+    "notes": "Distribuyen marcas locales en tiendas de todo el paÃ­s; pueden probar una serie corta.",
+    "drafts": [
+      {
+        "id": "drf_0d5cb622eb69",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Habitar",
+        "body": "Hola,\n\nVi la selecciÃ³n de Habitar y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable (versiÃ³n estÃ¡ndar 220â€“240 V; consultar versiÃ³n 110 V y certificaciÃ³n local antes de comprar) y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian",
+        "status": "enviado",
+        "createdAt": "2026-11-20T02:57:34.501Z",
+        "source": "mision",
+        "complianceCorrections": 1,
+        "guardVersion": 2,
+        "sentAt": "2026-11-20T03:02:03.982Z",
+        "sentChannel": "manual"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_b84718ae5346",
+        "direction": "out",
+        "channel": "formulario",
+        "subject": "Aurora 01: una serie corta para Habitar",
+        "body": "Hola,\n\nVi la selecciÃ³n de Habitar y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable (versiÃ³n estÃ¡ndar 220â€“240 V; consultar versiÃ³n 110 V y certificaciÃ³n local antes de comprar) y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA y no vuelvo a escribirte.",
+        "at": "2026-11-20T03:02:03.982Z",
+        "status": "enviado_manual",
+        "provider": "manual",
+        "messageId": "<lucian-8117ca84-74a2-4de4-9f88-5bff5678e4b3@lucian.local>"
+      }
+    ],
+    "nextStep": "Seguimiento con valor en 4 dÃ­as.",
+    "nextFollowUp": "2026-11-24T03:02:00.000Z",
+    "lastActivityAt": "2026-11-20T03:02:03.982Z",
+    "createdAt": "2026-11-20T02:57:34.501Z",
+    "updatedAt": "2026-11-20T03:02:28.512Z"
+  },
+  {
+    "id": "thr_aa9c1141b86d",
+    "demo": false,
+    "missionId": "mis_02488da07f50",
+    "productId": "prod_demo_filo",
+    "contact": {
+      "name": "Equipo de compras",
+      "company": "Interlight",
+      "role": "",
+      "email": "contacto@interlight.cl",
+      "emailStatus": "publico",
+      "country": "Chile",
+      "city": "Santiago",
+      "website": "https://interlight.cl",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "activo",
+      "webTitulo": "Interlight IluminaciÃ³n",
+      "webUrl": "https://interlight.cl/",
+      "emailEstado": "publico",
+      "emailFuente": "https://interlight.cl/",
+      "origen": "directorio",
+      "fuente": "directorio semilla de Lucian (sitios verificados en 2026-11-19)",
+      "at": "2026-11-20T02:06:30.417Z"
+    },
+    "unverified": false,
+    "stage": "contactado",
+    "score": 86,
+    "source": "MisiÃ³n Filo Â· Argentina",
+    "notes": "Tienda de iluminaciÃ³n de diseÃ±o con mÃ¡s de 40 aÃ±os en Chile; vende al detalle y a proyectos inmobiliarios.",
+    "drafts": [
+      {
+        "id": "drf_44a61a477430",
+        "channel": "email",
+        "language": "es",
+        "subject": "Filo, lÃ¡mpara 3D para Interlight Chile",
+        "body": "Hola Interlight, en Lucian diseÃ±amos Filo, una lÃ¡mpara colgante de gran formato con estructura de aluminio que aporta diseÃ±o y durabilidad, ideal para espacios premium. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºen su incorporaciÃ³n? Este mensaje se envÃ­a bajo interÃ©s legÃ­timo y puede solicitar baja respondiendo a este correo.",
+        "status": "enviado",
+        "createdAt": "2026-11-20T02:06:30.417Z",
+        "source": "mision",
+        "reviewNote": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+        "reviewKind": "cumplimiento",
+        "compliancePending": 3,
+        "revisionApplied": true,
+        "guardVersion": 2,
+        "approvedAt": "2026-11-20T02:58:31.932Z",
+        "approvedBy": "dueÃ±o",
+        "approvedReviewKind": "cumplimiento",
+        "updatedAt": "2026-11-20T02:58:31.932Z",
+        "sentAt": "2026-11-20T02:58:40.730Z",
+        "sentChannel": "manual"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_29359c329f45",
+        "direction": "out",
+        "channel": "email",
+        "subject": "Filo, lÃ¡mpara 3D para Interlight Chile",
+        "body": "Hola Interlight, en Lucian diseÃ±amos Filo, una lÃ¡mpara colgante de gran formato con estructura de aluminio que aporta diseÃ±o y durabilidad, ideal para espacios premium. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºen su incorporaciÃ³n? Este mensaje se envÃ­a bajo interÃ©s legÃ­timo y puede solicitar baja respondiendo a este correo.\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA y no vuelvo a escribirte.",
+        "at": "2026-11-20T02:58:40.730Z",
+        "status": "enviado_manual",
+        "provider": "manual",
+        "messageId": "<lucian-74b384f2-d6de-4797-8357-5a96d332d6ee@lucian.local>"
+      }
+    ],
+    "nextStep": "Seguimiento con valor en 4 dÃ­as.",
+    "nextFollowUp": "2026-11-24T02:58:40.730Z",
+    "lastActivityAt": "2026-11-20T02:58:40.730Z",
+    "createdAt": "2026-11-20T02:06:30.417Z",
+    "updatedAt": "2026-11-20T02:58:40.730Z"
+  },
+  {
+    "id": "thr_bbda21bd180b",
+    "demo": false,
+    "missionId": "mis_02488da07f50",
+    "productId": "prod_demo_filo",
+    "contact": {
+      "name": "Equipo de compras",
+      "company": "GA IluminaciÃ³n",
+      "role": "",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Argentina",
+      "city": "Buenos Aires",
+      "website": "https://gailuminacion.com",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "activo",
+      "webTitulo": "GA Iluminacion & Casa",
+      "webUrl": "https://gailuminacion.com/",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "directorio",
+      "fuente": "directorio semilla de Lucian (sitios verificados en 2026-11-19)",
+      "at": "2026-11-20T02:06:30.417Z"
+    },
+    "unverified": false,
+    "stage": "interesado",
+    "score": 60,
+    "source": "MisiÃ³n Filo Â· Argentina",
+    "notes": "Casa de iluminaciÃ³n en Buenos Aires con catÃ¡logo de diseÃ±o y proyectos.",
+    "drafts": [
+      {
+        "id": "drf_d63ff32adec6",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "LÃ¡mpara Filo para GA IluminaciÃ³n",
+        "body": "Saludos, en Lucian diseÃ±amos Filo, una lÃ¡mpara colgante geomÃ©trica con estructura interna de aluminio pensada para proyectos con diseÃ±o y durabilidad. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºen su posible incorporaciÃ³n? Este contacto se realiza bajo interÃ©s legÃ­timo y puede solicitar exclusiÃ³n respondiendo a este correo.",
+        "status": "enviado",
+        "createdAt": "2026-11-20T02:06:30.417Z",
+        "source": "mision",
+        "reviewNote": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+        "reviewKind": "cumplimiento",
+        "compliancePending": 3,
+        "revisionApplied": true,
+        "guardVersion": 2,
+        "approvedAt": "2026-11-20T03:01:09.035Z",
+        "approvedBy": "dueÃ±o",
+        "approvedReviewKind": "cumplimiento",
+        "updatedAt": "2026-11-20T03:01:09.035Z",
+        "sentAt": "2026-11-20T03:01:25.721Z",
+        "sentChannel": "manual"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_ff51d2b9c585",
+        "direction": "out",
+        "channel": "formulario",
+        "subject": "LÃ¡mpara Filo para GA IluminaciÃ³n",
+        "body": "Saludos, en Lucian diseÃ±amos Filo, una lÃ¡mpara colgante geomÃ©trica con estructura interna de aluminio pensada para proyectos con diseÃ±o y durabilidad. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºen su posible incorporaciÃ³n? Este contacto se realiza bajo interÃ©s legÃ­timo y puede solicitar exclusiÃ³n respondiendo a este correo.\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA y no vuelvo a escribirte.",
+        "at": "2026-11-20T03:01:25.721Z",
+        "status": "enviado_manual",
+        "provider": "manual",
+        "messageId": "<lucian-a7a8346c-8dd5-4f79-9cae-ac8292134150@lucian.local>"
+      }
+    ],
+    "nextStep": "Seguimiento con valor en 4 dÃ­as.",
+    "nextFollowUp": "2026-11-24T03:01:25.721Z",
+    "lastActivityAt": "2026-11-20T03:01:25.721Z",
+    "createdAt": "2026-11-20T02:06:30.417Z",
+    "updatedAt": "2026-11-20T03:01:38.990Z"
+  },
+  {
+    "id": "thr_fd7d4cab4f3f",
+    "demo": false,
+    "missionId": "mis_02488da07f50",
+    "productId": "prod_demo_filo",
+    "contact": {
+      "name": "Equipo de compras",
+      "company": "IluminaciÃ³n AgÃ¼ero",
+      "role": "",
+      "email": "info@iluminacionaguero.com",
+      "emailStatus": "publico",
+      "country": "Argentina",
+      "city": "Buenos Aires",
+      "website": "https://iluminacionaguero.com",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "activo",
+      "webTitulo": "IluminaciÃ³n AgÃ¼ero - Excelencia; diseÃ±o y calidad desde 1955.",
+      "webUrl": "https://iluminacionaguero.com/",
+      "emailEstado": "publico",
+      "emailFuente": "https://iluminacionaguero.com/",
+      "origen": "directorio",
+      "fuente": "directorio semilla de Lucian (sitios verificados en 2026-11-19)",
+      "at": "2026-11-20T02:06:30.417Z"
+    },
+    "unverified": false,
+    "stage": "respondio",
+    "score": 10,
+    "source": "MisiÃ³n Filo Â· Argentina",
+    "notes": "MÃ¡s de 60 aÃ±os en Recoleta; representa marcas internacionales de diseÃ±o y trabaja con estudios de arquitectura.\nLa respuesta 'PPPP' parece un error o mensaje accidental, no indica interÃ©s ni rechazo explÃ­cito.",
+    "drafts": [
+      {
+        "id": "drf_9e80feb3b4d9",
+        "channel": "email",
+        "language": "es",
+        "subject": "Â¿QuerÃ©s que te enviemos la ficha tÃ©cnica de Filo?",
+        "body": "Hola, notamos que tu Ãºltima respuesta no quedÃ³ clara. Â¿QuerÃ©s que te enviemos la ficha tÃ©cnica para que evalÃºen si Filo puede sumar a su catÃ¡logo? Quedamos atentos a tu interÃ©s.",
+        "status": "enviado",
+        "source": "ia",
+        "guardVersion": 2,
+        "createdAt": "2026-11-20T03:00:12.421Z",
+        "sentAt": "2026-11-20T03:00:42.907Z",
+        "sentChannel": "manual"
+      },
+      {
+        "id": "drf_e1964b01551a",
+        "channel": "email",
+        "language": "es",
+        "subject": "Filo: lÃ¡mpara 3D para IluminaciÃ³n AgÃ¼ero",
+        "body": "Hola, en Lucian creamos Filo, un colgante geomÃ©trico de gran formato con estructura de aluminio, ideal para espacios que requieren diseÃ±o y durabilidad. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºen si puede sumar a su catÃ¡logo? Contacto bajo interÃ©s legÃ­timo, puede solicitar baja respondiendo a este correo.",
+        "status": "enviado",
+        "createdAt": "2026-11-20T02:06:30.417Z",
+        "source": "mision",
+        "reviewNote": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+        "reviewKind": "cumplimiento",
+        "compliancePending": 3,
+        "revisionApplied": true,
+        "guardVersion": 2,
+        "approvedAt": "2026-11-20T02:59:23.178Z",
+        "approvedBy": "dueÃ±o",
+        "approvedReviewKind": "cumplimiento",
+        "updatedAt": "2026-11-20T02:59:23.178Z",
+        "sentAt": "2026-11-20T02:59:40.598Z",
+        "sentChannel": "manual"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_7618c4b514eb",
+        "direction": "out",
+        "channel": "email",
+        "subject": "Filo: lÃ¡mpara 3D para IluminaciÃ³n AgÃ¼ero",
+        "body": "Hola, en Lucian creamos Filo, un colgante geomÃ©trico de gran formato con estructura de aluminio, ideal para espacios que requieren diseÃ±o y durabilidad. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºen si puede sumar a su catÃ¡logo? Contacto bajo interÃ©s legÃ­timo, puede solicitar baja respondiendo a este correo.\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA y no vuelvo a escribirte.",
+        "at": "2026-11-20T02:59:40.598Z",
+        "status": "enviado_manual",
+        "provider": "manual",
+        "messageId": "<lucian-8b44b79d-34dd-4be5-a63c-8bab52ea749b@lucian.local>"
+      },
+      {
+        "id": "msg_8fcc2361da25",
+        "direction": "in",
+        "channel": "email",
+        "subject": "",
+        "body": "PPPP",
+        "at": "2026-11-20T03:00:09.335Z",
+        "status": "recibido"
+      },
+      {
+        "id": "msg_71cf4edb0ed6",
+        "direction": "out",
+        "channel": "email",
+        "subject": "Â¿QuerÃ©s que te enviemos la ficha tÃ©cnica de Filo?",
+        "body": "Hola, notamos que tu Ãºltima respuesta no quedÃ³ clara. Â¿QuerÃ©s que te enviemos la ficha tÃ©cnica para que evalÃºen si Filo puede sumar a su catÃ¡logo? Quedamos atentos a tu interÃ©s.\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA y no vuelvo a escribirte.\n\nLucian",
+        "at": "2026-11-20T03:00:42.907Z",
+        "status": "enviado_manual",
+        "provider": "manual",
+        "messageId": "<lucian-6919fd4d-70d8-4b49-abc0-64b702c2ca3c@lucian.local>"
+      }
+    ],
+    "nextStep": "Seguimiento con valor en 4 dÃ­as.",
+    "nextFollowUp": "2026-11-24T03:00:42.907Z",
+    "lastActivityAt": "2026-11-20T03:00:42.907Z",
+    "createdAt": "2026-11-20T02:06:30.417Z",
+    "updatedAt": "2026-11-20T03:00:42.907Z",
+    "lastInboundAt": "2026-11-20T03:00:09.335Z",
+    "lastAnalysis": {
+      "intencion": "desconocida",
+      "sentimiento": "neutral",
+      "score": 10,
+      "senales": [
+        "respuesta sin sentido o error de tipeo",
+        "no hay indicios claros de interÃ©s o rechazo"
+      ],
+      "siguiente_paso": "Enviar un mensaje breve para confirmar si recibieron bien la informaciÃ³n y ofrecer enviar ficha tÃ©cnica si interesa",
+      "etapa": "respondio",
+      "borrador": {
+        "asunto": "Â¿QuerÃ©s que te enviemos la ficha tÃ©cnica de Filo?",
+        "cuerpo": "Hola, notamos que tu Ãºltima respuesta no quedÃ³ clara. Â¿QuerÃ©s que te enviemos la ficha tÃ©cnica para que evalÃºen si Filo puede sumar a su catÃ¡logo? Quedamos atentos a tu interÃ©s."
+      },
+      "nota": "La respuesta 'PPPP' parece un error o mensaje accidental, no indica interÃ©s ni rechazo explÃ­cito.",
+      "at": "2026-11-20T03:00:12.421Z"
+    }
+  },
+  {
+    "id": "thr_67258a22f17d",
+    "demo": false,
+    "missionId": "mis_02488da07f50",
+    "productId": "prod_demo_filo",
+    "contact": {
+      "name": "comprador",
+      "company": "Luz CÃ³rdoba Tienda de IluminaciÃ³n",
+      "role": "comprador",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Argentina",
+      "city": "CÃ³rdoba",
+      "website": "",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "sin_sitio",
+      "webTitulo": "",
+      "webUrl": "",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://www.vientosurluz.com/",
+      "at": "2026-11-20T02:06:30.417Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 60,
+    "source": "MisiÃ³n Filo Â· Argentina",
+    "notes": "Especializada en lÃ¡mparas decorativas y funcionales con foco en diseÃ±o y calidad",
+    "drafts": [
+      {
+        "id": "drf_8be2eb9ceffb",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "PresentaciÃ³n de lÃ¡mpara Filo para Luz CÃ³rdoba",
+        "body": "Hola, en Lucian diseÃ±amos Filo, un colgante geomÃ©trico grande con estructura de aluminio, pensado para espacios residenciales y comerciales premium. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºen su incorporaciÃ³n? Este contacto se realiza bajo interÃ©s legÃ­timo y puede solicitar no recibir mÃ¡s mensajes respondiendo a este correo.",
+        "status": "listo",
+        "createdAt": "2026-11-20T02:06:30.417Z",
+        "source": "mision",
+        "reviewNote": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+        "reviewKind": "cumplimiento",
+        "compliancePending": 3,
+        "revisionApplied": true,
+        "guardVersion": 2,
+        "approvedAt": "2026-11-20T03:06:38.814Z",
+        "approvedBy": "dueÃ±o",
+        "approvedReviewKind": "cumplimiento",
+        "updatedAt": "2026-11-20T03:06:38.814Z"
+      }
+    ],
+    "messages": [],
+    "nextStep": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:06:30.417Z",
+    "createdAt": "2026-11-20T02:06:30.417Z",
+    "updatedAt": "2026-11-20T03:06:38.814Z"
+  },
+  {
+    "id": "thr_23a8e589c1f0",
+    "demo": false,
+    "missionId": "mis_02488da07f50",
+    "productId": "prod_demo_filo",
+    "contact": {
+      "name": "comprador",
+      "company": "Wayku",
+      "role": "comprador",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Argentina",
+      "city": "CÃ³rdoba",
+      "website": "https://www.wayku.ar",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "activo",
+      "webTitulo": "Wayku | Lamparas artesanales",
+      "webUrl": "https://www.wayku.ar/",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://www.wayku.ar/",
+      "at": "2026-11-20T02:06:30.417Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 60,
+    "source": "MisiÃ³n Filo Â· Argentina",
+    "notes": "Tienda de lÃ¡mparas artesanales y diseÃ±o de autor con enfoque en materiales naturales y exclusividad",
+    "drafts": [
+      {
+        "id": "drf_fd1c7a43898d",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "Filo: diseÃ±o 3D artesanal para Wayku",
+        "body": "Hola Wayku, en Lucian desarrollamos Filo, una lÃ¡mpara colgante con diseÃ±o geomÃ©trico y estructura de aluminio que acompaÃ±a su enfoque en piezas artesanales. Creemos que Filo puede ser una opciÃ³n para su catÃ¡logo. Â¿Podemos compartir la ficha tÃ©cnica para que la evalÃºen? Contacto bajo interÃ©s legÃ­timo, puede solicitar baja respondiendo a este correo.",
+        "status": "revisar",
+        "createdAt": "2026-11-20T02:06:30.417Z",
+        "source": "mision",
+        "reviewNote": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+        "reviewKind": "cumplimiento",
+        "compliancePending": 3,
+        "revisionApplied": true,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:06:30.417Z",
+    "createdAt": "2026-11-20T02:06:30.417Z",
+    "updatedAt": "2026-11-20T02:06:30.417Z"
+  },
+  {
+    "id": "thr_a78f7f7d1ab2",
+    "demo": false,
+    "missionId": "mis_02488da07f50",
+    "productId": "prod_demo_filo",
+    "contact": {
+      "name": "comprador",
+      "company": "Fabrilum",
+      "role": "comprador",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Argentina",
+      "city": "CÃ³rdoba",
+      "website": "http://fabrilum.com.ar",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "activo",
+      "webTitulo": "Fabrilum â€” IluminaciÃ³n de diseÃ±o",
+      "webUrl": "http://fabrilum.com.ar/",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "http://fabrilum.com.ar/",
+      "at": "2026-11-20T02:06:30.417Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 60,
+    "source": "MisiÃ³n Filo Â· Argentina",
+    "notes": "FÃ¡brica y tienda con mÃ¡s de 10 aÃ±os en iluminaciÃ³n de diseÃ±o, con alcance nacional",
+    "drafts": [
+      {
+        "id": "drf_aeb707f165eb",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "LÃ¡mpara de diseÃ±o 3D para Fabrilum",
+        "body": "Saludos, en Lucian diseÃ±amos Filo, un colgante geomÃ©trico con estructura reforzada de aluminio. Sabemos que Fabrilum tiene experiencia en iluminaciÃ³n de diseÃ±o y podrÃ­a interesarle un producto con proceso artesanal. Â¿Podemos enviarle mÃ¡s detalles para evaluar su incorporaciÃ³n? Este mensaje se envÃ­a bajo interÃ©s legÃ­timo y puede solicitar exclusiÃ³n respondiendo a este correo.",
+        "status": "revisar",
+        "createdAt": "2026-11-20T02:06:30.417Z",
+        "source": "mision",
+        "reviewNote": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+        "reviewKind": "cumplimiento",
+        "compliancePending": 3,
+        "revisionApplied": true,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:06:30.417Z",
+    "createdAt": "2026-11-20T02:06:30.417Z",
+    "updatedAt": "2026-11-20T02:06:30.417Z"
+  },
+  {
+    "id": "thr_9a202f81ddb4",
+    "demo": false,
+    "missionId": "mis_02488da07f50",
+    "productId": "prod_demo_filo",
+    "contact": {
+      "name": "comprador",
+      "company": "La Manivela - LÃ¡mparas y Muebles",
+      "role": "comprador",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "Argentina",
+      "city": "Tandil",
+      "website": "https://fullconfort.com.ar/muebleria/la-manivela-lamparas-y-muebles",
+      "type": "tienda"
+    },
+    "verification": {
+      "webEstado": "activo",
+      "webTitulo": "La Manivela -Lamparas y Muebles- MueblerÃ­a en Tandil, Provincia de Buenos Aires",
+      "webUrl": "https://fullconfort.com.ar/muebleria/la-manivela-lamparas-y-muebles/",
+      "emailEstado": "desconocido",
+      "emailFuente": "",
+      "origen": "fuentes",
+      "fuente": "https://fullconfort.com.ar/muebleria/la-manivela-lamparas-y-muebles/",
+      "at": "2026-11-20T02:06:30.417Z"
+    },
+    "unverified": false,
+    "stage": "nuevo",
+    "score": 78,
+    "source": "MisiÃ³n Filo Â· Argentina",
+    "notes": "Tienda de iluminaciÃ³n y muebles con foco en diseÃ±o y calidad, atiende mercado premium",
+    "drafts": [
+      {
+        "id": "drf_da9ba719b407",
+        "channel": "formulario",
+        "language": "es",
+        "subject": "Filo, lÃ¡mpara 3D para La Manivela",
+        "body": "Hola, en Lucian diseÃ±amos Filo, una lÃ¡mpara colgante geomÃ©trica con estructura de aluminio, ideal para espacios de impacto como los que atienden en La Manivela. Notamos su foco en muebles y luminarias de diseÃ±o. Â¿Podemos enviarle la ficha tÃ©cnica para que evalÃºe si encaja en su catÃ¡logo? Este contacto se realiza bajo interÃ©s legÃ­timo y puede solicitar no recibir mÃ¡s mensajes respondiendo a este correo.",
+        "status": "revisar",
+        "createdAt": "2026-11-20T02:06:30.417Z",
+        "source": "mision",
+        "reviewNote": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+        "reviewKind": "cumplimiento",
+        "compliancePending": 3,
+        "revisionApplied": true,
+        "guardVersion": 2
+      }
+    ],
+    "messages": [],
+    "nextStep": "Cumplimiento pidiÃ³ 3 cambios pero no coinciden con el texto de los mensajes. RevisÃ¡ el paso de cumplimiento y corregÃ­ a mano.",
+    "nextFollowUp": null,
+    "lastActivityAt": "2026-11-20T02:06:30.417Z",
+    "createdAt": "2026-11-20T02:06:30.417Z",
+    "updatedAt": "2026-11-20T02:06:30.417Z"
+  },
+  {
+    "id": "thr_demo_1",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "concept store",
+      "company": "Luz de Autor",
+      "role": "concept store",
+      "email": "compras@luz-de-autor.example.com",
+      "emailStatus": "publico",
+      "country": "EspaÃ±a",
+      "city": "Madrid",
+      "website": "https://example.com/luz-de-autor",
+      "type": "tienda"
+    },
+    "stage": "interesado",
+    "score": 82,
+    "source": "MisiÃ³n Aurora 01",
+    "notes": "PidiÃ³ ver la ficha y preguntÃ³ por el plazo de producciÃ³n. Buena seÃ±al.\nAnÃ¡lisis simulado del modo demo. ConfigurÃ¡ una IA para analizar la respuesta real.",
+    "drafts": [
+      {
+        "id": "drf_82de4107bb82",
+        "channel": "email",
+        "language": "es",
+        "subject": "Re: Re: Aurora 01",
+        "body": "Hola,\n\nGracias por responder. Te paso el dato concreto: la pieza se produce a pedido en 3 semanas y el precio mayorista arranca en 4 unidades.\n\nTe adjunto la ficha con medidas y materiales. Si te sirve, te reservo un lugar en la prÃ³xima serie y te confirmo la fecha exacta.\n\nÂ¿QuerÃ©s que avancemos con una unidad de muestra?\n\nâ€” Lucian",
+        "status": "enviado",
+        "source": "ia",
+        "guardVersion": 2,
+        "createdAt": "2026-11-20T02:38:34.146Z",
+        "sentAt": "2026-11-20T02:58:05.785Z",
+        "sentChannel": "manual"
+      },
+      {
+        "id": "drf_f74a65947f21",
+        "channel": "email",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Luz de Autor",
+        "body": "Hola,\n\nVi la selecciÃ³n de Luz de Autor y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA.",
+        "status": "listo",
+        "guardVersion": 2,
+        "createdAt": "2026-11-16T00:21:38.237Z"
+      },
+      {
+        "id": "drf_e979b93c117a",
+        "channel": "email",
+        "language": "es",
+        "subject": "Re: Aurora 01 â€” ficha y plazos",
+        "body": "Hola Marta,\n\nGracias por responder. Te paso los datos concretos: la pantalla mide 32 cm de diÃ¡metro, el cable es de 180 cm y el plazo para 4 unidades es de 3 semanas desde la confirmaciÃ³n.\n\nEl precio mayorista es USD 156 por unidad, sin envÃ­o, con un mÃ­nimo de 4. La pantalla se puede personalizar en hueso, terracota o verde oliva sin costo adicional; un color fuera de esa paleta tiene un extra del 12%.\n\nTe adjunto la ficha completa. Si te sirve, puedo reservar la producciÃ³n de la primera serie para la semana que viene.\n\nâ€” Lucian\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA.",
+        "status": "listo",
+        "guardVersion": 2,
+        "createdAt": "2026-11-19T00:21:38.243Z"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_f93c071f354a",
+        "direction": "out",
+        "channel": "email",
+        "subject": "Aurora 01: una serie corta para Luz de Autor",
+        "body": "Hola,\n\nVi la selecciÃ³n de Luz de Autor y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian\n",
+        "at": "2026-11-17T00:21:38.242Z",
+        "status": "enviado"
+      },
+      {
+        "id": "msg_b0f95b21c59c",
+        "direction": "in",
+        "channel": "email",
+        "subject": "Re: Aurora 01",
+        "body": "Hola, gracias por escribir. Nos interesa ver la ficha y saber el plazo de producciÃ³n para 4 unidades. TambiÃ©n nos gustarÃ­a saber si se puede personalizar el color de la pantalla. Saludos, Marta.",
+        "at": "2026-11-18T00:21:38.243Z",
+        "status": "recibido"
+      },
+      {
+        "id": "msg_1f3ff89533ec",
+        "direction": "out",
+        "channel": "email",
+        "subject": "Re: Re: Aurora 01",
+        "body": "Hola,\n\nGracias por responder. Te paso el dato concreto: la pieza se produce a pedido en 3 semanas y el precio mayorista arranca en 4 unidades.\n\nTe adjunto la ficha con medidas y materiales. Si te sirve, te reservo un lugar en la prÃ³xima serie y te confirmo la fecha exacta.\n\nÂ¿QuerÃ©s que avancemos con una unidad de muestra?\n\nâ€” Lucian\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA y no vuelvo a escribirte.",
+        "at": "2026-11-20T02:58:05.785Z",
+        "status": "enviado_manual",
+        "provider": "manual",
+        "messageId": "<lucian-60ab1b30-15ed-434b-b43b-bad7f31c465e@lucian.local>"
+      }
+    ],
+    "nextStep": "Seguimiento con valor en 4 dÃ­as.",
+    "nextFollowUp": "2026-11-24T02:58:05.785Z",
+    "lastActivityAt": "2026-11-20T02:58:05.785Z",
+    "createdAt": "2026-11-16T00:21:38.237Z",
+    "updatedAt": "2026-11-20T02:58:05.785Z",
+    "lastAnalysis": {
+      "intencion": "interesado",
+      "sentimiento": "positivo",
+      "score": 82,
+      "senales": [
+        "Pregunta concreta sobre producto o condiciones.",
+        "No pidiÃ³ retirarse."
+      ],
+      "siguiente_paso": "Responder con el dato exacto, una prueba y un Ãºnico siguiente paso.",
+      "etapa": "interesado",
+      "borrador": {
+        "asunto": "Re: Re: Aurora 01",
+        "cuerpo": "Hola,\n\nGracias por responder. Te paso el dato concreto: la pieza se produce a pedido en 3 semanas y el precio mayorista arranca en 4 unidades.\n\nTe adjunto la ficha con medidas y materiales. Si te sirve, te reservo un lugar en la prÃ³xima serie y te confirmo la fecha exacta.\n\nÂ¿QuerÃ©s que avancemos con una unidad de muestra?\n\nâ€” Lucian"
+      },
+      "nota": "AnÃ¡lisis simulado del modo demo. ConfigurÃ¡ una IA para analizar la respuesta real.",
+      "demo": true,
+      "at": "2026-11-20T02:38:34.146Z"
+    }
+  },
+  {
+    "id": "thr_demo_2",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "diseÃ±o de interiores",
+      "company": "Casa NÃ³rdica",
+      "role": "diseÃ±o de interiores",
+      "email": "hola@casa-nordica.example.com",
+      "emailStatus": "publico",
+      "country": "MÃ©xico",
+      "city": "Ciudad de MÃ©xico",
+      "website": "https://example.com/casa-nordica",
+      "type": "tienda"
+    },
+    "stage": "contactado",
+    "score": 51,
+    "source": "MisiÃ³n Aurora 01",
+    "notes": "",
+    "drafts": [
+      {
+        "id": "drf_589e6146a27e",
+        "channel": "email",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Casa NÃ³rdica",
+        "body": "Hola,\n\nVi la selecciÃ³n de Casa NÃ³rdica y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA.",
+        "status": "listo",
+        "guardVersion": 2,
+        "createdAt": "2026-11-16T00:21:38.237Z"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_068568e7666e",
+        "direction": "out",
+        "channel": "email",
+        "subject": "Aurora 01: una serie corta para Casa NÃ³rdica",
+        "body": "Hola,\n\nVi la selecciÃ³n de Casa NÃ³rdica y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian\n",
+        "at": "2026-11-17T00:21:38.243Z",
+        "status": "enviado"
+      }
+    ],
+    "nextStep": "Seguimiento el dÃ­a 4.",
+    "nextFollowUp": "2026-11-24T00:21:38.243Z",
+    "lastActivityAt": "2026-11-16T00:21:38.237Z",
+    "createdAt": "2026-11-16T00:21:38.237Z",
+    "updatedAt": "2026-11-16T00:21:38.237Z"
+  },
+  {
+    "id": "thr_demo_3",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "estudio de interiorismo",
+      "company": "Studio Lumen",
+      "role": "estudio de interiorismo",
+      "email": "hello@studio-lumen.example.com",
+      "emailStatus": "publico",
+      "country": "Estados Unidos",
+      "city": "Nueva York",
+      "website": "https://example.com/studio-lumen",
+      "type": "interiorista"
+    },
+    "stage": "interesado",
+    "score": 82,
+    "source": "MisiÃ³n Aurora 01",
+    "notes": "Pregunta por certificaciÃ³n UL. No prometer nada hasta confirmar.\nAnÃ¡lisis simulado del modo demo. ConfigurÃ¡ una IA para analizar la respuesta real.",
+    "drafts": [
+      {
+        "id": "drf_98079e9338a8",
+        "channel": "email",
+        "language": "es",
+        "subject": "Re: Re: Aurora 01",
+        "body": "Hola,\n\nGracias por responder. Te paso el dato concreto: la pieza se produce a pedido en 3 semanas y el precio mayorista arranca en 4 unidades.\n\nTe adjunto la ficha con medidas y materiales. Si te sirve, te reservo un lugar en la prÃ³xima serie y te confirmo la fecha exacta.\n\nÂ¿QuerÃ©s que avancemos con una unidad de muestra?\n\nâ€” Lucian",
+        "status": "listo",
+        "source": "ia",
+        "guardVersion": 2,
+        "createdAt": "2026-11-20T05:25:38.956Z"
+      },
+      {
+        "id": "drf_10a390ae9ee3",
+        "channel": "email",
+        "language": "en",
+        "subject": "Aurora 01: a small series for Studio Lumen",
+        "body": "Hi Studio Lumen team,\n\nI saw your selection of sculptural lighting and small-series objects and thought Aurora 01 might fit.\n\nIt is a 3D-printed pendant lamp with a warm, dimmable light and a geometric shade that casts a distinct shadow. Each piece is made to order in a small series and can be finished in a custom color.\n\nRetail is USD 240; wholesale starts at 4 units. I can send a one-page spec sheet with dimensions, materials and lead time.\n\nWould it make sense to send it over?\n\nâ€” Lucian\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA.",
+        "status": "listo",
+        "guardVersion": 2,
+        "createdAt": "2026-11-16T00:21:38.237Z"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_ff5d9b8357e8",
+        "direction": "out",
+        "channel": "email",
+        "subject": "Aurora 01: a small series for Studio Lumen",
+        "body": "Hi Studio Lumen team,\n\nI saw your selection of sculptural lighting and small-series objects and thought Aurora 01 might fit.\n\nIt is a 3D-printed pendant lamp with a warm, dimmable light and a geometric shade that casts a distinct shadow. Each piece is made to order in a small series and can be finished in a custom color.\n\nRetail is USD 240; wholesale starts at 4 units. I can send a one-page spec sheet with dimensions, materials and lead time.\n\nWould it make sense to send it over?\n\nâ€” Lucian\n",
+        "at": "2026-11-17T00:21:38.243Z",
+        "status": "enviado"
+      },
+      {
+        "id": "msg_172cd47295a2",
+        "direction": "in",
+        "channel": "email",
+        "subject": "Re: Aurora 01",
+        "body": "Thanks for reaching out. We like the shade. What would shipping to New York cost for one sample, and do you have UL certification? We cannot specify a fixture without it.",
+        "at": "2026-11-19T00:21:38.243Z",
+        "status": "recibido"
+      }
+    ],
+    "nextStep": "Responder con el dato exacto, una prueba y un Ãºnico siguiente paso.",
+    "nextFollowUp": "2026-11-22T00:21:00.000Z",
+    "lastActivityAt": "2026-11-16T00:21:38.237Z",
+    "createdAt": "2026-11-16T00:21:38.237Z",
+    "updatedAt": "2026-11-20T05:27:14.895Z",
+    "lastAnalysis": {
+      "intencion": "pide_precio",
+      "sentimiento": "positivo",
+      "score": 82,
+      "senales": [
+        "Pregunta concreta sobre producto o condiciones.",
+        "No pidiÃ³ retirarse."
+      ],
+      "siguiente_paso": "Responder con el dato exacto, una prueba y un Ãºnico siguiente paso.",
+      "etapa": "interesado",
+      "borrador": {
+        "asunto": "Re: Re: Aurora 01",
+        "cuerpo": "Hola,\n\nGracias por responder. Te paso el dato concreto: la pieza se produce a pedido en 3 semanas y el precio mayorista arranca en 4 unidades.\n\nTe adjunto la ficha con medidas y materiales. Si te sirve, te reservo un lugar en la prÃ³xima serie y te confirmo la fecha exacta.\n\nÂ¿QuerÃ©s que avancemos con una unidad de muestra?\n\nâ€” Lucian"
+      },
+      "nota": "AnÃ¡lisis simulado del modo demo. ConfigurÃ¡ una IA para analizar la respuesta real.",
+      "demo": true,
+      "at": "2026-11-20T05:25:38.956Z"
+    }
+  },
+  {
+    "id": "thr_demo_4",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "galerÃ­a de objetos",
+      "company": "Atelier Bruma",
+      "role": "galerÃ­a de objetos",
+      "email": "",
+      "emailStatus": "desconocido",
+      "country": "EspaÃ±a",
+      "city": "ParÃ­s",
+      "website": "https://example.com/atelier-bruma",
+      "type": "galeria"
+    },
+    "stage": "nuevo",
+    "score": 38,
+    "source": "MisiÃ³n Aurora 01",
+    "notes": "",
+    "drafts": [
+      {
+        "id": "drf_cd942c76d8fe",
+        "channel": "email",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Atelier Bruma",
+        "body": "Hola,\n\nVi la selecciÃ³n de Atelier Bruma y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA.",
+        "status": "listo",
+        "guardVersion": 2,
+        "createdAt": "2026-11-16T00:21:38.237Z"
+      }
+    ],
+    "messages": [],
+    "nextStep": "Revisar el borrador y enviar.",
+    "nextFollowUp": "2026-11-21T00:21:38.243Z",
+    "lastActivityAt": "2026-11-16T00:21:38.237Z",
+    "createdAt": "2026-11-16T00:21:38.237Z",
+    "updatedAt": "2026-11-16T00:21:38.237Z"
+  },
+  {
+    "id": "thr_demo_5",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "contact": {
+      "name": "mobiliario y luz",
+      "company": "Forma Living",
+      "role": "mobiliario y luz",
+      "email": "info@forma-living.example.com",
+      "emailStatus": "publico",
+      "country": "EspaÃ±a",
+      "city": "Barcelona",
+      "website": "https://example.com/forma-living",
+      "type": "tienda"
+    },
+    "stage": "nuevo",
+    "score": 38,
+    "source": "MisiÃ³n Aurora 01",
+    "notes": "",
+    "drafts": [
+      {
+        "id": "drf_41d2228a5641",
+        "channel": "email",
+        "language": "es",
+        "subject": "Aurora 01: una serie corta para Forma Living",
+        "body": "Hola,\n\nVi la selecciÃ³n de Forma Living y me pareciÃ³ que Aurora 01 puede encajar con lo que muestran: piezas con presencia, no solo lÃ¡mparas para iluminar.\n\nEs una luminaria impresa en 3D, con luz cÃ¡lida regulable y una pantalla geomÃ©trica que proyecta una sombra propia. La hacemos a pedido, en series cortas, y se puede elegir el color del cable y de la pantalla.\n\nEl precio de venta sugerido es USD 240; el mayorista arranca en 4 unidades. Te puedo mandar una ficha de una pÃ¡gina con medidas, materiales y plazo de producciÃ³n.\n\nÂ¿Te sirve que te la envÃ­e?\n\nâ€” Lucian\n\nSi preferÃ­s no recibir mÃ¡s mensajes, respondÃ© BAJA.",
+        "status": "listo",
+        "guardVersion": 2,
+        "createdAt": "2026-11-16T00:21:38.237Z"
+      }
+    ],
+    "messages": [],
+    "nextStep": "Revisar el borrador y enviar.",
+    "nextFollowUp": "2026-11-21T00:21:38.243Z",
+    "lastActivityAt": "2026-11-16T00:21:38.237Z",
+    "createdAt": "2026-11-16T00:21:38.237Z",
+    "updatedAt": "2026-11-16T00:21:38.237Z"
+  }
+]

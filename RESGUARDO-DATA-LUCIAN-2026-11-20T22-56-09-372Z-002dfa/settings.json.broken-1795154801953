@@ -1,0 +1,108 @@
+﻿{
+  "version": 1,
+  "brand": {
+    "name": "Lucian",
+    "maker": "",
+    "tagline": "LÃ¡mparas de diseÃ±o impresas en 3D",
+    "city": "",
+    "country": "",
+    "website": "",
+    "instagram": "",
+    "email": "",
+    "address": "",
+    "currency": "USD",
+    "languages": [
+      "es",
+      "en"
+    ]
+  },
+  "onboarding": {
+    "done": true,
+    "demoLoaded": true,
+    "startedAt": null,
+    "webhookEnvio": true
+  },
+  "ai": {
+    "provider": "openrouter",
+    "apiKey": "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",
+    "baseUrl": "https://openrouter.ai/api/v1",
+    "model": "openai/gpt-4.1-mini",
+    "visionModel": "openai/gpt-4.1-mini",
+    "temperature": 0.6,
+    "maxTokens": 8192
+  },
+  "search": {
+    "provider": "duckduckgo",
+    "apiKey": "",
+    "searxUrl": "",
+    "depth": "search+pages",
+    "maxResults": 8,
+    "prospectingDepth": "advanced",
+    "cacheHours": 24
+  },
+  "hunter": {
+    "apiKey": "",
+    "enabled": false
+  },
+  "email": {
+    "provider": "resend",
+    "resendKey": "re_8apV7dsK_Naru65GyoGzCQcgdxWFVXTxR",
+    "from": "charlyameghino@gmail.com",
+    "replyTo": "",
+    "footer": "",
+    "dailyLimit": 20,
+    "warmup": true,
+    "webhookUrl": "",
+    "webhookToken": "LUCIAN_WEBHOOK_TOKEN=7fK92mQaP4xTn88YbR3wLs6ZcH1e",
+    "autopilot": false,
+    "autopilotSpacingMin": 60,
+    "followUps": true,
+    "postSales": true,
+    "autopilotEnabled": false
+  },
+  "notify": {
+    "paused": false,
+    "telegram": {
+      "enabled": true,
+      "token": "9290322689:AAGwOxYN6OQhkfWKEBFQx-NBOD2sq6GKCVs",
+      "chatId": "5144879357",
+      "digestHour": 9
+    },
+    "whatsapp": {
+      "enabled": false,
+      "token": "",
+      "phoneNumberId": "",
+      "to": "",
+      "verifyToken": "lmb-12b82a9c-733",
+      "apiVersion": "v23.0"
+    },
+    "events": {
+      "missionDone": true,
+      "missionError": true,
+      "missionWarning": true,
+      "hotReply": true,
+      "optOut": true,
+      "digest": true
+    }
+  },
+  "mission": {
+    "depth": "estandar",
+    "markets": [
+      "EspaÃ±a",
+      "MÃ©xico",
+      "Estados Unidos"
+    ],
+    "tone": "profesional",
+    "currency": "USD",
+    "maxProspects": 12,
+    "autoCreateThreads": true,
+    "researchPages": true,
+    "reviewDirectory": true,
+    "contactCooldownDays": 3
+  },
+  "sales": {
+    "paymentLink": "",
+    "quoteValidityDays": 15,
+    "shippingPolicy": ""
+  }
+}

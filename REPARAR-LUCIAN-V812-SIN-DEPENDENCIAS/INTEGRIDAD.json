@@ -1,0 +1,14 @@
+{
+  "version": "8.1.2",
+  "independentTest": true,
+  "sourceFileCount": 7,
+  "files": {
+    "ACTUALIZAR-LUCIAN.cmd": "7a667635f451d5bd14ad10531be344f89492d77ffddff4c28df4efe069980c14",
+    "ACTUALIZAR-LUCIAN.ps1": "a8f0de5ecaec3b171278e1d2c85e2ace1e0db9a57a7697700f14473712eaaf0f",
+    "APLICAR-V81.cjs": "23b34ebeabf233e9dfaf480fadd14af3cf0f856274de0226eafbb8ee2804fe44",
+    "files/lib/resend-delivery.mjs": "64a0e3b0a4dbe517c2454471d91cfc207030aaf02682162a53c3882e4aaa689e",
+    "files/tools/test-resend-delivery-http.mjs": "7c374bca19ee12922a5cc65de4c8502a5f9062948e2b73f9dcda6443bae56541",
+    "files/tools/test-resend-delivery.mjs": "d190ea25a82f5d2cbf0b0c2acf59fd351ee36783cf1d60104eeba752f77dc36f",
+    "LEER-PRIMERO.txt": "6c06d79cb59dfbf85912f1ba1153726463fad7182d5b34d10888276169a9bb3c"
+  }
+}

@@ -1,0 +1,18 @@
+CORRECCIONES APLICADAS Y PROBADAS EN CODIGO LOCAL
+
+* Estados reales: configurado, verificado, pendiente, error (no mas verde por tener una API key).
+* Gmail IMAP: ahora lee los UID desde la linea SEARCH, no desde la respuesta OK.
+* Gmail IMAP: espera conexion TLS y no marca los mails como leidos.
+* Gmail SMTP: prueba de autenticar, sin MAIL FROM ni DATA ni enviar correo.
+* Gmail IMAP: prueba de autenticar, sin SELECT ni FETCH ni cambios en bandeja.
+* Resend: comprueba dominio exacto del remitente y estado 'verified'. No envia.
+* Telegram: prueba getMe (sin mandar mensaje).
+* WhatsApp: verifica token/numero pero advierte que webhook no ha sido comprobado.
+* Busqueda: falla si la API paga no responde aunque un buscador alternativo si.
+* Búsqueda: prueba fuerza nueva consulta, sin resultados de cache.
+* IA: prueba limitada a solicitud breve, sin 5 reintentos de varios minutos.
+* Informe sin credenciales que se copia desde la pantalla de Conexiones.
+
+TESTS LOCALES: npm test (incluyendo HTTP y mocks) finalizo con codigo 0.
+LIMITACION: no se pudo probar tus credenciales ni tu red porque tu PC no esta
+conectada a las herramientas de acceso remoto. No compartas las API keys.

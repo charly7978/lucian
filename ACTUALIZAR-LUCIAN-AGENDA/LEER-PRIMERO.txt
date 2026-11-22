@@ -1,0 +1,36 @@
+LUCIAN - ACTUALIZACION DE AGENDA COMERCIAL (V3)
+=================================================
+
+Esta actualizacion se aplica en el Lucian que YA funciona con tus lamparas.
+NO instala otro Lucian. NO importa productos ni migra conversaciones.
+NO envia mensajes ni habilita el piloto automatico.
+
+1. Cerrar la ventana negra del servidor Lucian.
+2. Extraer TODO el ZIP a una carpeta (no ejecutar dentro del ZIP).
+3. Doble clic en ACTUALIZAR-LUCIAN.cmd.
+4. Elegir el INICIAR-LUCIAN.cmd de tu instalacion ACTUAL.
+   Si ese iniciador esta junto a server.mjs y package.json, elegir ese.
+   Si estan en carpeta lumbre, elegir el iniciador DENTRO de lumbre.
+5. Comprobar cantidad de lamparas. Escribir SI solo si es correcto.
+6. Iniciar Lucian como siempre; abrir http://localhost:4321/#/ventas
+   y presionar Ctrl+F5 una vez.
+
+Que cambia:
+- Agenda comercial priorizada de hasta 15 acciones en Ventas.
+- Respuestas entrantes, cotizaciones, saldos, vencimientos y borradores.
+- Filtro contra contactos suprimidos, opt-out y datos demo.
+- Nada se envia ni se cobra automaticamente por esta agenda.
+
+Seguridad del instalador:
+- Verifica que exista data/products.json y muestra total de lamparas.
+- Exige confirmacion SI antes de cualquier cambio.
+- Hace respaldo del codigo anterior antes de reemplazarlo.
+- Verifica hash SHA-256 de cada archivo reemplazado.
+- Verifica que products.json permanece byte a byte intacto.
+- En error, restaura el codigo anterior desde su respaldo.
+
+Nota: el conteo y la integridad de todas las otras tablas de data no se
+modifican porque el instalador NUNCA toca ninguna ruta dentro de data.
+
+La agenda solo identifica prioridades. Se requieren comprobacion humana y
+credenciales autorizadas para enviar propuestas o confirmar pagos reales.

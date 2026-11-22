@@ -1,0 +1,866 @@
+[
+  {
+    "id": "prd_31153dce6d90",
+    "name": "BORU Velador",
+    "code": "2007",
+    "category": "Lámpara",
+    "price": 38500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 400,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "AGREGAR 2 VELADORES AL CARRITO PARA LA PROMO  CARACTERÍSTICAS Velador colgante moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 1...",
+    "notes": "Importado de GALAPA. SKU: 2007. Stock: 39. URL: https://galapa.com.ar/productos/boru-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/boru-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_5afe6de76f50.webp",
+        "alt": "BORU Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:47:15.458Z",
+    "updatedAt": "2026-11-20T06:47:15.458Z"
+  },
+  {
+    "id": "prd_eaa28dec5f77",
+    "name": "SORA Velador",
+    "code": "1039",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 500,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 31 cm x Ancho 13 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 31 cm. (con patas) Ancho: 13 cm. Cable 1,5 m de largo. P...",
+    "notes": "Importado de GALAPA. SKU: 1039. Stock: 20. URL: https://galapa.com.ar/productos/sora-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/sora-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_6fee4dfb875b.webp",
+        "alt": "SORA Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:47:12.852Z",
+    "updatedAt": "2026-11-20T06:47:12.852Z"
+  },
+  {
+    "id": "prd_8a0b3677ed99",
+    "name": "YAMA velador",
+    "code": "1038",
+    "category": "Lámpara",
+    "price": 38500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 500,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 15 cm x Ancho 20 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 15cm. Ancho: 20 cm. Cable 1,5 m de largo. Portalámpara E...",
+    "notes": "Importado de GALAPA. SKU: 1038. Stock: 20. URL: https://galapa.com.ar/productos/yama-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/yama-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_e3a4ba352322.webp",
+        "alt": "YAMA velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:47:10.051Z",
+    "updatedAt": "2026-11-20T07:52:17.457Z"
+  },
+  {
+    "id": "prd_bb0cc1ef273d",
+    "name": "IZUMI Velador",
+    "code": "1035",
+    "category": "Lámpara",
+    "price": 36000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 500,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 20 cm x Ancho 11 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 20cm. Ancho: 11 cm. Cable 1,5 m de largo. Portalámpara E...",
+    "notes": "Importado de GALAPA. SKU: 1035. Stock: 19. URL: https://galapa.com.ar/productos/izumi-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/izumi-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_1357993ff6d8.webp",
+        "alt": "IZUMI Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:47:07.413Z",
+    "updatedAt": "2026-11-20T07:52:28.649Z"
+  },
+  {
+    "id": "prd_35ec77972c49",
+    "name": "CIRE - velador",
+    "code": "1024",
+    "category": "Lámpara",
+    "price": 36000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 350,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 22 cm x Ancho 13 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 22 cm. Ancho: 13 cm. Cable 1,5 m de largo. Portalámpara ...",
+    "notes": "Importado de GALAPA. SKU: 1024. Stock: 14. URL: https://galapa.com.ar/productos/cire-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/cire-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_5af772c62909.webp",
+        "alt": "CIRE - velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:47:04.780Z",
+    "updatedAt": "2026-11-20T06:47:04.780Z"
+  },
+  {
+    "id": "prd_32f5f0b10b32",
+    "name": "DESE - DEBRE - Lampara de Pie",
+    "code": "3012",
+    "category": "Lámpara",
+    "price": 205000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 10000,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara de pie moderna y ecológica. Pantalla: fabricada en PLA (Polímero Vegetal Eco-Amigable). Tamaño pantalla \"ADIS\": 32 cm de diámetro (an...",
+    "notes": "Importado de GALAPA. SKU: 3012. Stock: 40. URL: https://galapa.com.ar/productos/dese-debre-lampara-de-pie/",
+    "paymentLink": "https://galapa.com.ar/productos/dese-debre-lampara-de-pie/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_977b0ef838e3.webp",
+        "alt": "DESE - DEBRE - Lampara de Pie"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:59.740Z",
+    "updatedAt": "2026-11-20T07:52:37.050Z"
+  },
+  {
+    "id": "prd_383d81c5442d",
+    "name": "MENDIR - Lámapara colgande",
+    "code": "8003",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 0,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara colgante moderna y ecológica. Fabricada en PLA (Polímero Vegetal Eco-Amigable). Cable de 1 m de largo. Portalámpara E27 (apto para cu...",
+    "notes": "Importado de GALAPA. SKU: 8003. Stock: 120. URL: https://galapa.com.ar/productos/mendir-lamapara-colgande/",
+    "paymentLink": "https://galapa.com.ar/productos/mendir-lamapara-colgande/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_b08fb75c8b16.webp",
+        "alt": "MENDIR - Lámapara colgande"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:57.141Z",
+    "updatedAt": "2026-11-20T06:46:57.141Z"
+  },
+  {
+    "id": "prd_dabaeb84ac53",
+    "name": "TAMWA L - Lampara de mesa",
+    "code": "3011",
+    "category": "Lámpara",
+    "price": 73600,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 1500,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 36 cm x Ancho 28 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 36 cm. Ancho: 28 cm. Cable de 1,5 m de largo. Portalámpa...",
+    "notes": "Importado de GALAPA. SKU: 3011. Stock: 19. URL: https://galapa.com.ar/productos/tamwa-l-lampara-de-mesa/",
+    "paymentLink": "https://galapa.com.ar/productos/tamwa-l-lampara-de-mesa/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_2f71ee53a0d2.webp",
+        "alt": "TAMWA L - Lampara de mesa"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:54.551Z",
+    "updatedAt": "2026-11-20T06:46:54.551Z"
+  },
+  {
+    "id": "prd_bc23724f9e60",
+    "name": "TAMWA - Velador",
+    "code": "1009",
+    "category": "Lámpara",
+    "price": 46000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 1000,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto:20 Ancho:18 Cable de 1,5 m de largo. Portalámpara E27 (ap...",
+    "notes": "Importado de GALAPA. SKU: 1009. Stock: 14. URL: https://galapa.com.ar/productos/tamwa-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/tamwa-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_17b10a541756.webp",
+        "alt": "TAMWA - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:51.832Z",
+    "updatedAt": "2026-11-20T06:46:51.832Z"
+  },
+  {
+    "id": "prd_88f236b413e0",
+    "name": "DEBRE - Lámpara colgante",
+    "code": "4001",
+    "category": "Lámpara",
+    "price": 60500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 1300,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "pantalla de colgante pantalla de techo lampara de techo lampara colgante tienda de ilumanacion iluminacion 3d lampara decorativas",
+    "notes": "Importado de GALAPA. SKU: 4001. Stock: 111. URL: https://galapa.com.ar/productos/debre-lampara-colgante/",
+    "paymentLink": "https://galapa.com.ar/productos/debre-lampara-colgante/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_eda3083752db.webp",
+        "alt": "DEBRE - Lámpara colgante"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:49.213Z",
+    "updatedAt": "2026-11-20T06:46:49.213Z"
+  },
+  {
+    "id": "prd_dbd51379f302",
+    "name": "ADIS - Lámpara colgante",
+    "code": "5001",
+    "category": "Lámpara",
+    "price": 60500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 1300,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara colgante moderna y ecológica. Fabricada en PLA (Polímero Vegetal Eco-Amigable). Cable de 1 m de largo. Portalámpara E27 (apto para cu...",
+    "notes": "Importado de GALAPA. SKU: 5001. Stock: 118. URL: https://galapa.com.ar/productos/adis-grande-lampara-colgante1/",
+    "paymentLink": "https://galapa.com.ar/productos/adis-grande-lampara-colgante1/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_1d222e20a0b6.webp",
+        "alt": "ADIS - Lámpara colgante"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:46.576Z",
+    "updatedAt": "2026-11-20T06:46:46.576Z"
+  },
+  {
+    "id": "prd_088e553959c0",
+    "name": "DIBRE - Lámpara colgante",
+    "code": "6001",
+    "category": "Lámpara",
+    "price": 41000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 750,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara colgante moderna y ecológica. Fabricada en PLA (Polímero Vegetal Eco-Amigable). Cable de 1 m de largo. Portalámpara E27 (apto para cu...",
+    "notes": "Importado de GALAPA. SKU: 6001. Stock: 116. URL: https://galapa.com.ar/productos/dire-grande-lampara-colgante1/",
+    "paymentLink": "https://galapa.com.ar/productos/dire-grande-lampara-colgante1/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_0a5ecfd298ca.webp",
+        "alt": "DIBRE - Lámpara colgante"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:43.841Z",
+    "updatedAt": "2026-11-20T06:46:43.841Z"
+  },
+  {
+    "id": "prd_41a035e083bb",
+    "name": "REMBÁ - Velador",
+    "code": "1007",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 800,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 21,5 cm x Ancho 12 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 21,5 cm. Ancho: 12 cm. Cable 1,5 m de largo. Portalámpar...",
+    "notes": "Importado de GALAPA. SKU: 1007. Stock: 20. URL: https://galapa.com.ar/productos/remba-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/remba-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_7ffec6bd9f0a.webp",
+        "alt": "REMBÁ - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:41.186Z",
+    "updatedAt": "2026-11-20T06:46:41.186Z"
+  },
+  {
+    "id": "prd_179bb2771ccd",
+    "name": "DESE - ADIS - Lámpara de pie",
+    "code": "3009",
+    "category": "Lámpara",
+    "price": 205000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 10,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara de pie moderna y ecológica. Pantalla: fabricada en PLA (Polímero Vegetal Eco-Amigable). Tamaño pantalla \"ADIS\": 32 cm de diámetro (an...",
+    "notes": "Importado de GALAPA. SKU: 3009. Stock: 40. URL: https://galapa.com.ar/productos/dese-adis-lampara-de-pie/",
+    "paymentLink": "https://galapa.com.ar/productos/dese-adis-lampara-de-pie/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_28da1af8eb37.webp",
+        "alt": "DESE - ADIS - Lámpara de pie"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:38.537Z",
+    "updatedAt": "2026-11-20T06:46:38.537Z"
+  },
+  {
+    "id": "prd_ec4536536ea9",
+    "name": "MEGA - Velador",
+    "code": "1006",
+    "category": "Lámpara",
+    "price": 53500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 700,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 28 cm x Ancho 19 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 28 cm. Ancho: 19 cm. Cable 1,5 m de largo. Portalámpara ...",
+    "notes": "Importado de GALAPA. SKU: 1006. Stock: 19. URL: https://galapa.com.ar/productos/mega-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/mega-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_8025f9faa813.webp",
+        "alt": "MEGA - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:35.846Z",
+    "updatedAt": "2026-11-20T06:46:35.846Z"
+  },
+  {
+    "id": "prd_68de8702b487",
+    "name": "DIRE - Lámpara colgante x3 unidades",
+    "code": "9001",
+    "category": "Lámpara",
+    "price": 49500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 850,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara colgante moderna y ecológica. Fabricada en PLA (Polímero Vegetal Eco-Amigable).-- Este modelo cuenta con 3 pantallas iguales, con dif...",
+    "notes": "Importado de GALAPA. SKU: 9001. Stock: 40. URL: https://galapa.com.ar/productos/dire-lampara-colgante-x3-unidades/",
+    "paymentLink": "https://galapa.com.ar/productos/dire-lampara-colgante-x3-unidades/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_61d8349dd6d8.webp",
+        "alt": "DIRE - Lámpara colgante x3 unidades"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:33.113Z",
+    "updatedAt": "2026-11-20T06:46:33.113Z"
+  },
+  {
+    "id": "prd_a16570415357",
+    "name": "MENDI - Lámpara colgante x3 unidades",
+    "code": "10001",
+    "category": "Lámpara",
+    "price": 49500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 900,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara colgante moderna y ecológica. Fabricada en PLA (Polímero Vegetal Eco-Amigable).-- Este modelo cuenta con 3 pantallas iguales, con dif...",
+    "notes": "Importado de GALAPA. SKU: 10001. Stock: 37. URL: https://galapa.com.ar/productos/mendi-lampara-colgante-x3-unidades/",
+    "paymentLink": "https://galapa.com.ar/productos/mendi-lampara-colgante-x3-unidades/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_73b6082f429a.webp",
+        "alt": "MENDI - Lámpara colgante x3 unidades"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:30.450Z",
+    "updatedAt": "2026-11-20T06:46:30.450Z"
+  },
+  {
+    "id": "prd_d5247d5a854c",
+    "name": "TANA - Lámpara de mesa",
+    "code": "3007",
+    "category": "Lámpara",
+    "price": 60000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 700,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara de mesa moderna y ecológica. Pantalla: fabricada en PLA (Polímero Vegetal Eco-Amigable). Alto total: 49 cm. Ancho: 20 cm. Cable 1,5 m...",
+    "notes": "Importado de GALAPA. SKU: 3007. Stock: 39. URL: https://galapa.com.ar/productos/tana-lampara-de-mesa/",
+    "paymentLink": "https://galapa.com.ar/productos/tana-lampara-de-mesa/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_81c81ff3d03e.webp",
+        "alt": "TANA - Lámpara de mesa"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:27.812Z",
+    "updatedAt": "2026-11-20T06:46:27.812Z"
+  },
+  {
+    "id": "prd_e00669fd106d",
+    "name": "GORE - Lámpara de mesa",
+    "code": "3005",
+    "category": "Lámpara",
+    "price": 60000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 700,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara de mesa moderna y ecológica. Pantalla: fabricada en PLA (Polímero Vegetal Eco-Amigable). Alto total: 49 cm. Ancho: 20 cm. Cable 1,5 m...",
+    "notes": "Importado de GALAPA. SKU: 3005. Stock: 39. URL: https://galapa.com.ar/productos/gore-lampara-de-mesa/",
+    "paymentLink": "https://galapa.com.ar/productos/gore-lampara-de-mesa/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_cd0970436a46.webp",
+        "alt": "GORE - Lámpara de mesa"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:25.088Z",
+    "updatedAt": "2026-11-20T06:46:25.088Z"
+  },
+  {
+    "id": "prd_347f3c8fc777",
+    "name": "BALMA - Lámpara de pie",
+    "code": "3003",
+    "category": "Lámpara",
+    "price": 195000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 3000,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Lámpara de pie moderna y ecológica. Pantalla: fabricada en PLA (Polímero Vegetal Eco-Amigable). Tamaño pantalla: 33 cm de diámetro (ancho) x ...",
+    "notes": "Importado de GALAPA. SKU: 3003. Stock: 35. URL: https://galapa.com.ar/productos/balma-lampara-de-pie/",
+    "paymentLink": "https://galapa.com.ar/productos/balma-lampara-de-pie/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_907e0d95cc7a.webp",
+        "alt": "BALMA - Lámpara de pie"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:22.487Z",
+    "updatedAt": "2026-11-20T06:46:22.487Z"
+  },
+  {
+    "id": "prd_6248d3a4795e",
+    "name": "DANAR - Velador",
+    "code": "2003",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 400,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 13 cm x Ancho 18 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador colgante moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 13 cm. Ancho: 18 cm. Cable 1,5 m de largo. Port...",
+    "notes": "Importado de GALAPA. SKU: 2003. Stock: 40. URL: https://galapa.com.ar/productos/danar-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/danar-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_f31ddd6ef6a6.webp",
+        "alt": "DANAR - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:19.865Z",
+    "updatedAt": "2026-11-20T06:46:19.865Z"
+  },
+  {
+    "id": "prd_435785497be6",
+    "name": "GAMBELA - Velador",
+    "code": "1005",
+    "category": "Lámpara",
+    "price": 36000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 450,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "Descubre el Velador GAMBELA, ecológico y moderno, fabricado en PLA. Ideal para cualquier lamparita. ¡Ilumina tu espacio con estilo!",
+    "notes": "Importado de GALAPA. SKU: 1005. Stock: 14. URL: https://galapa.com.ar/productos/gambela-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/gambela-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_d2aa633322c2.webp",
+        "alt": "GAMBELA - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:17.128Z",
+    "updatedAt": "2026-11-20T06:46:17.128Z"
+  },
+  {
+    "id": "prd_d8521d3691d1",
+    "name": "MICH - Velador",
+    "code": "1003",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 600,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 21,5 cm x Ancho 12 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 21,5 cm. Ancho: 12 cm. Cable de 1,5 m de largo. Portalám...",
+    "notes": "Importado de GALAPA. SKU: 1003. Stock: 15. URL: https://galapa.com.ar/productos/mich-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/mich-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_6a9e0ba14677.webp",
+        "alt": "MICH - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:14.457Z",
+    "updatedAt": "2026-11-20T06:46:14.457Z"
+  },
+  {
+    "id": "prd_167615c8d58c",
+    "name": "JIMA - Velador",
+    "code": "1002",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 550,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 21,5 cm x Ancho 12 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 21,5 cm. Ancho: 12 cm. Cable 1,5 m de largo. Portalámpar...",
+    "notes": "Importado de GALAPA. SKU: 1002. Stock: 17. URL: https://galapa.com.ar/productos/jima-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/jima-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_d33f648d1f36.webp",
+        "alt": "JIMA - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:11.791Z",
+    "updatedAt": "2026-11-20T06:46:11.791Z"
+  },
+  {
+    "id": "prd_3864ecde1cc7",
+    "name": "BURAO - Lámpara de pie",
+    "code": "3001",
+    "category": "Lámpara",
+    "price": 198000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 3000,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "lampara de pie lampara alta tienda de iluminación iluminación 3d decoración innovación luz cálida luz fría",
+    "notes": "Importado de GALAPA. SKU: 3001. Stock: 33. URL: https://galapa.com.ar/productos/burao-lampara-de-pie/",
+    "paymentLink": "https://galapa.com.ar/productos/burao-lampara-de-pie/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_ae4eca201851.webp",
+        "alt": "BURAO - Lámpara de pie"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:09.081Z",
+    "updatedAt": "2026-11-20T06:46:09.081Z"
+  },
+  {
+    "id": "prd_819df760f790",
+    "name": "TEPI - Velador",
+    "code": "1001",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 350,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "velador tienda de iluminación iluminación 3d decoración innovación luz cálida luz fria velador mesa de luz",
+    "notes": "Importado de GALAPA. SKU: 1001. Stock: 40. URL: https://galapa.com.ar/productos/tepi-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/tepi-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_833579d0cb4d.webp",
+        "alt": "TEPI - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:06.382Z",
+    "updatedAt": "2026-11-20T06:46:06.382Z"
+  },
+  {
+    "id": "prd_9c747a6e21ac",
+    "name": "AWASA - Velador",
+    "code": "1004",
+    "category": "Lámpara",
+    "price": 36000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 450,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 20 cm x Ancho 13,5 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 20 cm. Ancho: 13,5 cm. Cable 1,5 m de largo. Portalámpar...",
+    "notes": "Importado de GALAPA. SKU: 1004. Stock: 11. URL: https://galapa.com.ar/productos/awasa-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/awasa-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_b34a8336f5af.webp",
+        "alt": "AWASA - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:03.678Z",
+    "updatedAt": "2026-11-20T06:46:03.678Z"
+  },
+  {
+    "id": "prd_d7ea1f0dc4f5",
+    "name": "NEGELE - Velador",
+    "code": "2005",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 400,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "AGREGAR 2 VELADORES AL CARRITO PARA LA PROMO  CARACTERÍSTICAS Velador colgante moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 1...",
+    "notes": "Importado de GALAPA. SKU: 2005. Stock: 39. URL: https://galapa.com.ar/productos/negele-velador/",
+    "paymentLink": "https://galapa.com.ar/productos/negele-velador/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_82f9dde20c77.webp",
+        "alt": "NEGELE - Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:46:01.028Z",
+    "updatedAt": "2026-11-20T06:46:01.028Z"
+  },
+  {
+    "id": "prd_4abb46a5a4dd",
+    "name": "IONIX Velador",
+    "code": "IONIX-VELADO",
+    "category": "Lámpara",
+    "price": 36000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 0,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 20 cm x Ancho 13 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 20 cm. Ancho: 13 cm. Cable 1,5 m de largo. Portalámpara ...",
+    "notes": "Importado de GALAPA. SKU: . Stock: 20. URL: https://galapa.com.ar/productos/velador-ionix-1wbwv/",
+    "paymentLink": "https://galapa.com.ar/productos/velador-ionix-1wbwv/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_686341b4edc6.webp",
+        "alt": "IONIX Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:45:58.354Z",
+    "updatedAt": "2026-11-20T06:45:58.354Z"
+  },
+  {
+    "id": "prd_ecee495d1cd4",
+    "name": "MIZU Velador",
+    "code": "MIZU-VELADOR",
+    "category": "Lámpara",
+    "price": 42000,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 0,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 20 cm x Ancho 13 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 20 cm. Ancho: 13 cm. Cable 1,5 m de largo. Portalámpara ...",
+    "notes": "Importado de GALAPA. SKU: . Stock: 19. URL: https://galapa.com.ar/productos/mizu-velador-tt5e6/",
+    "paymentLink": "https://galapa.com.ar/productos/mizu-velador-tt5e6/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_ece27983b932.webp",
+        "alt": "MIZU Velador"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:45:55.756Z",
+    "updatedAt": "2026-11-20T06:45:55.756Z"
+  },
+  {
+    "id": "prd_1a8503ccf474",
+    "name": "SIRI Velador (base alta)",
+    "code": "SIRI-VELADOR",
+    "category": "Lámpara",
+    "price": 49500,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 0,
+    "capacityPerWeek": 0,
+    "leadTimeDays": 0,
+    "dimensions": "Alto 35 cm x Ancho 20 cm",
+    "materials": "PLA (Polímero Vegetal Eco-Amigable)",
+    "description": "CARACTERÍSTICAS Velador moderno y ecológico. Fabricado en PLA (Polímero Vegetal Eco-Amigable). Alto: 35 cm. Ancho:20 cm. Cable 1,5 m de largo. Portalámpara E...",
+    "notes": "Importado de GALAPA. SKU: . Stock: 20. URL: https://galapa.com.ar/productos/siri-velador-1s63t/",
+    "paymentLink": "https://galapa.com.ar/productos/siri-velador-1s63t/",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_0d92d8ffcd24.webp",
+        "alt": "SIRI Velador (base alta)"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:45:53.153Z",
+    "updatedAt": "2026-11-20T06:45:53.153Z"
+  },
+  {
+    "id": "prd_3ff6c667ece0",
+    "name": "Siri - Lámpara de techo",
+    "code": "LUM-ECE0",
+    "category": "Lámpara de Techo",
+    "price": 60.5,
+    "currency": "ARS",
+    "cost": 0,
+    "weightGrams": 0,
+    "capacityPerWeek": 2,
+    "leadTimeDays": 10,
+    "dimensions": "",
+    "materials": "",
+    "description": "",
+    "notes": "",
+    "paymentLink": "",
+    "status": "listo",
+    "photos": [
+      {
+        "file": "products/img_09856cb86634.jpg",
+        "alt": "siri-techo-2-71a79d2a00e126b21217809452734981-1024-1024"
+      }
+    ],
+    "demo": false,
+    "createdAt": "2026-11-20T06:38:03.001Z",
+    "updatedAt": "2026-11-20T06:38:03.001Z"
+  }
+]

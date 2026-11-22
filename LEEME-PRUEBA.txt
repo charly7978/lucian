@@ -1,0 +1,22 @@
+PROBAR LUCIAN - DIRECTOR COMERCIAL IA (PR #5)
+==================================================
+1. Extraer el ZIP (NO colocarlo dentro del Lucian que vendes).
+2. Ejecutar PROBAR-LUCIAN.cmd.
+3. Si lo ofrece, escribir SI para copiar SOLO las fichas y fotos de las 33 lamparas.
+4. Se abrira automaticamente http://127.0.0.1:48621.
+5. Abrir Ventas -> Director comercial IA o Productos -> Estrategia IA.
+6. Elegir lampara, pais, publico. Para INVESTIGAR de verdad hay que configurar
+   una IA y un buscador en Conexiones DENTRO DE ESTA COPIA DE PRUEBA.
+
+AVISO:
+- Esta es la rama EXPERIMENTAL de PR #5, NO la V9 que usas para vender.
+- La prueba descarga una revision fija de GitHub, no reemplaza codigo existente.
+- No copia settings, contrasenas, tokens, conversaciones, misiones ni correos.
+- No envia emails, no publica ni cobra por si misma.
+- Requiere internet, Node.js y acceso al codigo publico en GitHub.
+- No pasar a produccion: CI aun no se ha ejecutado en GitHub Actions.
+- Si falla: copiar la PRIMERA linea [ERROR] de la ventana negra.
+
+PR: https://github.com/charly7978/lumbre/pull/5
+Revision: 0cc1258a79acb2d624d73ae08a2f2338ac8b4523
+Datos aislados: %USERPROFILE%\Downloads\LUCIAN-PRUEBA-DIRECTOR-IA\DATOS_DE_PRUEBA

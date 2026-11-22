@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-11-20T00:14:05.345Z",
+  "lastDigest": "2026-11-20",
+  "agentUsage": {
+    "director": 32,
+    "mercado": 9,
+    "cazador": 16,
+    "aduanas": 7,
+    "precios": 7,
+    "redactor": 11,
+    "contenido": 6,
+    "cumplimiento": 7,
+    "redteam": 7,
+    "memoria": 6,
+    "analista": 2
+  },
+  "telegramOffset": 380588349,
+  "lastFollowUpScan": "2026-11-20T22:06:30.396Z",
+  "lastMissionAt": "2026-11-20T20:52:50.699Z",
+  "autopilotLastContentMission": "2026-11-20T16:29:55.370Z",
+  "autopilotContentIndex": 1
+}

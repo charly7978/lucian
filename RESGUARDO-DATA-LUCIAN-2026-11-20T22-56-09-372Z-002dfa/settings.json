@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "brand": {
+    "name": "Lucian",
+    "maker": "Carlos Ameghino",
+    "tagline": "Lámparas de diseño impresas en 3D",
+    "city": "caseros",
+    "country": "Argentina",
+    "website": "https://galapa.com.ar",
+    "instagram": "",
+    "email": "charlyameghino@gmail.com",
+    "address": "Buenos Aires, Buenos Aires Province, Argentina",
+    "currency": "ARS",
+    "languages": [
+      "es",
+      "en"
+    ]
+  },
+  "onboarding": {
+    "done": true,
+    "demoLoaded": true,
+    "startedAt": null,
+    "completed": true,
+    "step": 4,
+    "focus": "escalar ventas con catálogo de diseño",
+    "catalogReviewed": true,
+    "emailTestRequired": true,
+    "verifyDomainBeforeSend": true,
+    "domainVerificationPending": true,
+    "note": "Verificá el dominio propio en Resend antes de activar el autopilot; el envío desde gmail.com queda bloqueado.",
+    "enabled": true,
+    "welcomeMessage": "¡Hola! Bienvenidos a Lucian",
+    "introVideo": true,
+    "message": "Hola, soy Lucian. Vi tu interés por lámparas de diseño impresas en 3D. ¿Te muestro cómo funcionan?",
+    "status": "active"
+  },
+  "ai": {
+    "provider": "pollinations",
+    "apiKey": "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",
+    "baseUrl": "https://text.pollinations.ai/openai",
+    "model": "openai-fast",
+    "visionModel": "",
+    "temperature": 0.7,
+    "maxTokens": 8064
+  },
+  "search": {
+    "provider": "duckduckgo",
+    "apiKey": "",
+    "searxUrl": "",
+    "depth": "search+pages",
+    "maxResults": 8,
+    "prospectingDepth": "advanced",
+    "cacheHours": 24
+  },
+  "hunter": {
+    "apiKey": "792887c9fe6d7eb5a5070229d5578321b7b69a6b",
+    "enabled": true
+  },
+  "autopilot": {
+    "enabled": false,
+    "intervalMinutes": 10,
+    "ensureContent": true,
+    "minContentIdeas": 3,
+    "contentCooldownMinutes": 90
+  },
+  "fallback": {
+    "enabled": true,
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "model": "qwen2.5:7b-instruct-q4_0"
+    }
+  },
+  "email": {
+    "provider": "gmail",
+    "resendKey": "re_VJzBBC2s_Ac41J5BvUWhaunP7aEexEGNM",
+    "smtpUser": "charlyameghino@gmail.com",
+    "smtpPassword": "jtlezoybsgnzevwl",
+    "from": "Lucian <charlyameghino@gmail.com>",
+    "replyTo": "charlyameghino@gmail.com",
+    "footer": "",
+    "dailyLimit": 50,
+    "warmup": true,
+    "webhookUrl": "",
+    "webhookToken": "",
+    "autopilot": false,
+    "autopilotSpacingMin": 30,
+    "followUps": 3,
+    "postSales": 2,
+    "autopilotEnabled": true
+  },
+  "notify": {
+    "paused": false,
+    "telegram": {
+      "enabled": true,
+      "token": "9290322689:AAGwOxYN6OQhkfWKEBFQx-NBOD2sq6GKCVs",
+      "chatId": "5144879357",
+      "digestHour": 9
+    },
+    "whatsapp": {
+      "enabled": false,
+      "token": "",
+      "phoneNumberId": "",
+      "to": "",
+      "verifyToken": "lmb-4a75509a-8d1",
+      "apiVersion": "v23.0"
+    },
+    "events": {
+      "missionDone": true,
+      "missionError": true,
+      "missionWarning": true,
+      "hotReply": true,
+      "optOut": true,
+      "digest": true
+    }
+  },
+  "mission": {
+    "depth": "estandar",
+    "markets": [
+      "Argentina",
+      "Uruguay",
+      "Chile",
+      "México"
+    ],
+    "tone": "amigable y cercano",
+    "currency": "ARS",
+    "maxProspects": 40,
+    "autoCreateThreads": true,
+    "researchPages": true,
+    "reviewDirectory": true,
+    "contactCooldownDays": 3
+  },
+  "sales": {
+    "paymentLink": "https://galapa.com.ar/pago",
+    "quoteValidityDays": 14,
+    "shippingPolicy": ""
+  }
+}

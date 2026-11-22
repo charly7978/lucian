@@ -1,0 +1,18 @@
+LUCIAN V7.1 - CORRECCION DE APIs
+
+1. CERRAR las ventanas del servidor Lucian.
+2. Extraer TODO el ZIP (NO ejecutar dentro del ZIP).
+3. Doble clic en ACTUALIZAR-LUCIAN.cmd.
+4. Seleccionar el INICIAR-LUCIAN.cmd de la instalacion que muestra tus 33 lamparas.
+5. Confirmar que detecto 33 o mas lamparas. Escribir SI.
+6. Reiniciar Lucian, Ctrl + F5, entrar en Conexiones.
+7. Pulsar Probar APIs configuradas. Puede usar consultas minimas pagas de IA/busqueda.
+8. Pulsar Copiar informe sin claves y pegarlo en el chat para revisar fallas.
+
+No borra productos, conversaciones, misiones, fotografias, credenciales ni 
+carpetas de datos. Tampoco envia mails o Telegram en la prueba de conexion.
+La conexion de WhatsApp verifica token y telefono, NO la recepcion de webhook.
+Las pruebas de proveedores externos solo son posibles en tu PC con tus propias
+cuentas: este paquete NO incluye tokens y no los necesita para instalarse.
+
+Se conserva una copia de seguridad del codigo anterior en la instalacion.

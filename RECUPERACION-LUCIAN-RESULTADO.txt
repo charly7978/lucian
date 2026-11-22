@@ -1,0 +1,9 @@
+Resultado: CORRECTO
+Origen: C:\Users\carlo.ROLITO\Downloads\Sistema-Ventas-Lamparas\lumbre\data
+Destino: C:\Users\carlo.ROLITO\Downloads\Nueva carpeta (2)\LUCIAN-LISTO\data
+Lamparas: 33
+Conversaciones: 26
+Misiones: 34
+Contenidos: 89
+Respaldo anterior: C:\Users\carlo.ROLITO\Downloads\Nueva carpeta (2)\LUCIAN-LISTO\RESGUARDO-DATA-LUCIAN-2026-11-20T22-56-09-372Z-002dfa
+Avisos y envios automaticos pausados: SI

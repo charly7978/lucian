@@ -1,0 +1,67 @@
+{
+  "5144879357": {
+    "history": [
+      {
+        "role": "user",
+        "text": "tengo trabadas dos misiones",
+        "at": "2026-11-20T09:05:57.114Z"
+      },
+      {
+        "role": "assistant",
+        "text": "Miré el tablero: tenés **Siri Brasil** y **SIRI Velador México** en `running`, y **AWASA EE.UU.** en `error`. Las dos primeras no están \"trabadas\" por falta de datos: están trabadas porque les falta un paso humano (muestras) y porque el precio mayorista no cierra. Te lo desarmo por misión.\n\n**1. Siri Brasil (running)**\nEl resumen ya te dice el problema: precio mayorista de USD 189 con margen 12,4%. Eso no es un negocio, es caridad. Con la regla de aprendizaje \"mínimo 4 unidades\" y \"margen mínimo 30%\", ese número no se sostiene. La misión no avanza porque el precio está mal calibrado y falta el código HS confirmado.\nQué hacer: subir el mayorista a un valor que deje 30% post comisiones y envío (sin dato de flete real, es supuesto: recalcular con cotización de courier), fijar mínimo 4 unidades y cerrar HS antes de seguir. Sin eso, cualquier comprador que responda te va a pedir landed cost y no lo tenés.\n\n**2. SIRI México (running)**\nAcá el cuello es la certificación eléctrica (aprendizaje de confianza alta). No es un tema de venta, es de cumplimiento: sin certificación no podés entrar formalmente. La misión está corriendo pero no puede avanzar a cierre hasta resolver eso. Mientras tanto, el camino real es preparar el expediente técnico y buscar un laboratorio/agente certificador local (sin dato de cuál: hay que investigar).\n\n**3. AWASA EE.UU. (error)**\nMismo cuello: certificación (UL/FCC según corresponda, sin dato exacto). La misión falló probablemente por eso. No la relances a ciegas.\n\n**Mi recomendación de socio:** no desbloqueás tres frentes a la vez. Elegí **Brasil** como único mercado de la semana (coincide con tu aprendizaje \"un país por semana rinde más\"). Ahí sí podés avanzar sin certificación eléctrica compleja y con precio recalibrado. México y EE.UU. quedan en pausa hasta tener certificación y muestras.\n\n**Pasos concretos para desbloquear Brasil esta semana:**\n1. Recalcular mayorista con margen 30% real (necesito costo de flete y comisión; si no los tenés, ",
+        "at": "2026-11-20T09:06:03.450Z"
+      },
+      {
+        "role": "user",
+        "text": "hola!",
+        "at": "2026-11-20T17:52:03.077Z"
+      },
+      {
+        "role": "assistant",
+        "text": "No pude consultar al equipo: El proveedor de IA no tiene saldo suficiente. Cargá crédito o cambiá de proveedor.. Revisá la configuración de IA en Lucian.\n\nLucian ”” estado de hoy\nMisiones activas: 1\nLeads calientes: 0\nBorradores listos: 4\nEn curso: SORA Velador · Argentina (50%).",
+        "at": "2026-11-20T17:52:04.790Z"
+      },
+      {
+        "role": "user",
+        "text": "Hola",
+        "at": "2026-11-20T19:48:06.591Z"
+      },
+      {
+        "role": "assistant",
+        "text": "(Modo demo) 📊 *Lucian — estado real de hoy*\n\nProductos en catálogo: 33\nMisiones activas: 0\nLeads calientes: 5\nVentas cerradas: 0\nBorradores listos para enviar: 6\nBorradores por aprobar: 0\nPiezas de contenido listas: 79\n\n⚠️ La IA está sin saldo, así que este resumen sale directo de tus datos. Para volver a conversar con el equipo, cargá crédito en el proveedor o configurá un modelo local con memoria disponible.",
+        "at": "2026-11-20T19:48:24.987Z"
+      },
+      {
+        "role": "user",
+        "text": "Hola",
+        "at": "2026-11-20T19:49:31.318Z"
+      },
+      {
+        "role": "assistant",
+        "text": "(Modo demo) 📊 *Lucian — estado real de hoy*\n\nProductos en catálogo: 33\nMisiones activas: 0\nLeads calientes: 5\nVentas cerradas: 0\nBorradores listos para enviar: 6\nBorradores por aprobar: 0\nPiezas de contenido listas: 79\n\n⚠️ La IA está sin saldo, así que este resumen sale directo de tus datos. Para volver a conversar con el equipo, cargá crédito en el proveedor o configurá un modelo local con memoria disponible.",
+        "at": "2026-11-20T19:49:50.226Z"
+      },
+      {
+        "role": "user",
+        "text": "Que tal?",
+        "at": "2026-11-20T19:49:52.378Z"
+      },
+      {
+        "role": "assistant",
+        "text": "(Modo demo) 📊 *Lucian — estado real de hoy*\n\nProductos en catálogo: 33\nMisiones activas: 0\nLeads calientes: 5\nVentas cerradas: 0\nBorradores listos para enviar: 7\nBorradores por aprobar: 0\nPiezas de contenido listas: 79\n\n⚠️ La IA está sin saldo, así que este resumen sale directo de tus datos. Para volver a conversar con el equipo, cargá crédito en el proveedor o configurá un modelo local con memoria disponible.",
+        "at": "2026-11-20T19:50:10.780Z"
+      },
+      {
+        "role": "user",
+        "text": "No está sin saldo la ia",
+        "at": "2026-11-20T19:50:19.299Z"
+      },
+      {
+        "role": "assistant",
+        "text": "(Modo demo) 📊 *Lucian — estado real de hoy*\n\nProductos en catálogo: 33\nMisiones activas: 1 (SORA Velador · Argentina 50%)\nLeads calientes: 5\nVentas cerradas: 0\nBorradores listos para enviar: 7\nBorradores por aprobar: 0\nPiezas de contenido listas: 79\n\nEn curso: SORA Velador · Argentina (50%)\n\n⚠️ La IA está sin saldo, así que este resumen sale directo de tus datos. Para volver a conversar con el equipo, cargá crédito en el proveedor o configurá un modelo local con memoria disponible.",
+        "at": "2026-11-20T19:50:38.426Z"
+      }
+    ],
+    "updatedAt": "2026-11-20T19:50:38.426Z"
+  }
+}

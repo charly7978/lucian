@@ -1,0 +1,92 @@
+{
+  "version": "7.0",
+  "updated": "2026-11-20",
+  "description": "Catálogo comercial estático con captación de consultas y scripts; reemplazo seguro del código Lucian, sin modificar datos",
+  "archivos": [
+    {
+      "archivo": "server.mjs",
+      "sha256": "c07cba588b6f7249b9332378542df36f1d2c4cca2f4f99186f60313a144a1f69",
+      "bytes": 166771
+    },
+    {
+      "archivo": "public\\app.js",
+      "sha256": "2ba7e94cae484bd23be1eb1c81279204f040aa3f913960752c3b57efb871967f",
+      "bytes": 421292
+    },
+    {
+      "archivo": "package.json",
+      "sha256": "755c38404f4125aced9c49eb76630f3971da2498e36d07e2a907a4c37f69e20f",
+      "bytes": 3749
+    },
+    {
+      "archivo": "lib\\agents.mjs",
+      "sha256": "2c6d3520b4590a156f23743fbfa1525e11007fa15e0bf9863e4fc713ae937240",
+      "bytes": 113587
+    },
+    {
+      "archivo": "lib\\catalog-bulk.mjs",
+      "sha256": "c93b96f45f9005f824fbda244099fbb00296a8d38f3143694be1754b7127f205",
+      "bytes": 3330
+    },
+    {
+      "archivo": "lib\\campaign-pricing.mjs",
+      "sha256": "068b5276cadd481048c7fe7b2a2475cedc8215da093532c8cb13dc1e8fefca16",
+      "bytes": 1865
+    },
+    {
+      "archivo": "lib\\campaign-board.mjs",
+      "sha256": "0cf99ca6ee07b2f308a1e2e19a98ad17acdb406877a9789678ba0777ed0d7f01",
+      "bytes": 2524
+    },
+    {
+      "archivo": "tools\\test-catalog-v5.mjs",
+      "sha256": "455f4179f095f67ec0045487568b666d52c1eb6c25cdfd0b10c3fd0f84411109",
+      "bytes": 7315
+    },
+    {
+      "archivo": "tools\\test-campaign-pricing.mjs",
+      "sha256": "104ba8ad32d74ccd0e6aa03e8ba89cbbc4296a48bb6ba6fd86f389132fec66c3",
+      "bytes": 1116
+    },
+    {
+      "archivo": "tools\\test-campaign-board.mjs",
+      "sha256": "fbe951887d908ca7dc5e00823ce81584f86e625c661474888759db5fd94e7288",
+      "bytes": 1663
+    },
+    {
+      "archivo": "tools\\test-api.mjs",
+      "sha256": "0d92cf6fc58949d2b0226956472f987a74c7a945ebb542fc3928002481dae819",
+      "bytes": 20344
+    },
+    {
+      "archivo": "lib\\sales-offers.mjs",
+      "sha256": "382ee9e18babc5ee22185d66c8de77647730357621669e3306b73877df34d306",
+      "bytes": 15275
+    },
+    {
+      "archivo": "tools\\test-sales-offers.mjs",
+      "sha256": "cda32affccefc8713f2572497a988df08de85f1fc874546f46a4d91947599071",
+      "bytes": 4186
+    },
+    {
+      "archivo": "tools\\test-sales-offers-http.mjs",
+      "sha256": "b6f5d6c5bd5dd8c4ec608060a21efda453294f1b56f7b25110ac8d99fb5b7218",
+      "bytes": 2972
+    },
+    {
+      "archivo": "lib\\public-catalog.mjs",
+      "sha256": "05fd21ab8e803c711c3953cae853d9a1e13c970ce1bc5e051cc139135d143003",
+      "bytes": 15893
+    },
+    {
+      "archivo": "tools\\test-public-catalog.mjs",
+      "sha256": "de0909412fc31b33758ccff6f83d768731e4faea2dd38eb0052b41c7ff48d4e0",
+      "bytes": 4785
+    },
+    {
+      "archivo": "tools\\test-public-catalog-http.mjs",
+      "sha256": "76b80a0e90cb188e6a0890c2a724c37111e2bcf887b754cc3717f2921a4fee4d",
+      "bytes": 3226
+    }
+  ]
+}

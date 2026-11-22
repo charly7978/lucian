@@ -1,0 +1,61 @@
+{
+  "version": "8.1-resend-delivery",
+  "purpose": "read-only Resend delivery reconciliation and bounce-safe sending",
+  "requires": "Exact compatible V7.1 or V8 server, UI and package baselines",
+  "does_not_send_messages": true,
+  "does_not_write_data_during_install": true,
+  "compatible": {
+    "V7.1": {
+      "server.mjs": "db315f4611beec832e793fac035e46526911ebde304a2ec026ea03de6676b542",
+      "public/app.js": "f9b64a3add0789a9782c40815103e24448962e702c84e00599c3cbe6ae25c17b",
+      "package.json": "d3f959630640c83ca30fea44ac2322f5d91e01166d1d57a2d9b23e5b22758328"
+    },
+    "V8": {
+      "server.mjs": "6dd18febae2a38d30233afab747af4f347785d430bbb8ffda3ab2fba5c0c04c5",
+      "public/app.js": "b060a58afe62ac1418ec856aaf995df8193dafbe48aa98c0a5480d73d7c60d21",
+      "package.json": "65cceb4457ed241949f007ae0f05494111bacf8b51ec3629c65e3b55fff05a5a"
+    }
+  },
+  "files": [
+    {
+      "path": "server.mjs",
+      "sha256": "1335dd3b96de40e5003085b337606bbc350bf749140d707cea1636f4aaf7c1a8",
+      "v8_sha256": "6dd18febae2a38d30233afab747af4f347785d430bbb8ffda3ab2fba5c0c04c5"
+    },
+    {
+      "path": "public/app.js",
+      "sha256": "e561b5a5a0642a3012c76aa549f0a845889ff3a04006d5e239bd5615a0b7da0f",
+      "v8_sha256": "b060a58afe62ac1418ec856aaf995df8193dafbe48aa98c0a5480d73d7c60d21"
+    },
+    {
+      "path": "package.json",
+      "sha256": "bbf2dfb758a96cc3e14d03cf7981f7d9865387f980a0baed4cd9c3a1d00bed11",
+      "v8_sha256": "65cceb4457ed241949f007ae0f05494111bacf8b51ec3629c65e3b55fff05a5a"
+    },
+    {
+      "path": "lib/outreach-audit.mjs",
+      "sha256": "388de55256018f5c7519e8778c5f6112421ff00de7dc11d2a41c5655cb6d4418",
+      "v8_sha256": "7a746e71aabc2da9c7be532bd249f211c8baa84674c08c5cd4c688ff513fc78f"
+    },
+    {
+      "path": "tools/test-outreach-audit.mjs",
+      "sha256": "08472b12dffa5577eda2e53da816eb856fc56e73d67991559deaf5c3371835ef",
+      "v8_sha256": "08472b12dffa5577eda2e53da816eb856fc56e73d67991559deaf5c3371835ef"
+    },
+    {
+      "path": "lib/resend-delivery.mjs",
+      "sha256": "64a0e3b0a4dbe517c2454471d91cfc207030aaf02682162a53c3882e4aaa689e",
+      "v8_sha256": null
+    },
+    {
+      "path": "tools/test-resend-delivery.mjs",
+      "sha256": "45133e90a543698c8b1969f01ca5762752345af7734c459fe117953e16b7b1f9",
+      "v8_sha256": null
+    },
+    {
+      "path": "tools/test-resend-delivery-http.mjs",
+      "sha256": "ebc27c37d17f500dcd09dce62d29a536174005c735a5dc89414699ba2e6341be",
+      "v8_sha256": null
+    }
+  ]
+}
