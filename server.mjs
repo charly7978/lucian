@@ -37,11 +37,11 @@ import { diagnoseConnections, testConnection, getAiFailoverState, resetAiFailove
 import { startAutopilot, runAutopilot, getAutopilotState } from './lib/autopilot.mjs';
 import { verifyMetaSignature, hasDocumentedOptIn, resendIdempotencyKey } from './lib/security.mjs';
 import {
-  POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch, policyConfig,
+  POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch, isPolicyActive, policyConfig,
   policyFingerprint, policyStatus, revokePolicyPatch,
 } from './lib/policy.mjs';
 import { buildSalesAgenda, buildCatalogHealth } from './lib/sales-ops.mjs';
-import { supervisedMissionPreflight } from './lib/sales-launch.mjs';
+import { runScheduledB2B, scheduledB2BPlan, supervisedMissionPreflight } from './lib/sales-launch.mjs';
 import { planCatalogBulk } from './lib/catalog-bulk.mjs';
 import { campaignPriceMap, campaignProductView } from './lib/campaign-pricing.mjs';
 import { buildCampaignBoard } from './lib/campaign-board.mjs';
@@ -561,7 +561,10 @@ function startImapPolling() {
   console.log(`  Correo entrante (IMAP Gmail): cada ${minutes} min`);
 }
 startImapPolling();
-const autopilotDeps = { createMission };
+const autopilotDeps = {
+  createMission,
+  runScheduledB2B: () => runScheduledB2B(store, { createMission, aiReady: isAIReady, searchInfo: searchProviderInfo }),
+};
 startAutopilot(store, notifier, (line) => console.log(line), autopilotDeps);
 
 /* Extrae el procesamiento de un correo entrante para reutilizarlo
@@ -717,6 +720,7 @@ function statePayload() {
     catalogHealth: buildCatalogHealth(products),
     channelReadiness: buildChannelReadiness(products),
     salesLaunch: supervisedMissionPreflight({ products, missions, settings, aiReady: isAIReady(settings), searchInfo: searchProviderInfo(settings) }),
+    scheduledB2B: scheduledB2BPlan({ products, missions, settings, aiReady: flags.ai, searchInfo: searchProviderInfo(settings) }, meta.lastScheduledB2B),
     outbox: outbox.status(),
     policy: policyStatus(settings, store),
     usage: meta.agentUsage || {},
@@ -944,7 +948,7 @@ async function updateProduct(id, body) {
    Misiones
    ───────────────────────────────────────────────────────────── */
 
-async function createMission(body) {
+async function createMission(body, { b2bFocus = false } = {}) {
   const settings = store.settings();
   const product = store.find('products', asString(body.productId));
   if (!product) throw new HttpError(400, 'Elegí un producto válido para lanzar la misión.');
@@ -1007,6 +1011,7 @@ async function createMission(body) {
     demo,
     mode: demo ? 'demo' : 'real',
     manualReviewOnly: !demo && body.manualReviewOnly === true,
+    ...(b2bFocus ? { b2bFocus } : {}),
     requestedMode,
     productId: product.id,
     priceSnapshot: { price: Number(effectiveProduct.price) || 0, currency: product.currency || 'USD', capturedAt: now, source: campaignPrice === null ? 'catalog' : 'campaign' },
@@ -2998,6 +3003,7 @@ async function handle(req, res) {
         target.nextFollowUp = body.nextFollowUp ? new Date(body.nextFollowUp).toISOString() : null;
       }
       if (body.score !== undefined) target.score = clamp(asNumber(body.score), 0, 100);
+      let permissionGranted = false;
       if (body.contact && typeof body.contact === 'object') {
         const contact = { ...target.contact };
         for (const key of ['name', 'company', 'role', 'email', 'emailStatus', 'country', 'city', 'website', 'type']) {
@@ -3018,6 +3024,7 @@ async function handle(req, res) {
             const sameEvidence = contact.permission?.status === 'opted_in' && contact.permission.evidence === evidence;
             contact.permission = { status: 'opted_in', source: 'manual', evidence,
               capturedAt: sameEvidence ? contact.permission.capturedAt : nowISO() };
+            permissionGranted = !sameEvidence;
           } else {
             contact.permission = { status: 'unknown' };
           }
@@ -3027,6 +3034,12 @@ async function handle(req, res) {
       target.updatedAt = nowISO();
       target.lastActivityAt = target.lastActivityAt || target.updatedAt;
       await store.set('threads', threads);
+      if (permissionGranted && isPolicyActive(store.settings())) {
+        const mission = store.find('missions', target.missionId);
+        if (mission?.b2bFocus && !isSuppressed(target.contact?.email, threadSuppressions(target), target.contact?.company)) {
+          await outbox.scheduleMission(mission, { threadId: target.id });
+        }
+      }
       json(res, 200, { thread: target });
       return;
     }

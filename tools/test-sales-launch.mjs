@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { supervisedMissionPreflight } from '../lib/sales-launch.mjs';
+import { runScheduledB2B, scheduledB2BPlan, supervisedMissionPreflight } from '../lib/sales-launch.mjs';
+import { verifyProspectArtifact } from '../lib/agents.mjs';
 const now = Date.parse('2026-11-20T22:00:00Z');
 const product = (id, p = {}) => ({ id, name: `Lampara ${id}`, photos: [{file: 'foto.jpg'}], price: 100, ...p });
 const data = { now, products: [product('A'), product('B'), product('C', {photos:[]}), product('D', { status:'archivado'})],
@@ -28,3 +29,38 @@ assert.equal(plan.eligible, 2);
 assert.equal(supervisedMissionPreflight({...data,products:[product('C',{photos:[]})]}).canStart,false);
 assert.ok(plan.guarantee.includes('NO envía'));
 console.log('OK: preflight IA, busqueda, mercados, fichas, misiones activas y deduplicacion por 7 dias.');
+
+const automatic = { ...data, settings: { mission: { scheduledB2B: true, markets: ['Argentina', 'España'], maxProspects: 6 } } };
+assert.deepEqual(scheduledB2BPlan(data), { enabled: false });
+assert.equal(scheduledB2BPlan(automatic, new Date(now - 3600000).toISOString()).canStart, false);
+assert.equal(scheduledB2BPlan({ ...automatic, aiReady: false }).canStart, false);
+
+const meta = {};
+const store = {
+  settings: () => automatic.settings,
+  get: (key) => key === 'meta' ? meta : automatic[key],
+  setMeta: async (patch) => { Object.assign(meta, patch); },
+};
+const calls = [];
+const deps = {
+  now,
+  aiReady: () => true,
+  searchInfo: () => automatic.searchInfo,
+  createMission: async (body, options) => { calls.push({ body, options }); return body; },
+};
+await Promise.all([runScheduledB2B(store, deps), runScheduledB2B(store, deps)]);
+assert.equal(calls.length, 1);
+assert.equal(calls[0].options.b2bFocus, true);
+assert.equal(calls[0].body.manualReviewOnly, undefined);
+assert.deepEqual(calls[0].body.markets, ['Argentina']);
+assert.equal(calls[0].body.maxProspects, 6);
+assert.equal(calls[0].body.mode, 'real');
+assert.equal(await runScheduledB2B(store, { ...deps, now: now + 23 * 3600000 }), null);
+
+const verified = await verifyProspectArtifact({ compradores: [
+  { nombre: 'Tienda Ejemplo', tipo: 'tienda', por_que: 'Vende iluminación' },
+  { nombre: 'Distribuidor Ejemplo', tipo: 'distribuidor' },
+] }, { mission: { b2bFocus: true, markets: ['España'] } });
+assert.equal(verified.compradores.length, 0);
+assert.equal(verified.descartados.length, 2);
+console.log('OK: prospección B2B optativa, límite de 24 h, disparos simultáneos y filtro de compradores.');

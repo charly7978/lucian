@@ -4999,7 +4999,7 @@ function settingsEmailHTML() {
       'Envío desde Lucian',
       configured,
       configured
-        ? `${email.provider === 'resend' ? 'Resend' : 'Webhook'} está configurado. Lucian nunca envía sin tu confirmación y respeta el límite diario.`
+        ? 'El proveedor de correo está configurado. El piloto envía borradores listos con permiso documentado y dentro del cupo.'
         : 'Modo manual: preparás el mensaje, descargás el .eml o lo copiás, y lo enviás desde tu correo. Nada sale solo.',
       testButton('resend', 'Probar Resend', 'send') + ` ${testButton('email', 'Revisar configuración', 'check')}`,
     )}
@@ -5024,7 +5024,7 @@ function settingsEmailHTML() {
         <div class="field full"><label for="email-domains">Lista de dominios</label><textarea class="textarea" id="email-domains" name="sendDomains" rows="5" placeholder="lucian.com | hola@lucian.com | 200">${esc((email.sendDomains || []).map((d) => `${d.domain} | ${d.from || ''} | ${d.dailyLimit || 200}${d.enabled === false ? ' | 0' : ''}`).join('\n'))}</textarea><p class="field-hint">Uno por línea: <code>dominio | remitente | límite diario | activo</code>. Ejemplo: <code>ventas.tumarca.com | Lucian &lt;hola@ventas.tumarca.com&gt; | 200 | 1</code>. El remitente debe pertenecer al dominio. <b>La clave de Resend va en el campo “Clave de Resend” de arriba, no acá.</b> Las líneas que no tengan este formato se ignoran y no rompen el guardado.</p></div>
       </div>
       ${Array.isArray(limits.domains) && limits.domains.length ? `<div class="artifact-card mt-3"><h5>Uso de hoy por dominio</h5><div class="artifact-chips">${limits.domains.map((d) => `<span class="chip" title="${attr(d.from || d.domain)}">${esc(d.domain)} · ${num(d.used)}/${num(d.limit)}${d.enabled === false ? ' · apagado' : ''}</span>`).join('')}</div><p class="tiny muted mt-2">Capacidad total activa: ${num(limits.capacity)} correos/día · enviados hoy: ${num(limits.used)} · cupo restante: ${num(limits.remaining)}.</p></div>` : ''}
-      <div class="artifact-callout warn mt-3"><b>Límites reales del proveedor</b>En el plan gratuito de Resend el cupo total es de 100 correos/día (incluye los recibidos) y hasta 3 dominios. Varios dominios no aumentan ese cupo: necesitás un plan paid para superarlo. Resend pide mantener rebotes por debajo del 4 % quejas por debajo del 0,08 %.</div>
+      <div class="artifact-callout warn mt-3"><b>Cupo de tu proveedor</b>Verificá el cupo diario y mensual en tu cuenta. Los límites por dominio que configurás acá solo controlan la cola de Lucian.</div>
     </div>
 
     <div class="form-section">
@@ -5122,6 +5122,7 @@ function settingsNotifyHTML() {
 function settingsMissionHTML() {
   const settings = S.state.settings || {};
   const mission = settings.mission || {};
+  const automatic = S.state.scheduledB2B || {};
   const body = `
     ${settingsStatusCard(
       'Modo de trabajo',
@@ -5138,6 +5139,13 @@ function settingsMissionHTML() {
       <div class="field"><label class="switch" style="margin-top:22px"><input type="checkbox" name="autoCreateThreads" ${mission.autoCreateThreads !== false ? 'checked' : ''}><span class="track"></span><span>Crear conversaciones en la bandeja</span></label></div>
       <div class="field"><label class="switch" style="margin-top:22px"><input type="checkbox" name="reviewDirectory" ${mission.reviewDirectory !== false ? 'checked' : ''}><span class="track"></span><span>Revisar compradores del directorio antes de enviar</span></label></div>
       <div class="field"><label class="switch" style="margin-top:22px"><input type="checkbox" name="researchPages" ${mission.researchPages !== false ? 'checked' : ''}><span class="track"></span><span>Leer páginas encontradas</span></label></div>
+    </div>
+    <div class="form-section">
+      <p class="form-section-title">Prospección automática para hoteles y mayoristas</p>
+      <label class="switch"><input type="checkbox" name="scheduledB2B" ${mission.scheduledB2B === true ? 'checked' : ''}><span class="track"></span><span>Buscar empresas y preparar propuestas</span></label>
+      <p class="field-hint">Mientras Lucian esté abierto, intenta hasta una misión cada 24 horas en el primer mercado de la lista. Reutiliza una ficha después de siete días. Consume créditos de IA. El piloto de correo exige permiso documentado para enviar.</p>
+      ${automatic.enabled && automatic.reasons?.length ? `<p class="field-hint">${esc(automatic.reasons.join(' '))}</p>` : ''}
+      ${automatic.nextAt ? `<p class="field-hint">Próximo turno desde ${esc(new Date(automatic.nextAt).toLocaleString())}.</p>` : ''}
     </div>
     <div class="artifact-callout info mt-3"><b>Una misión no es una campaña</b>Cada misión es una pasada completa con un objetivo. Después podés repetirla con otra lámpara o ajustar el rumbo con lo que aprendió el equipo.</div>`;
   return settingsForm('misiones', 'Cómo trabaja el equipo', 'Estos valores vienen precargados en el asistente de nueva misión y podés cambiarlos en cada una.', body, 'No cambia misiones que ya están en curso.');
@@ -5621,6 +5629,7 @@ async function saveSettings(form) {
   } else if (tab === 'misiones') {
     patch = {
       mission: {
+        scheduledB2B: check('scheduledB2B'),
         depth: val('missionDepth') || 'estandar',
         markets: splitList(val('missionMarkets')),
         tone: val('missionTone') || TONES[0],

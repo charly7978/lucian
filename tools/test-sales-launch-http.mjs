@@ -9,8 +9,8 @@ const data = await mkdtemp(path.join(os.tmpdir(), 'lucian-supervised-'));
 const port = 46000 + Math.floor(Math.random() * 10000);
 const base = `http://127.0.0.1:${port}`;
 const proc = spawn(process.execPath, ['server.mjs'], {cwd:root,env:{...process.env,PORT:String(port),LUCIAN_DATA_DIR:data,LUCIAN_NO_OPEN:'1',LUCIAN_HOST:'127.0.0.1'},stdio:'ignore'});
-async function call(route, body, expect) {
-  const res = await fetch(base+route,{method:body===undefined?'GET':'POST',headers:{'content-type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)})});
+async function call(route, body, expect, method = body === undefined ? 'GET' : 'POST') {
+  const res = await fetch(base+route,{method,headers:{'content-type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)})});
   const j = await res.json();
   assert.equal(res.status,expect,`${route}: ${JSON.stringify(j)}`);
   return j;
@@ -21,9 +21,15 @@ try{
   assert.ok(okay,'Servidor local iniciado');
   const before=await call('/api/state',undefined,200);
   assert.equal(before.salesLaunch.canStart,false,'Sin IA real configurada no debe correr');
+  assert.equal(before.scheduledB2B.enabled, false);
+  await call('/api/settings', { mission: { scheduledB2B: true } }, 200, 'PUT');
+  await call('/api/autopilot/run', {}, 200);
   await call('/api/sales/prepare-one',{productId:'x'},400);
   await call('/api/sales/prepare-one',{confirm:true,productId:'x'},409);
   const after=await call('/api/state',undefined,200);
   assert.equal(after.counts.missions,before.counts.missions,'No se crean misiones por solicitudes rechazadas');
+  assert.equal(after.scheduledB2B.enabled, true);
+  assert.equal(after.scheduledB2B.canStart, false);
+  assert.equal(after.scheduledB2B.lastAttempt, null);
   console.log('OK HTTP: preflight visible, rechazo de inicio sin configuracion, y sin misiones creadas.');
 }finally{proc.kill();await new Promise(r=>{if(proc.exitCode!==null)return r();proc.once('exit',r);setTimeout(r,1200)});await rm(data,{recursive:true,force:true})}
