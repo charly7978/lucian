@@ -1,0 +1,151 @@
+[
+  {
+    "id": "cnt_b16f33777d2b",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "platform": "Instagram",
+    "format": "Reel 8 s",
+    "hook": "Apagada también es una escultura.",
+    "script": "Plano fijo de la lámpara apagada. Se enciende. La sombra aparece en la pared. Corte al detalle de la terminación.",
+    "caption": "Una lámpara no solo ilumina: también dibuja. Aurora 01, impresa en 3D en series cortas.",
+    "hashtags": [
+      "#iluminaciondediseno",
+      "#lamparadeautor",
+      "#impresion3d",
+      "#disenoindustrial",
+      "#luzcalida"
+    ],
+    "cta": "Guardá el reel para tu próxima reforma.",
+    "day": "Día 1",
+    "status": "publicado",
+    "createdAt": "2026-11-18T12:32:49.764Z",
+    "updatedAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "cnt_1454938d6020",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "platform": "TikTok",
+    "format": "Video 15 s",
+    "hook": "Así se imprime una lámpara que no se ve en cualquier lado.",
+    "script": "Timelapse de impresión → manos lijando → lámpara terminada → sombra en la pared.",
+    "caption": "De un rollo de filamento a una pieza que proyecta su propia sombra. Aurora 01, hecha a pedido.",
+    "hashtags": [
+      "#3dprinting",
+      "#lightingdesign",
+      "#makers",
+      "#diseño"
+    ],
+    "cta": "Comentá \"luz\" y te cuento cómo se elige el color.",
+    "day": "Día 2",
+    "status": "idea",
+    "createdAt": "2026-11-18T12:32:49.764Z",
+    "updatedAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "cnt_4c729890bb94",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "platform": "Pinterest",
+    "format": "Foto vertical",
+    "hook": "La lámpara que hace que un rincón chico se vea intencional.",
+    "script": "Foto de ambiente con la lámpara encendida, texto mínimo sobre la imagen.",
+    "caption": "Un rincón, una luz cálida y una sombra que cambia según la hora.",
+    "hashtags": [
+      "#smallspaces",
+      "#lightinginspo",
+      "#designlamp",
+      "#warmlight"
+    ],
+    "cta": "Guardá la idea para tu rincón de lectura.",
+    "day": "Día 3",
+    "status": "idea",
+    "createdAt": "2026-11-18T12:32:49.764Z",
+    "updatedAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "cnt_536a8fe05bb9",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "platform": "Instagram",
+    "format": "Carrusel 4 placas",
+    "hook": "Tres colores. Una misma sombra.",
+    "script": "Placa 1: las tres lámparas juntas. Placa 2: detalle de cada terminación. Placa 3: la sombra de cada una. Placa 4: cómo elegir.",
+    "caption": "El color cambia la pieza; la sombra sigue siendo la misma. ¿Con cuál te quedás?",
+    "hashtags": [
+      "#colordesign",
+      "#lamparas",
+      "#interiores",
+      "#hechoapedido"
+    ],
+    "cta": "Elegí tu color en los comentarios.",
+    "day": "Día 4",
+    "status": "idea",
+    "createdAt": "2026-11-18T12:32:49.764Z",
+    "updatedAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "cnt_195d73b179d9",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "platform": "TikTok",
+    "format": "Video 20 s",
+    "hook": "Lo que nadie te muestra del packaging de una lámpara frágil.",
+    "script": "Mostrar el packaging, la espuma, el seguro y el test de caída. Cerrar con la lámpara llegando entera.",
+    "caption": "Una lámpara frágil no se manda en una caja cualquiera. Así viaja Aurora 01.",
+    "hashtags": [
+      "#packagingdesign",
+      "#smallbusiness",
+      "#makers",
+      "#logistica"
+    ],
+    "cta": "Si tenés una tienda, pedí la ficha técnica.",
+    "day": "Día 5",
+    "status": "idea",
+    "createdAt": "2026-11-18T12:32:49.764Z",
+    "updatedAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "cnt_683838e00c9b",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "platform": "Instagram",
+    "format": "Historia con encuesta",
+    "hook": "¿La pondrías en el comedor o en la entrada?",
+    "script": "Foto de la lámpara en dos ambientes. Encuesta: comedor / entrada. Respuesta con un dato de instalación.",
+    "caption": "",
+    "hashtags": [],
+    "cta": "Respondé la encuesta.",
+    "day": "Día 6",
+    "status": "idea",
+    "createdAt": "2026-11-18T12:32:49.764Z",
+    "updatedAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "cnt_032d1bc5e979",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "productId": "prod_demo_aurora",
+    "platform": "Pinterest",
+    "format": "Pin de ficha técnica",
+    "hook": "Medidas, materiales y luz: todo en una imagen.",
+    "script": "Infografía simple con silueta, medidas, materiales y temperatura de color.",
+    "caption": "Ficha clara para decidir sin adivinar. Aurora 01, serie corta.",
+    "hashtags": [
+      "#specsheet",
+      "#lightingdesign",
+      "#interiorarchitecture"
+    ],
+    "cta": "Guardá el pin para tu próximo proyecto.",
+    "day": "Día 7",
+    "status": "idea",
+    "createdAt": "2026-11-18T12:32:49.764Z",
+    "updatedAt": "2026-11-18T12:32:49.764Z"
+  }
+]

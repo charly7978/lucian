@@ -1,0 +1,54 @@
+[
+  {
+    "id": "lrn_9c7f4c173475",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "scope": "Aurora 01",
+    "insight": "El argumento más fuerte no es la tecnología de impresión, sino la sombra que proyecta la pieza.",
+    "evidence": "El red team y el análisis de contenido coinciden en que la sombra es el diferencial visual.",
+    "confidence": "media",
+    "apply": "Usar la sombra como gancho principal en la próxima campaña y en la primera foto.",
+    "tag": "mensaje",
+    "pinned": false,
+    "createdAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "lrn_8bdbfc3d1ecd",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "scope": "Aurora 01",
+    "insight": "El precio mayorista necesita un mínimo de 4 unidades para absorber packaging y atención.",
+    "evidence": "El escenario de precios muestra que con 1 unidad el margen se reduce a la mitad.",
+    "confidence": "alta",
+    "apply": "Fijar mínimo de 4 unidades y no incluir envío en la cotización mayorista.",
+    "tag": "precio",
+    "pinned": true,
+    "createdAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "lrn_73714d768647",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "scope": "Aurora 01",
+    "insight": "La certificación eléctrica es el verdadero cuello de botella para México y EE. UU.",
+    "evidence": "Cumplimiento y aduanas la marcan como requisito alto y el plan no tiene costo ni plazo.",
+    "confidence": "alta",
+    "apply": "Pedir presupuesto a un laboratorio antes de prospectar esos mercados.",
+    "tag": "aduanas",
+    "pinned": false,
+    "createdAt": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "lrn_afbc6e130980",
+    "demo": true,
+    "missionId": "mis_demo_aurora",
+    "scope": "Aurora 01",
+    "insight": "Un solo país en la primera semana produce más aprendizaje que tres mercados a la vez.",
+    "evidence": "El red team detectó que el plan original no cabía en el tiempo de una persona sola.",
+    "confidence": "alta",
+    "apply": "Elegir un mercado de prueba por misión y ampliar solo con conversaciones.",
+    "tag": "operacion",
+    "pinned": false,
+    "createdAt": "2026-11-18T12:32:49.764Z"
+  }
+]

@@ -1,0 +1,198 @@
+[
+  {
+    "id": "act_3c8adfbfe12d",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T13:32:16.225Z"
+  },
+  {
+    "id": "act_0c8f75ce1dc7",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T13:31:24.803Z"
+  },
+  {
+    "id": "act_701707bd4bb8",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T13:30:30.380Z"
+  },
+  {
+    "id": "act_5f12a2f20b8d",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T13:30:01.483Z"
+  },
+  {
+    "id": "act_bcad094ecd4e",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T13:29:23.896Z"
+  },
+  {
+    "id": "act_bf3856c681aa",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T13:14:59.502Z"
+  },
+  {
+    "id": "act_db2f2a4ac38d",
+    "type": "mission",
+    "text": "Misión con error: Filo · España. Mercado y competencia: No hay conexión con el proveedor. Revisá internet o la dirección configurada.",
+    "meta": {
+      "missionId": "mis_a09b5f0112bc",
+      "demo": false
+    },
+    "at": "2026-11-22T12:41:15.411Z"
+  },
+  {
+    "id": "act_bfcad4944b54",
+    "type": "mission",
+    "text": "Misión iniciada: Filo · España.",
+    "meta": {
+      "missionId": "mis_a09b5f0112bc",
+      "demo": false
+    },
+    "at": "2026-11-22T12:40:23.507Z"
+  },
+  {
+    "id": "act_e122bf15b696",
+    "type": "mission",
+    "text": "Misión creada: Filo · España.",
+    "meta": {
+      "missionId": "mis_a09b5f0112bc",
+      "demo": false
+    },
+    "at": "2026-11-22T12:40:23.422Z"
+  },
+  {
+    "id": "act_a4c15092320d",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T12:39:42.879Z"
+  },
+  {
+    "id": "act_49e443c33c1a",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T12:39:29.774Z"
+  },
+  {
+    "id": "act_de2779d76e6a",
+    "type": "outreach",
+    "text": "Mensaje marcado como enviado a Studio Lumen.",
+    "meta": {
+      "threadId": "thr_demo_3",
+      "channel": "manual"
+    },
+    "at": "2026-11-22T12:37:51.464Z"
+  },
+  {
+    "id": "act_3c1bc9217faa",
+    "type": "reply",
+    "text": "Respuesta analizada: Studio Lumen (pide_precio).",
+    "meta": {
+      "threadId": "thr_demo_3",
+      "score": 82
+    },
+    "at": "2026-11-22T12:37:41.253Z"
+  },
+  {
+    "id": "act_57a43f7452dc",
+    "type": "outreach",
+    "text": "Mensaje marcado como enviado a Luz de Autor.",
+    "meta": {
+      "threadId": "thr_demo_1",
+      "channel": "manual"
+    },
+    "at": "2026-11-22T12:37:31.334Z"
+  },
+  {
+    "id": "act_0a94d9f05cc6",
+    "type": "reply",
+    "text": "Respuesta analizada: Luz de Autor (interesado).",
+    "meta": {
+      "threadId": "thr_demo_1",
+      "score": 82
+    },
+    "at": "2026-11-22T12:37:12.390Z"
+  },
+  {
+    "id": "act_a83a203c52f7",
+    "type": "system",
+    "text": "Se cargaron datos de ejemplo.",
+    "meta": {
+      "demo": true
+    },
+    "at": "2026-11-22T12:32:49.778Z"
+  },
+  {
+    "id": "act_5ea9e9f4556d",
+    "type": "system",
+    "text": "Datos de ejemplo cargados.",
+    "meta": {
+      "demo": true
+    },
+    "at": "2026-11-22T12:32:49.778Z"
+  },
+  {
+    "id": "act_17fa5f983923",
+    "type": "reply",
+    "text": "Luz de Autor respondió: pidió ficha y plazo para 4 unidades.",
+    "meta": {
+      "threadId": "thr_demo_1"
+    },
+    "at": "2026-11-20T12:32:49.772Z"
+  },
+  {
+    "id": "act_9e02c0cb0306",
+    "type": "mission",
+    "text": "Misión Aurora 01 completada: 12 compradores analizados y 5 conversaciones abiertas con borradores.",
+    "meta": {
+      "missionId": "mis_demo_aurora",
+      "demo": true
+    },
+    "at": "2026-11-18T12:44:49.772Z"
+  },
+  {
+    "id": "act_4ac59b5ffdc1",
+    "type": "content",
+    "text": "7 piezas de contenido listas para revisar.",
+    "meta": {
+      "missionId": "mis_demo_aurora",
+      "demo": true
+    },
+    "at": "2026-11-18T12:45:49.772Z"
+  },
+  {
+    "id": "act_69bc1354610a",
+    "type": "system",
+    "text": "Se cargaron datos de ejemplo. Podés borrarlos desde Ajustes.",
+    "meta": {
+      "demo": true
+    },
+    "at": "2026-11-18T12:32:49.764Z"
+  },
+  {
+    "id": "act_96eb89a6d3ac",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T12:32:49.760Z"
+  },
+  {
+    "id": "act_c3fb5ac05de5",
+    "type": "settings",
+    "text": "Ajustes actualizados.",
+    "meta": {},
+    "at": "2026-11-22T12:32:49.754Z"
+  }
+]

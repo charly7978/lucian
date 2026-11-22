@@ -210,9 +210,9 @@ async function freshStore() {
   ok(outbox.items().at(-1).status === 'cancelled', 'el elemento queda cancelado');
 }
 
-/* 8. Espaciado global: como máximo un envío por intervalo configurado,
-   incluso si hay varios borradores vencidos al mismo tiempo (reinicio,
-   misiones que terminan juntas). Si el cupo se agotó, el envío espera. */
+/* 8. Espaciado por dominio: con un solo remitente equivale al espaciado
+   global; con varios dominios cada uno tiene su propia ventana. Si el cupo
+   se agotó, el envío espera. */
 {
   const store = await freshStore();
   await store.saveSettings({
@@ -230,13 +230,13 @@ async function freshStore() {
   for (const thread of threads) await outbox.enqueueDraft(thread, thread.drafts[0]);
   await outbox.save();
 
-  // Un envío reciente bloquea el siguiente aunque haya vencidos.
-  await store.setMeta({ lastOutboxSendAt: new Date().toISOString() });
+  // Un envío reciente en el dominio bloquea el siguiente aunque haya vencidos.
+  await store.setMeta({ lastSendByDomain: { 'lucian.test': new Date().toISOString() } });
   const blocked = await outbox.processQueue(store.settings());
-  ok(blocked === 0 && delivered === 0, 'un envío reciente impone el espaciado global');
+  ok(blocked === 0 && delivered === 0, 'un envío reciente impone el espaciado del dominio');
 
-  // Pasado el intervalo, sale de a uno (MAX_PER_TICK), nunca en ráfaga.
-  await store.setMeta({ lastOutboxSendAt: new Date(Date.now() - 60 * 60 * 1000).toISOString() });
+  // Pasado el intervalo, sale de a uno por dominio, nunca en ráfaga.
+  await store.setMeta({ lastSendByDomain: { 'lucian.test': new Date(Date.now() - 60 * 60 * 1000).toISOString() } });
   await outbox.processQueue(store.settings());
   ok(delivered === 1, 'pasado el espaciado sale un solo envío por corrida');
   ok(outbox.items().filter((entry) => entry.status === 'pending').length === 1, 'el segundo sigue esperando su turno');
@@ -362,9 +362,9 @@ async function freshStore() {
   ok(Boolean(item2), 'encola el segundo toque');
   thread2.stage = 'respondio';
   await store.set('threads', store.get('threads').map((t) => (t.id === thread2.id ? thread2 : t)));
-  // El espaciado global (5 min) sigue vigente desde el primer envío;
-  // pasamos la hora para que el segundo elemento sí sea evaluado.
-  await store.setMeta({ lastOutboxSendAt: new Date(Date.now() - 60 * 60 * 1000).toISOString() });
+  // El espaciado por dominio se cuenta desde el primer envío; lo dejamos
+  // atrás para que el segundo elemento sí sea evaluado.
+  await store.setMeta({ lastSendByDomain: { 'lucian.test': new Date(Date.now() - 60 * 60 * 1000).toISOString() } });
   await outbox.processQueue(store.settings());
   ok(outbox.items().find((entry) => entry.id === item2.id).status === 'cancelled', 'si volvió a escribir, la postventa se cancela');
   ok(delivered.length === 1, 'y no sale ningún correo');

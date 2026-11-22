@@ -19,6 +19,7 @@ const AGENTS = [
   { id: 'redteam', name: 'Abogado del Diablo', initials: 'AD', role: 'Contradicción', color: '#8f4f45', bio: 'Su trabajo es encontrar por qué el plan puede fallar. Sin crueldad y sin diplomacia: si un número no cierra, lo dice.', focus: ['Supuestos', 'Agujeros', 'Escenarios'] },
   { id: 'memoria', name: 'Memoria y Aprendizaje', initials: 'MA', role: 'Aprendizaje acumulado', color: '#7c7a5c', bio: 'Extrae lo que esta misión enseñó para que la próxima no empiece de cero. Guarda solo lo que tiene evidencia.', focus: ['Aprendizajes', 'Patrones', 'Confianza'] },
   { id: 'analista', name: 'Analista de Respuestas', initials: 'AR', role: 'Bandeja y seguimiento', color: '#5f7b72', bio: 'Lee lo que respondió el comprador, detecta la intención real y propone el siguiente paso sin sonar desesperado.', focus: ['Intención', 'Siguiente paso', 'Borradores'] },
+  { id: 'configurador', name: 'Asistente de Configuración', initials: 'AC', role: 'Puesta en marcha y ajustes', color: '#4f6d7a', bio: 'Convierte lo que querés vender en ajustes concretos de Lucian: marca, mercados, correo, límites, política única y conexiones.', focus: ['Ajustes', 'Conexiones', 'Política única'] },
 ];
 
 const DEPTHS = {
@@ -521,7 +522,7 @@ const VIEW_META = {
   ventas: ['Ventas', 'Lo vendido y lo que está por cerrar'],
   bandeja: ['Conversaciones', 'Compradores reales, no leads'],
   contenido: ['Contenido', 'Narrativa y redes'],
-  equipo: ['Equipo', 'Once especialistas'],
+  equipo: ['Equipo', `${AGENTS.length} especialistas`],
   mercados: ['Mercados', 'Inteligencia acumulada'],
   conexiones: ['Conexiones', 'Estado de tus integraciones'],
   ajustes: ['Ajustes', 'Tu sistema'],
@@ -811,7 +812,7 @@ function renderPanel() {
             : `<button class="btn btn-ghost" type="button" data-action="demo-seed">${icon('sun')} Ver con datos de ejemplo</button>`}
         </div>
         <div class="hero-meta">
-          <span><b>11</b> especialistas</span>
+          <span><b>${AGENTS.length}</b> especialistas</span>
           <span><b>0</b> planillas</span>
           <span><b>100%</b> en tu computadora</span>
         </div>
@@ -842,6 +843,15 @@ function renderPanel() {
       ${statCard('Te escribieron', counts.awaitingReply || 0, 'message', counts.awaitingReply ? 'respuestas por leer' : 'sin novedades', '#/bandeja?filtro=responder', counts.awaitingReply ? 'warm' : '')}
       ${statCard('Ventas cerradas', S.state.sales?.sold || 0, 'dollar', S.state.sales?.revenue ? `${money(S.state.sales.revenue, S.state.sales.currency)} cobros informados` : 'todavía ninguna', '#/ventas', (S.state.sales?.sold || 0) ? 'warm' : '')}
       ${statCard('Piezas de contenido', counts.content || 0, 'image', 'ideas, borradores y publicadas', '#/contenido')}
+      ${statCard(
+        'Capacidad de envío',
+        s.limits?.domains?.length ? (s.limits.capacity || 0) : (s.limits?.limit || 0),
+        'send',
+        s.limits?.domains?.length
+          ? `${s.limits.domains.length} dominio${s.limits.domains.length === 1 ? '' : 's'} · ${s.limits.used || 0} usados hoy`
+          : `${s.limits?.used || 0} usados hoy · 1 remitente`,
+        '#/ajustes?tab=correo',
+      )}
     </section>
 
     ${panelSalesHTML()}
@@ -898,7 +908,7 @@ function renderPanel() {
       </div>
       <div>
         <div class="section-head">
-          <div><h2 class="section-title">${s.latestPlan ? 'El plan de 7 días' : 'Cómo trabaja el equipo'}</h2><p class="section-sub">${s.latestPlan ? 'Lo que dejó la última misión.' : 'Once especialistas, una sola persona al mando.'}</p></div>
+          <div><h2 class="section-title">${s.latestPlan ? 'El plan de 7 días' : 'Cómo trabaja el equipo'}</h2><p class="section-sub">${s.latestPlan ? 'Lo que dejó la última misión.' : `${AGENTS.length} especialistas, una sola persona al mando.`}</p></div>
           ${s.latestPlan?.mission?.id ? `<a class="section-link" href="#/misiones/${encodeURIComponent(s.latestPlan.mission.id)}">Ver misión ${icon('arrowRight')}</a>` : ''}
         </div>
         ${s.latestPlan
@@ -922,7 +932,7 @@ function renderPanel() {
     <section class="section">
       <div class="section-head">
         <div><h2 class="section-title">El equipo</h2><p class="section-sub">No es un chatbot. Son roles con un trabajo distinto.</p></div>
-        <a class="section-link" href="#/equipo">Ver los once ${icon('arrowRight')}</a>
+        <a class="section-link" href="#/equipo">Ver los ${AGENTS.length} ${icon('arrowRight')}</a>
       </div>
       <div class="team-grid">
         ${AGENTS.slice(0, 6).map(agentMiniCard).join('')}
@@ -2142,7 +2152,7 @@ function renderWizard() {
       })}`;
   }
   const product = products.find((p) => p.id === w.productId) || products[0];
-  const modeLabel = w.mode === 'demo' ? 'Demo' : w.mode === 'real' ? 'Real' : S.state.flags?.ai ? 'Real (IA configurada)' : 'Demo (sin IA)';
+  const modeLabel = w.mode === 'demo' ? 'Demo (simulación)' : S.state.flags?.ai ? 'Real (IA configurada)' : 'Real (requiere IA)';
   const stepNames = ['Producto', 'Objetivo', 'Mercados', 'Modo'];
   const stepsBar = `<div class="wizard-steps">${stepNames.map((name, index) => {
     const n = index + 1;
@@ -2191,7 +2201,7 @@ function renderWizard() {
         <p class="form-section-title">Modo</p>
         <p class="form-section-sub">${aiReady ? 'La IA está configurada.' : 'Todavía no hay una IA configurada, así que el modo real no está disponible.'}</p>
         <div class="choice-grid">
-          <button class="choice ${w.mode === 'auto' ? 'selected' : ''}" type="button" data-action="wizard-mode" data-id="auto"><div class="choice-title">Automático</div><div class="choice-sub">${aiReady ? 'Usa la IA configurada y datos reales.' : 'Como no hay IA, corre en demo para que puedas ver el flujo.'}</div></button>
+          <button class="choice ${w.mode === 'auto' ? 'selected' : ''}" type="button" data-action="wizard-mode" data-id="auto"><div class="choice-title">Automático</div><div class="choice-sub">${aiReady ? 'Usa la IA configurada y datos reales.' : 'Usa IA real: configurá un proveedor o elegí Demo para simular.'}</div></button>
           <button class="choice ${w.mode === 'demo' ? 'selected' : ''}" type="button" data-action="wizard-mode" data-id="demo"><div class="choice-title">Demo</div><div class="choice-sub">Datos simulados y marcados como ejemplo. Ideal para aprender el sistema.</div></button>
           <button class="choice ${w.mode === 'real' ? 'selected' : ''} ${!aiReady ? 'disabled' : ''}" type="button" data-action="wizard-mode" data-id="real" ${!aiReady ? 'disabled style="opacity:.5;cursor:not-allowed"' : ''}><div class="choice-title">Real</div><div class="choice-sub">${aiReady ? 'Investigación y redacción con IA sobre datos reales.' : 'Configurá una IA en Ajustes para habilitarlo.'}</div></button>
         </div>
@@ -2232,7 +2242,7 @@ function renderWizard() {
         <div class="summary-row"><span>Tiempo estimado</span><b>${esc(DEPTHS[w.depth]?.minutes || '””')} min</b></div>
         <div class="summary-row"><span>Modo</span><b>${esc(modeLabel)}</b></div>
       </div>
-      ${!S.state.flags?.ai ? '<div class="summary-note warn">Sin IA configurada, esta misión se ejecuta en demo. Sirve para recorrer todo el flujo con datos de ejemplo.</div>' : ''}
+      ${!S.state.flags?.ai && w.mode !== 'demo' ? '<div class="summary-note warn">Sin IA configurada no se puede lanzar esta misión. Configurá un proveedor en Ajustes o volvé al paso 4 y elegí Demo para simular.</div>' : ''}
       ${w.mode === 'demo' ? '<div class="summary-note">Los datos generados quedan marcados como ejemplo y no se envían a nadie real.</div>' : ''}
       <div class="summary-note">No se envía nada automáticamente. Todo queda como borrador para que lo revises.</div>
     </aside>
@@ -4384,7 +4394,7 @@ function renderTeam() {
   return `<div class="page-head">
     <div class="page-head-main">
       <p class="eyebrow">El equipo</p>
-      <h2 class="page-title">Once especialistas. Una sola persona al mando.</h2>
+      <h2 class="page-title">${AGENTS.length} especialistas. Una sola persona al mando.</h2>
       <p class="page-sub">No es un chatbot que escribe párrafos. Cada rol tiene un trabajo distinto, se contradice con los demás y deja un resultado que podés usar o descartar.</p>
     </div>
     <div class="page-actions">
@@ -4419,9 +4429,9 @@ function renderTeam() {
         <button class="btn btn-primary" type="submit" id="ask-submit" ${ask.loading ? 'disabled' : ''}>${ask.loading ? `${icon('refresh', 'spin')} Pensando”¦` : `${icon('spark')} Preguntar`}</button>
       </div>
     </form>
-    ${!S.state.flags?.ai ? '<div class="artifact-callout warn mt-3"><b>Modo demo</b>Sin una IA configurada, las respuestas son ejemplos del sistema. Configurá un proveedor en Ajustes para consultas reales sobre tus datos.</div>' : ''}
+    ${!S.state.flags?.ai ? '<div class="artifact-callout warn mt-3"><b>Se necesita IA</b>Los 12 especialistas son modelos de lenguaje reales y no tienen respuestas prefabricadas. Configurá un proveedor en Ajustes → Inteligencia artificial para consultarlos.</div>' : ''}
     ${ask.result ? `<div class="answer-box">
-      <div class="answer-head">${agentAvatar(ask.result.agent?.id || ask.agentId)}<div><b style="font-size:13px">${esc(ask.result.agent?.name || agentById(ask.agentId).name)}</b><p class="tiny muted">${ask.result.demo ? 'Respuesta de ejemplo' : 'Consulta real sobre tus datos'}${(ask.result.usage?.total ?? ask.result.usage?.total_tokens) ? ` · ${numFmt(ask.result.usage?.total ?? ask.result.usage?.total_tokens)} tokens` : ''}</p></div></div>
+      <div class="answer-head">${agentAvatar(ask.result.agent?.id || ask.agentId)}<div><b style="font-size:13px">${esc(ask.result.agent?.name || agentById(ask.agentId).name)}</b><p class="tiny muted">Respuesta del modelo sobre tus datos${(ask.result.usage?.total ?? ask.result.usage?.total_tokens) ? ` · ${numFmt(ask.result.usage?.total ?? ask.result.usage?.total_tokens)} tokens` : ''}</p></div></div>
       <div class="answer-text">${esc(ask.result.answer || '')}</div>
       <div class="artifact-chips mt-3">${copyButton(ask.result.answer || '', 'Copiar respuesta')}${ask.result.note ? `<span class="tiny muted" style="align-self:center">${esc(ask.result.note)}</span>` : ''}</div>
     </div>` : ''}
@@ -4429,7 +4439,7 @@ function renderTeam() {
 
   <section class="section">
     <div class="section-head">
-      <div><h2 class="section-title">Quién hace qué</h2><p class="section-sub">El mismo producto, mirado por once pares de ojos distintos.</p></div>
+      <div><h2 class="section-title">Quién hace qué</h2><p class="section-sub">El mismo producto, mirado por ${AGENTS.length} pares de ojos distintos.</p></div>
       <span class="badge badge-neutral">${AGENTS.length} roles</span>
     </div>
     <div class="team-grid">${AGENTS.map(agentFullCard).join('')}</div>
@@ -4746,6 +4756,7 @@ const SETTINGS_TABS = [
   ['notificaciones', 'Notificaciones', 'message'],
   ['no-contactar', 'No contactar', 'shield'],
   ['misiones', 'Misiones', 'spark'],
+  ['politica', 'Política única', 'wand'],
   ['datos', 'Datos y respaldo', 'database'],
   ['ayuda', 'Ayuda', 'shield'],
 ];
@@ -4758,6 +4769,7 @@ const SEARCH_PROVIDERS = [
   ['none', 'Sin búsqueda web'],
 ];
 
+const MAX_DAILY_PER_DOMAIN = 200;
 const EMAIL_PROVIDERS = [
   ['manual', 'Manual · exportar .eml y marcar como enviado'],
   ['gmail', 'Gmail · envío real con contraseña de aplicación (recomendado)'],
@@ -4785,7 +4797,7 @@ function settingsPageHead() {
     <div class="page-head-main">
       <p class="eyebrow">Ajustes</p>
       <h2 class="page-title">Tu sistema, tus reglas.</h2>
-      <p class="page-sub">Todo vive en tu computadora. Conectá solo lo que quieras usar: Lucian funciona en modo demo sin una sola clave, y envía correos reales únicamente cuando vos lo confirmás.</p>
+      <p class="page-sub">Todo vive en tu computadora. Conectá solo lo que quieras usar: sin IA podés recorrer una simulación marcada como Demo; los agentes reales y los envíos requieren configuración y tu confirmación.</p>
     </div>
     <div class="page-actions">
       <a class="btn btn-ghost btn-sm" href="#/ajustes?tab=ayuda">${icon('shield')} Ver ayuda</a>
@@ -4866,7 +4878,7 @@ function settingsAIHTML() {
       ready,
       ready
         ? `${selected.label || ai.provider} está configurado. Las misiones reales consumen tokens de tu cuenta.`
-        : 'Sin una clave, Lucian funciona en modo demo con respuestas simuladas. El flujo es el mismo; los datos no.',
+        : 'Sin proveedor no hay agentes: las consultas y misiones reales se bloquean. Solo el modo Demo, marcado como simulación, funciona sin clave.',
       testButton('ai', 'Probar conexión') + ` <button class="btn btn-ghost btn-sm" type="button" data-action="load-models">${icon('list' in ICON_PATHS ? 'list' : 'search')} Ver modelos</button>`,
     )}
     <div class="form-grid">
@@ -4887,7 +4899,7 @@ function settingsAIHTML() {
     ${testResultBox('ai')}
     <div class="cluster mt-3" id="ai-models"></div>
     <div class="artifact-callout info mt-3"><b>Qué se paga y qué no</b>Lucian es gratis y corre en tu máquina. Solo pagás el proveedor de IA que elijas, y únicamente cuando lanzás una misión real o hacés una prueba de conexión.</div>`;
-  return settingsForm('ia', 'El motor que piensa', 'Elegí un proveedor y pegá una clave. El modo demo no necesita nada de esto.', body, 'La prueba de conexión hace una llamada real y puede tener un costo mínimo.');
+  return settingsForm('ia', 'El motor que piensa', 'Los 12 agentes son modelos reales: elegí un proveedor y pegá una clave. El modo Demo es una simulación explícita y no necesita nada de esto.', body, 'La prueba de conexión hace una llamada real y puede tener un costo mínimo.');
 }
 
 function settingsSearchHTML() {
@@ -4935,6 +4947,47 @@ function settingsSearchHTML() {
   return settingsForm('busqueda', 'Investigar sin inventar', 'La búsqueda alimenta al analista de mercado y al cazador de compradores. Los correos se verifican antes de usarse.', body, 'La prueba de búsqueda consulta la web real.');
 }
 
+function settingsPolicyHTML() {
+  const policy = S.state.policy || {};
+  const config = policy.config || {};
+  const counts = policy.counts || {};
+  const active = Boolean(policy.active);
+  const changed = Boolean(policy.approved && !policy.matches);
+  const statusLine = active
+    ? `Vigente desde ${new Date(policy.approvedAt).toLocaleString()}. Los agentes aprueban solos los avisos de verificación; los bloqueos legales siguen igual.`
+    : changed
+      ? 'Cambiaste una regla de la política. Volvé a aprobarla para reactivar el modo automático.'
+      : 'Apagada: aprobás cada borrador en la Bandeja.';
+  const rows = [
+    ['Mercados', arr(config.markets).join(', ') || 'Sin mercados definidos'],
+    ['Tono', config.tone || '—'],
+    ['Prospectos por misión', String(num(config.maxProspects))],
+    ['Ritmo de envío', `${num(config.dailyLimit)} correos/día · ${num(config.spacingMin)} min entre envíos`],
+    ['Avisos auto-aprobados', arr(config.autoApproveKinds).join(', ') || 'ninguno'],
+    ['Proveedor de correo', config.provider || 'manual'],
+  ];
+  return `
+    <div class="form-section">
+      <p class="form-section-title">Aprobá una vez. No correo por correo.</p>
+      <p class="form-section-sub">Esta es la política con la que trabajan los agentes: investigan, redactan, corrigen y preparan el envío sin pedirte aprobación individual. Si cambiás una regla, la política se desactiva sola y la reaprobás.</p>
+      ${settingsStatusCard('Política única', active, statusLine)}
+      <div class="artifact-callout mt-3"><b>Bandeja</b> ${num(counts.listo)} listos · ${num(counts.revisar)} por revisar · ${num(counts.autoApproved)} auto-aprobados · ${num(counts.missingConsent) } sin consentimiento documentado.</div>
+      ${arr(policy.warnings).map((warning) => `<div class="artifact-callout warn mt-2">${esc(warning)}</div>`).join('')}
+    </div>
+    <div class="form-section">
+      <p class="form-section-title">Reglas que vas a aprobar</p>
+      <div class="artifact-section"><ul class="clean-list">${rows.map(([label, value]) => `<li><b>${esc(label)}:</b> ${esc(value)}</li>`).join('')}</ul></div>
+      <p class="field-hint mt-2">Nunca se aprueban solos: bloqueos de cumplimiento, textos sin mensaje 1:1, cotizaciones ni contactos sin consentimiento documentado. El límite diario y el calentamiento se respetan igual.</p>
+    </div>
+    <div class="form-section">
+      <div class="cluster">
+        <button class="btn btn-primary" type="button" data-action="policy-approve">${icon('wand')} ${active ? 'Reaprobar política' : 'Aprobar política'}</button>
+        <button class="btn btn-ghost" type="button" data-action="policy-apply">${icon('refresh')} Aplicar a borradores existentes</button>
+        <button class="btn btn-ghost" type="button" data-action="policy-revoke">${icon('shield')} Desactivar</button>
+      </div>
+    </div>`;
+}
+
 function settingsEmailHTML() {
   const settings = S.state.settings || {};
   const email = settings.email || {};
@@ -4956,12 +5009,22 @@ function settingsEmailHTML() {
       <div class="field full"><label for="email-smtp-pass">Contraseña de aplicación de Gmail</label><div class="secret-row"><input class="input" id="email-smtp-pass" name="smtpPassword" type="password" value="${attr(email.smtpPassword || '')}" placeholder="16 letras (contraseña de aplicación)" autocomplete="new-password"><button class="btn btn-ghost btn-sm" type="button" data-action="clear-secret" data-path="email.smtpPassword">Borrar</button></div><p class="field-hint">No es tu contraseña normal. La generás en myaccount.google.com/apppasswords (16 letras, con o sin espacios). Con esto Lucian envía correos reales desde Gmail.</p></div>
       <div class="field"><label for="email-from">Remitente</label><input class="input" id="email-from" name="from" value="${attr(email.from || '')}" placeholder="${attr(brand.email ? `${brand.name || 'Lucian'} <${brand.email}>` : 'Tu nombre <hola@tumarca.com>')}"><p class="field-hint">Nombre y correo. Con Gmail debe ser tu dirección de Gmail.</p></div>
       <div class="field"><label for="email-reply">Responder a</label><input class="input" id="email-reply" name="replyTo" value="${attr(email.replyTo || '')}" placeholder="Opcional"></div>
-      <div class="field full"><label for="email-resend">Clave de Resend</label><div class="secret-row"><input class="input" id="email-resend" name="resendKey" type="password" value="${attr(email.resendKey || '')}" placeholder="re_..." autocomplete="new-password"><button class="btn btn-ghost btn-sm" type="button" data-action="clear-secret" data-path="email.resendKey">Borrar</button></div></div>
+      <div class="field full"><label for="email-resend">Clave de Resend</label><div class="secret-row"><input class="input" id="email-resend" name="resendKey" type="password" value="${attr(email.resendKey || '')}" placeholder="re_..." autocomplete="new-password"><button class="btn btn-ghost btn-sm" type="button" data-action="clear-secret" data-path="email.resendKey">Borrar</button></div><p class="field-hint">Pegá acá SOLO la clave (empieza con <code>re_</code>). No va en “Dominios de envío”. Guardar no la valida: podés guardar aunque la clave esté mal y probarla después.</p></div>
       <div class="field full"><label for="email-webhook">Webhook de envío</label><input class="input" id="email-webhook" name="webhookUrl" value="${attr(email.webhookUrl || '')}" placeholder="https://tu-servidor.com/enviar"><p class="field-hint">Lucian manda el mensaje a esta URL y tu automatización hace el envío final.</p></div>
       <div class="field full"><label for="email-webhook-token">Token para correos entrantes</label><div class="secret-row"><input class="input" id="email-webhook-token" name="webhookToken" type="password" value="${attr(email.webhookToken || '')}" placeholder="Una frase larga y secreta" autocomplete="new-password"><button class="btn btn-ghost btn-sm" type="button" data-action="clear-secret" data-path="email.webhookToken">Borrar</button></div><p class="field-hint">Protege <code>/api/webhooks/email</code>. Si no hay token, Lucian solo acepta correos entrantes desde esta computadora. Para recibir respuestas desde internet, configurá uno acá o en <code>LUCIAN_WEBHOOK_TOKEN</code>.</p></div>
-      <div class="field"><label for="email-limit">Límite diario</label><input class="input" id="email-limit" name="dailyLimit" type="number" min="1" max="200" value="${attr(email.dailyLimit || 20)}"><p class="field-hint">Hoy: ${num(limits.used)} de ${num(limits.limit || email.dailyLimit || 20)}${limits.warmup ? ` · calentamiento, día ${num(limits.day)}` : ''}.</p></div>
+      <div class="field"><label for="email-limit">Límite diario del remitente único</label><input class="input" id="email-limit" name="dailyLimit" type="number" min="1" max="200" value="${attr(email.dailyLimit || 20)}"><p class="field-hint">Se usa solo si no cargás dominios de envío. Hoy: ${num(limits.used)} de ${num(limits.limit || email.dailyLimit || 20)}${limits.warmup ? ` · calentamiento, día ${num(limits.day)}` : ''}.</p></div>
       <div class="field"><label class="switch" style="margin-top:24px"><input type="checkbox" name="warmup" ${email.warmup ? 'checked' : ''}><span class="track"></span><span>Calentamiento gradual</span></label><p class="field-hint">Empieza con pocos envíos por día y sube de a poco. Mejor reputación, menos spam.</p></div>
       <div class="field full"><label for="email-footer">Pie de cumplimiento</label><textarea class="textarea" id="email-footer" name="footer" rows="4" placeholder="Ej.: Recibís este correo porque tu tienda trabaja con diseño. Podés responder “baja” para no recibir más.">${esc(email.footer || '')}</textarea><p class="field-hint">Se agrega al final de cada correo. Lucian ya incluye la baja y tu identidad (marca, dirección y web).</p></div>
+    </div>
+
+    <div class="form-section">
+      <p class="form-section-title">Dominios de envío</p>
+      <p class="form-section-sub">Cada dominio o subdominio verificado tiene su propia reputación y su propio cupo de ${MAX_DAILY_PER_DOMAIN} correos por día. Lucian reparte los envíos entre los dominios activos. Si dejás esta lista vacía, se usa el remitente único de arriba.</p>
+      <div class="form-grid">
+        <div class="field full"><label for="email-domains">Lista de dominios</label><textarea class="textarea" id="email-domains" name="sendDomains" rows="5" placeholder="lucian.com | hola@lucian.com | 200">${esc((email.sendDomains || []).map((d) => `${d.domain} | ${d.from || ''} | ${d.dailyLimit || 200}${d.enabled === false ? ' | 0' : ''}`).join('\n'))}</textarea><p class="field-hint">Uno por línea: <code>dominio | remitente | límite diario | activo</code>. Ejemplo: <code>ventas.tumarca.com | Lucian &lt;hola@ventas.tumarca.com&gt; | 200 | 1</code>. El remitente debe pertenecer al dominio. <b>La clave de Resend va en el campo “Clave de Resend” de arriba, no acá.</b> Las líneas que no tengan este formato se ignoran y no rompen el guardado.</p></div>
+      </div>
+      ${Array.isArray(limits.domains) && limits.domains.length ? `<div class="artifact-card mt-3"><h5>Uso de hoy por dominio</h5><div class="artifact-chips">${limits.domains.map((d) => `<span class="chip" title="${attr(d.from || d.domain)}">${esc(d.domain)} · ${num(d.used)}/${num(d.limit)}${d.enabled === false ? ' · apagado' : ''}</span>`).join('')}</div><p class="tiny muted mt-2">Capacidad total activa: ${num(limits.capacity)} correos/día · enviados hoy: ${num(limits.used)} · cupo restante: ${num(limits.remaining)}.</p></div>` : ''}
+      <div class="artifact-callout warn mt-3"><b>Límites reales del proveedor</b>En el plan gratuito de Resend el cupo total es de 100 correos/día (incluye los recibidos) y hasta 3 dominios. Varios dominios no aumentan ese cupo: necesitás un plan paid para superarlo. Resend pide mantener rebotes por debajo del 4 % quejas por debajo del 0,08 %.</div>
     </div>
 
     <div class="form-section">
@@ -4987,7 +5050,7 @@ function settingsEmailHTML() {
     ${testResultBox('resend')}
     ${testResultBox('email')}
     <div class="artifact-callout ${email.autopilot ? 'warn' : ''} mt-3"><b>${email.autopilot ? 'El piloto automático está activo' : 'Nada se envía solo'}</b>${email.autopilot ? 'Solo salen borradores aprobados por las guardas, con cupo y pausas. Podés apagarlo en cualquier momento.' : 'Cada mensaje pasa por tu revisión. Los contactos de ejemplo terminan en example.com y están bloqueados para envíos reales.'}</div>`;
-  return settingsForm('correo', 'Cómo salen los mensajes', 'Empezá en manual. Cuando tengas dominio propio y confianza, conectá Resend o tu webhook.', body, 'El límite diario y el calentamiento se aplican a los envíos reales.');
+  return settingsForm('correo', 'Cómo salen los mensajes', 'Empezá en manual. Cuando tengas dominio propio y confianza, conectá Resend o tu webhook.', body, 'El cupo se controla por dominio de envío; los envíos manuales no lo consumen.');
 }
 
 function settingsNotifyHTML() {
@@ -5015,6 +5078,7 @@ function settingsNotifyHTML() {
         <div class="field full"><label for="tg-token">Token del bot</label><div class="secret-row"><input class="input" id="tg-token" name="tgToken" type="password" value="${attr(telegram.token || '')}" placeholder="123456789:AA..." autocomplete="new-password"><button class="btn btn-ghost btn-sm" type="button" data-action="clear-secret" data-path="notify.telegram.token">Borrar</button></div></div>
         <div class="field"><label for="tg-chat">Chat o usuario</label><input class="input" id="tg-chat" name="tgChat" value="${attr(telegram.chatId || '')}" placeholder="Tu chat ID numérico"><p class="field-hint">Si no lo sabés, guardá el token, escribile al bot y usá “Buscar chats”.</p></div>
         <div class="field"><label for="tg-digest">Hora del resumen diario</label><input class="input" id="tg-digest" name="tgDigest" type="number" min="0" max="23" value="${attr(telegram.digestHour ?? 9)}"><p class="field-hint">Hora local de tu computadora.</p></div>
+        <div class="field"><label for="tg-style">Estilo del agente</label><select class="select" id="tg-style" name="tgStyle"><option value="serio" ${(telegram.style || 'serio') === 'serio' ? 'selected' : ''}>Serio y preciso</option><option value="directo" ${telegram.style === 'directo' ? 'selected' : ''}>Directo, dos frases</option><option value="estrategico" ${telegram.style === 'estrategico' ? 'selected' : ''}>Estratégico (recomendación + riesgo)</option></select><p class="field-hint">Cómo te responde el agente al dialogar. Podés cambiarlo cuando quieras.</p></div>
       </div>
       ${testResultBox('telegram')}
       <div class="cluster mt-2" id="telegram-chats"></div>
@@ -5062,7 +5126,7 @@ function settingsMissionHTML() {
     ${settingsStatusCard(
       'Modo de trabajo',
       Boolean(S.state.flags?.ai),
-      S.state.flags?.ai ? 'Hay una IA configurada. Las misiones nuevas pueden correr con datos reales.' : 'Sin IA, las misiones corren en demo. Podés cambiar la profundidad y los mercados igual.',
+      S.state.flags?.ai ? 'Hay una IA configurada. Las misiones nuevas pueden correr con datos reales.' : 'Sin IA no se pueden lanzar misiones reales. La Demo es una simulación marcada como ejemplo.',
       S.state.flags?.ai ? '' : `<a class="btn btn-ghost btn-sm" href="#/ajustes?tab=ia">${icon('key')} Configurar IA</a>`,
     )}
     <div class="form-grid">
@@ -5175,7 +5239,7 @@ function settingsHelpHTML() {
   const brand = S.state.brand || {};
   const checks = [
     ['Marca con nombre y correo', Boolean(brand.name && brand.email), 'Se usa en los mensajes y en el pie de los correos.', '#/ajustes?tab=marca'],
-    ['Motor de IA', Boolean(flags.ai), flags.ai ? 'Las misiones pueden correr con datos reales.' : 'Sin IA, todo funciona en demo. Podés practicar igual.', '#/ajustes?tab=ia'],
+    ['Motor de IA', Boolean(flags.ai), flags.ai ? 'Los 12 agentes y las misiones trabajan con datos reales.' : 'Sin IA los agentes no responden. Solo la Demo simula el flujo.', '#/ajustes?tab=ia'],
     ['Búsqueda web', Boolean(flags.search), 'Sin clave usa SearXNG público; para ventas en serio, configurá Tavily, Brave o Serper.', '#/ajustes?tab=busqueda'],
     ['Remitente de correo', Boolean(S.state.settings?.email?.from || brand.email), 'Necesario para descargar el .eml y para Resend.', '#/ajustes?tab=correo'],
     ['Telegram', Boolean(flags.telegram), 'Opcional, pero es la forma más simple de recibir avisos.', '#/ajustes?tab=notificaciones'],
@@ -5345,6 +5409,7 @@ function renderSettings() {
     notificaciones: settingsNotifyHTML,
     'no-contactar': settingsSuppressionsHTML,
     misiones: settingsMissionHTML,
+    politica: settingsPolicyHTML,
     datos: settingsDataHTML,
     ayuda: settingsHelpHTML,
   };
@@ -5487,6 +5552,19 @@ async function saveSettings(form) {
       },
     };
   } else if (tab === 'correo') {
+    const sendDomains = val('sendDomains').split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((line) => {
+      const [domain, from, limit, enabled] = line.split('|').map((part) => part.trim());
+      // Una línea sin dominio NI remitente no es un dominio: se descarta en
+      // vez de tirar abajo todo el guardado (por ejemplo si alguien pegó la
+      // clave de Resend en este campo por error).
+      if (!domain || !from) return null;
+      return {
+        domain,
+        from,
+        dailyLimit: Math.max(1, Math.min(MAX_DAILY_PER_DOMAIN, Math.round(num(limit, MAX_DAILY_PER_DOMAIN)))),
+        enabled: enabled !== '0',
+      };
+    }).filter(Boolean);
     patch = {
       email: {
         provider: val('emailProvider') || 'manual',
@@ -5498,6 +5576,7 @@ async function saveSettings(form) {
         footer: val('footer'),
         dailyLimit: Math.max(1, Math.min(200, Math.round(num(val('dailyLimit'), 20)))),
         warmup: check('warmup'),
+        sendDomains,
         webhookUrl: val('webhookUrl'),
         webhookToken: val('webhookToken'),
         autopilot: check('emailAutopilot'),
@@ -5519,6 +5598,7 @@ async function saveSettings(form) {
           token: val('tgToken'),
           chatId: val('tgChat'),
           digestHour: Math.max(0, Math.min(23, Math.round(num(val('tgDigest'), 9)))),
+          style: ['serio', 'directo', 'estrategico'].includes(val('tgStyle')) ? val('tgStyle') : 'serio',
         },
         whatsapp: {
           enabled: check('whatsappEnabled'),
@@ -6062,6 +6142,57 @@ function wizardAction(action, el) {
   if (action === 'wizard-launch') launchWizard();
 }
 
+async function refreshAfterPolicy() {
+  await loadState({ silent: true, render: false });
+  render();
+}
+
+async function approveUniquePolicy() {
+  const confirmed = await confirmAction({
+    title: 'Aprobar política única',
+    message: 'Vas a autorizar a los agentes a aprobar por vos los avisos de verificación de compradores y nombres, y a enviar los borradores resultantes dentro del límite diario y del calentamiento.',
+    details: 'Los bloqueos de cumplimiento, los textos sin mensaje 1:1, las cotizaciones y los contactos sin consentimiento documentado NUNCA se aprueban solos. Si cambiás una regla, la política se desactiva y la reaprobás.',
+    confirmLabel: 'Aprobar una vez',
+  });
+  if (!confirmed) return;
+  try {
+    const result = await api('/api/policy/approve', { method: 'POST' });
+    await refreshAfterPolicy();
+    toast(result.autopilotEnabled
+      ? 'Política aprobada y piloto de envío activado.'
+      : `Política aprobada: ${num(result.applied?.approved)} borradores aprobados. Revisá Correo para activar el envío.`);
+  } catch (error) {
+    toast(error.message, 'error');
+  }
+}
+
+async function revokeUniquePolicy() {
+  const confirmed = await confirmAction({
+    title: 'Desactivar política única',
+    message: 'Volvés a aprobar cada borrador en la Bandeja. Los correos ya enviados no se tocan y los borradores auto-aprobados mantienen su aprobación.',
+    confirmLabel: 'Desactivar',
+    danger: true,
+  });
+  if (!confirmed) return;
+  try {
+    await api('/api/policy/revoke', { method: 'POST' });
+    await refreshAfterPolicy();
+    toast('Política única desactivada.');
+  } catch (error) {
+    toast(error.message, 'error');
+  }
+}
+
+async function applyUniquePolicy() {
+  try {
+    const result = await api('/api/policy/apply', { method: 'POST' });
+    await refreshAfterPolicy();
+    toast(`${num(result.approved)} borrador(es) aprobados por la política vigente.`);
+  } catch (error) {
+    toast(error.message, 'error');
+  }
+}
+
 async function handleAction(action, el) {
   switch (action) {
     case 'close-modal': closeModal(); return;
@@ -6117,6 +6248,9 @@ async function handleAction(action, el) {
     case 'campaign-apply-percent': campaignSetPercent(); return;
     case 'campaign-reset-prices': campaignResetPrices(); return;
     case 'launch-supervised-agents': await launchSupervisedAgents(); return;
+    case 'policy-approve': await approveUniquePolicy(); return;
+    case 'policy-revoke': await revokeUniquePolicy(); return;
+    case 'policy-apply': await applyUniquePolicy(); return;
     case 'edit-product': openProductModal(el.dataset.id); return;
     case 'delete-product': await deleteProduct(el.dataset.id); return;
     case 'save-product': await saveProduct(); return;

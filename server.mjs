@@ -15,9 +15,11 @@ import { isAIReady, listModels, resolveAIConfig, testAI, PROVIDERS } from './lib
 import { searchProviderInfo, searchWebDetailed } from './lib/search.mjs';
 import { hunterAccount } from './lib/hunter.mjs';
 import {
-  assertCanSend, buildEml, composeEmail, dailyLimitInfo, detectOptOut, emailDomain, emlFilename,
-  isSharedEmailDomain, isSuppressed, isValidEmail, normalizeCompany, normalizeEmail,
-  parseEmailEvent, parseInbound, sendWithResend, sendWithWebhook, sendWithGmail, testResend,
+  activeSendDomains, assertCanSend, buildEml, chooseSendDomain, composeEmail, dailyLimitInfo,
+  detectOptOut, emailDomain, emlFilename, isSharedEmailDomain, isSuppressed, isValidEmail,
+  normalizeCompany, normalizeDomain, normalizeEmail, normalizeSendDomains, parseEmailEvent,
+  parseInbound, sendDomainStatus, sendWithResend, sendWithWebhook, sendWithGmail, testResend,
+  validateSendDomains,
 } from './lib/email.mjs';
 import { Notifier, parseWhatsAppWebhook, sendWhatsApp, telegramChats, testTelegram, testWhatsApp } from './lib/notify.mjs';
 import {
@@ -34,6 +36,10 @@ import { fetchNewEmails } from './lib/imap.mjs';
 import { diagnoseConnections, testConnection, getAiFailoverState, resetAiFailover } from './lib/connections.mjs';
 import { startAutopilot, runAutopilot, getAutopilotState } from './lib/autopilot.mjs';
 import { verifyMetaSignature, hasDocumentedOptIn, resendIdempotencyKey } from './lib/security.mjs';
+import {
+  POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch, policyConfig,
+  policyFingerprint, policyStatus, revokePolicyPatch,
+} from './lib/policy.mjs';
 import { buildSalesAgenda, buildCatalogHealth } from './lib/sales-ops.mjs';
 import { supervisedMissionPreflight } from './lib/sales-launch.mjs';
 import { planCatalogBulk } from './lib/catalog-bulk.mjs';
@@ -459,11 +465,21 @@ function broadcast(missionId, event) {
   }
 }
 
+/* Enrutamiento del agente que responde: el dueño no tiene que elegir. */
+function chooseAssistant(question) {
+  const q = String(question || '').toLowerCase();
+  if (/configur|ajuste|clave|token|conexi|correo|resend|dominio|telegram|límite|limite|política|politica|warm|instalar|arranc|empezar|guardar|backup/.test(q)) return 'configurador';
+  if (/respuest|borrador|cliente|convers|hilo|lead|comprador/.test(q)) return 'analista';
+  if (/precio|margen|costo|caro|descuento|cotiz/.test(q)) return 'precios';
+  if (/mercado|compet|tendencia|pa[ií]s|hotel|distribuid|tienda/.test(q)) return 'mercado';
+  return 'director';
+}
+
 const notifier = new Notifier({
   store,
   ask: async (question, channel = 'web', history = [], images = []) => {
-    const result = await askTeam({ question, agentId: 'director', store, history, channel, images });
-    return result.demo ? `(Modo demo) ${result.answer}` : result.answer;
+    const result = await askTeam({ question, agentId: chooseAssistant(question), store, history, channel, images });
+    return result.answer;
   },
   actions: { createMission, sendThreadMessage, createQuote, analyzeThread },
 });
@@ -471,13 +487,13 @@ notifier.start();
 
 const outbox = new Outbox({
   store,
-  deliver: async ({ threadId, draftId }) => {
+  deliver: async ({ threadId, draftId, sendDomain }) => {
     const settings = store.settings();
     let channel = 'manual';
     if (settings.email?.provider === 'resend' && settings.email?.resendKey) channel = 'resend';
     else if (settings.email?.provider === 'gmail' && settings.email?.smtpUser && settings.email?.smtpPassword) channel = 'gmail';
     else if (settings.email?.webhookUrl) channel = 'webhook';
-    return sendThreadMessage(threadId, { draftId, channel, automated: true });
+    return sendThreadMessage(threadId, { draftId, channel, automated: true, sendDomain });
   },
   notify: notifier,
 });
@@ -628,6 +644,7 @@ function statePayload() {
   const activity = store.get('activity');
   const flags = settingsFlags(settings);
   const meta = store.get('meta');
+  const domainInfo = sendDomainStatus(settings, threads);
   const activeMissions = missions.filter((m) => ['running', 'queued'].includes(m.status));
   const finishedMissions = missions.filter((m) => ['done', 'done_with_warnings'].includes(m.status));
   const readyDrafts = threads.reduce((acc, t) => acc + (t.drafts || []).filter((d) => d.status === 'listo').length, 0);
@@ -685,7 +702,15 @@ function statePayload() {
       sold: threads.filter((t) => t.stage === 'ganado').length,
       suppressed: suppressions.length,
     },
-    limits: dailyLimitInfo(settings, threads),
+    limits: {
+      ...dailyLimitInfo(settings, threads),
+      ...domainInfo,
+      // Con dominios configurados, el number que ve el panel es la suma de
+      // cupos, no el límite heredado del remitente único.
+      ...(domainInfo.domains.length
+        ? { limit: domainInfo.capacity, used: domainInfo.used, remaining: domainInfo.remaining, warmup: false, day: null }
+        : {}),
+    },
     sales: buildSales(threads, products, settings.brand?.currency || 'USD'),
     campaigns: buildCampaignBoard(missions, threads, products),
     salesAgenda: buildSalesAgenda({ threads, products, suppressions }),
@@ -693,6 +718,7 @@ function statePayload() {
     channelReadiness: buildChannelReadiness(products),
     salesLaunch: supervisedMissionPreflight({ products, missions, settings, aiReady: isAIReady(settings), searchInfo: searchProviderInfo(settings) }),
     outbox: outbox.status(),
+    policy: policyStatus(settings, store),
     usage: meta.agentUsage || {},
     intel: buildIntel(missions),
   };
@@ -935,9 +961,12 @@ async function createMission(body) {
   const markets = [...new Set(asArray(body.markets).map((m) => asString(m).trim()).filter(Boolean))];
   const finalMarkets = markets.length ? markets : asArray(settings.mission.markets);
   const requestedMode = ['auto', 'real', 'demo'].includes(body.mode) ? body.mode : 'auto';
-  const demo = requestedMode === 'demo' || (requestedMode === 'auto' && !isAIReady(settings));
-  if (requestedMode === 'real' && !isAIReady(settings)) {
-    throw new HttpError(400, 'Para lanzar una misión real primero configurá una IA en Ajustes.');
+  // "Automático" ya no significa "si no hay IA, simulá". Una misión real sin
+  // modelo produciría pasos vacíos o inventados. La simulación solo se elige
+  // de forma explícita.
+  const demo = requestedMode === 'demo';
+  if (!demo && !isAIReady(settings)) {
+    throw new HttpError(400, 'Los agentes solo funcionan con un modelo de IA. Configurá un proveedor en Ajustes → Inteligencia artificial, o elegí explícitamente el modo Demo para simular.');
   }
   if (!finalMarkets.length) {
     throw new HttpError(400, 'Elegí al menos un mercado para la misión. Sin mercado no hay a quién venderle.');
@@ -1068,7 +1097,7 @@ function previewCatalogCampaign(body = {}) {
     overriddenPrices:items.filter(x=>x.priceOverridden).length,
     willStart:candidate.length, estimatedMaxProspects:candidate.length*maxProspects,
     candidates:candidate, skipped:items.filter(x=>!x.ready), remaining:0, parallelMissions:2,
-    note:'Todas las lámparas aptas se incorporan a la cola. Dos misiones simultáneas por defecto para estabilidad. No se envían mensajes; búsquedas e IA pueden consumir créditos.'
+    note:'Todas las lámparas aptas se incorporan a la cola. Dos misiones simultáneas por defecto para estabilidad. Las misiones reales requieren un modelo de IA; la simulación solo se activa en modo Demo. No se envían mensajes; búsquedas e IA pueden consumir créditos.'
   };
 }
 
@@ -1094,9 +1123,12 @@ async function createCampaign(body = {}) {
     .sort((a, b) => (a.status === 'listo' ? -1 : 0) - (b.status === 'listo' ? -1 : 0));
   if (!pool.length) throw new HttpError(400, 'No hay productos activos para lanzar una campaña.');
   const requestedMode = ['auto', 'real', 'demo'].includes(body.mode) ? body.mode : 'auto';
-  const demo = requestedMode === 'demo' || (requestedMode === 'auto' && !isAIReady(settings));
-  if (requestedMode === 'real' && !isAIReady(settings)) {
-    throw new HttpError(400, 'Para lanzar una campaña real primero configurá una IA en Ajustes.');
+  // Igual que en las misiones: la simulación es siempre explícita. Una
+  // campaña "automática" sin modelo no produce agentes reales, produce
+  // texto inventado. Por eso se bloquea y se ofrece el modo Demo.
+  const demo = requestedMode === 'demo';
+  if (!demo && !isAIReady(settings)) {
+    throw new HttpError(400, 'Los agentes solo funcionan con un modelo de IA. Configurá un proveedor en Ajustes → Inteligencia artificial, o elegí explícitamente el modo Demo para simular.');
   }
   const active = new Set(store.get('missions').filter((mission) => ['running', 'queued'].includes(mission.status)).map((mission) => mission.productId));
   const markets = [...new Set(asArray(body.markets).map((market) => asString(market).trim()).filter(Boolean))];
@@ -1263,15 +1295,14 @@ function threadSuppressions(thread) {
 
 /* El dominio del Message-ID sale del remitente real: si el dueño usa su
    propio dominio, los filtros de correo ven coherencia entre From y el hilo. */
-function messageIdDomain(settings) {
-  const raw = String(settings?.email?.from || settings?.brand?.email || '').trim();
+function messageIdDomain(settings, fromOverride = '') {
+  const raw = String(fromOverride || settings?.email?.from || settings?.brand?.email || '').trim();
   const email = raw.includes('<') ? (raw.match(/<([^>]+)>/)?.[1] || '') : raw;
-  const domain = String(email).split('@')[1]?.trim().toLowerCase() || '';
-  return /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain) ? domain : 'lucian.local';
+  return normalizeDomain(String(email).split('@')[1] || '') || 'lucian.local';
 }
 
-function newMessageId(settings) {
-  return `<lucian-${crypto.randomUUID()}@${messageIdDomain(settings)}>`;
+function newMessageId(settings, fromOverride = '') {
+  return `<lucian-${crypto.randomUUID()}@${messageIdDomain(settings, fromOverride)}>`;
 }
 
 function lastInboundMessage(thread) {
@@ -1514,6 +1545,24 @@ async function sendThreadMessage(threadId, body) {
 
   const settings = store.settings();
   const channel = ['resend', 'webhook', 'gmail', 'manual'].includes(body.channel) ? body.channel : 'manual';
+  /* Cada envío real se decide en un dominio verificado. La cola elige el
+     dominio con menos uso del día; un envío manual respeta el remitente
+     configurado. Nunca se mezcla un From de un dominio con un Message-ID de
+     otro: los filtros lo detectan como inconsistente. */
+  const configuredDomains = normalizeSendDomains(settings.email?.sendDomains, settings);
+  let sendDomain = null;
+  if (body.sendDomain) {
+    const wanted = String(body.sendDomain).trim();
+    sendDomain = configuredDomains.find((domain) => domain.id === wanted || domain.domain === normalizeDomain(wanted)) || null;
+    if (!sendDomain || !sendDomain.enabled) {
+      throw new HttpError(400, 'Ese dominio de envío no está activo o no es válido.');
+    }
+  } else if (channel !== 'manual') {
+    sendDomain = chooseSendDomain({ settings, threads, seed: `${thread.id}:${draft.id}` });
+  }
+  if (channel !== 'manual' && !sendDomain) {
+    throw new HttpError(400, 'No hay dominios de envío activos con cupo. Configuralos en Ajustes → Correo → Dominios de envío.');
+  }
   if (channel !== 'manual' && (thread.messages || []).some(message => message.direction === 'out' && ['bounced', 'suppressed', 'complained'].includes(message.deliveryStatus))) {
     throw new HttpError(409, 'Hay un rebote, supresión o queja confirmada para este contacto. Revisá su dirección y permisos antes de volver a enviar.');
   }
@@ -1523,7 +1572,7 @@ async function sendThreadMessage(threadId, body) {
   const company = thread.contact?.company || '';
   let message;
   try {
-    message = composeEmail(thread, draft, settings);
+    message = composeEmail(thread, draft, settings, { from: sendDomain?.from });
   } catch (error) {
     throw new HttpError(400, error.message || 'No se pudo preparar el mensaje.');
   }
@@ -1538,9 +1587,9 @@ async function sendThreadMessage(threadId, body) {
   if (channel === 'resend') {
     message.idempotencyKey = resendIdempotencyKey(thread.id, draft.id);
     message.consentVerified = true;
-    message.messageId = `<lucian-${message.idempotencyKey.slice(7, 39)}@${messageIdDomain(settings)}>`;
+    message.messageId = `<lucian-${message.idempotencyKey.slice(7, 39)}@${messageIdDomain(settings, sendDomain?.from)}>`;
   } else {
-    message.messageId = newMessageId(settings);
+    message.messageId = newMessageId(settings, sendDomain?.from);
   }
   message.inReplyTo = previousInbound?.messageId || '';
   message.references = [previousInbound?.references, previousInbound?.messageId]
@@ -1552,6 +1601,7 @@ async function sendThreadMessage(threadId, body) {
     assertCanSend(settings, threads, message.to, threadSuppressions(thread), {
       manual: channel === 'manual',
       company,
+      sendDomain: sendDomain?.domain,
     });
   } catch (error) {
     throw new HttpError(400, error.message || 'No se puede enviar este mensaje.');
@@ -1568,7 +1618,13 @@ async function sendThreadMessage(threadId, body) {
       try { delivery = await sendWithGmail(settings, message); } catch (error) { throw new HttpError(502, error.message || 'Gmail rechazó el envío.'); }
     }
     if (channel === 'webhook') {
-      try { delivery = await sendWithWebhook(settings, message, { threadId: thread.id, contact: thread.contact }); } catch (error) { throw new HttpError(502, error.message || 'El webhook rechazó el envío.'); }
+      try {
+        delivery = await sendWithWebhook(settings, message, {
+          threadId: thread.id,
+          contact: thread.contact,
+          domain: sendDomain?.domain || '',
+        });
+      } catch (error) { throw new HttpError(502, error.message || 'El webhook rechazó el envío.'); }
     }
   }
 
@@ -1584,6 +1640,9 @@ async function sendThreadMessage(threadId, body) {
     at: now,
     status: channel === 'manual' ? 'enviado_manual' : 'enviado',
     provider: channel,
+    from: message.from,
+    sendDomain: sendDomain?.domain || '',
+    sendDomainId: sendDomain?.id || '',
     messageId: message.messageId,
     ...(message.inReplyTo ? { inReplyTo: message.inReplyTo } : {}),
     ...(message.references ? { references: message.references } : {}),
@@ -2346,6 +2405,10 @@ async function handle(req, res) {
 
   if (pathname === '/api/settings' && method === 'PUT') {
     const body = await readJson(req);
+    if (body?.email?.sendDomains !== undefined) {
+      const validation = validateSendDomains(body.email.sendDomains);
+      if (!validation.ok) throw new HttpError(400, validation.errors.join(' '));
+    }
     const prevToken = store.settings()?.notify?.telegram?.token;
     const settings = await store.saveSettings(body);
     if (body?.notify?.telegram?.token && body.notify.telegram.token !== prevToken) {
@@ -2354,6 +2417,49 @@ async function handle(req, res) {
     notifier.refresh();
     await store.activity('settings', 'Ajustes actualizados.');
     json(res, 200, { settings: maskSettings(settings), flags: settingsFlags(settings) });
+    return;
+  }
+
+  if (pathname === '/api/policy' && method === 'GET') {
+    json(res, 200, policyStatus(store.settings(), store));
+    return;
+  }
+
+  if (pathname === '/api/policy/approve' && method === 'POST') {
+    const settings = store.settings();
+    const config = policyConfig(settings);
+    const patch = approvePolicyPatch(settings);
+    const saved = await store.saveSettings({ policy: patch }, { allowPolicyApproval: true });
+    const canAutopilot = (config.provider === 'resend' && Boolean(saved.email?.resendKey))
+      || (config.provider === 'webhook' && Boolean(saved.email?.webhookUrl));
+    let autopilotEnabled = false;
+    if (canAutopilot && !saved.email?.autopilot) {
+      await store.saveSettings({ email: { autopilot: true } });
+      autopilotEnabled = true;
+    }
+    const applied = await applyPolicyToThreads(store, store.settings());
+    notifier.refresh();
+    await store.activity('settings', `Política única aprobada (v${POLICY_VERSION}): ${applied.approved} borrador(es) aprobados sin revisión individual.`);
+    json(res, 200, {
+      ok: true,
+      autopilotEnabled,
+      applied,
+      policy: policyStatus(store.settings(), store),
+    });
+    return;
+  }
+
+  if (pathname === '/api/policy/revoke' && method === 'POST') {
+    await store.saveSettings({ policy: revokePolicyPatch() }, { allowPolicyApproval: true });
+    notifier.refresh();
+    await store.activity('settings', 'Política única desactivada: volvió la aprobación borrador por borrador.');
+    json(res, 200, { ok: true, policy: policyStatus(store.settings(), store) });
+    return;
+  }
+
+  if (pathname === '/api/policy/apply' && method === 'POST') {
+    const applied = await applyPolicyToThreads(store, store.settings());
+    json(res, 200, { ok: true, ...applied, policy: policyStatus(store.settings(), store) });
     return;
   }
 
@@ -3453,7 +3559,10 @@ async function handle(req, res) {
 
 const server = http.createServer((req, res) => {
   handle(req, res).catch((error) => {
-    const status = error instanceof HttpError ? error.status : 500;
+    // Los errores de los agentes traen su propio status (AI_REQUIRED=409,
+    // AI_UNAVAILABLE=502). No queremos que el cliente vea un 500 genérico ni
+    // que se pierda el código que explica qué configurar.
+    const status = Number(error?.status) || (error instanceof HttpError ? error.status : 500);
     if (status >= 500) console.error('[Lucian]', error);
     if (!res.headersSent) {
       fail(res, status, error.message || 'Error interno.');
@@ -3512,7 +3621,7 @@ if (lanMode) {
   try { await import('node:fs/promises').then((m) => m.writeFile(path.join(__dirname, 'access-key.txt'), ACCESS_TOKEN, { encoding: 'utf8', mode: 0o600 })); } catch { /* noop */ }
 }
 const settings = store.settings();
-const aiLabel = isAIReady(settings) ? `${settings.ai.provider} · ${resolveAIConfig(settings).model}` : 'modo demo (sin clave de IA)';
+const aiLabel = isAIReady(settings) ? `${settings.ai.provider} · ${resolveAIConfig(settings).model}` : 'sin IA (la consulta al equipo requiere un modelo; solo Demo simula)';
 
 /* Panel de listo para funcionar: solo conteos y booleanos. Nunca imprime
    claves ni tokens. Sirve para saber de un vistazo qué está pendiente antes
@@ -3535,13 +3644,23 @@ function readinessLines() {
   const tg = settings.notify?.telegram;
   const telegramLabel = tg?.enabled && tg?.token && tg?.chatId ? `configurado (avisos día ${tg.digestHour ?? 9}:00)` : 'apagado (Ajustes → Notificaciones)';
   const queued = (store.get('missions') || []).filter((m) => m.status === 'queued').length;
+  const startupDomains = sendDomainStatus(settings, store.get('threads') || []);
+  const policy = policyStatus(settings, store);
+  const policyLabel = policy.active
+    ? `ACTIVA (${policy.counts.autoApproved} borradores auto-aprobados)`
+    : policy.approved && !policy.matches
+      ? 'cambió: volvé a aprobarla en Ajustes → Política única'
+      : 'apagada (aprobación borrador por borrador)';
   const lines = [
     '  Listo para funcionar:',
+    `  · Política única: ${policyLabel}`,
     `  · IA: ${aiLabel}`,
     `  · Datos: ${DATA_DIR}`,
     `  · Búsqueda: ${settings.search?.provider || 'duckduckgo'}${settings.search?.provider === 'tavily' && !(settings.search?.tavilyKey || settings.search?.apiKey) ? ' (sin clave: usa solo la rotación sin clave)' : ''}`,
     `  · Correo: ${emailLabel}${email.autopilot ? ' · piloto automático ACTIVO' : ''}`,
-    `  · Calentamiento: ${email.warmup !== false ? 'activo' : 'desactivado'} · límite diario ${email.dailyLimit ?? 20}`,
+    startupDomains.domains.length
+      ? `  · Dominios de envío: ${startupDomains.domains.filter((d) => d.enabled).map((d) => `${d.domain} ${d.used}/${d.limit}`).join(' · ')} · capacidad ${startupDomains.capacity}/día`
+      : `  · Calentamiento: ${email.warmup !== false ? 'activo' : 'desactivado'} · límite diario ${email.dailyLimit ?? 20}`,
     `  · Telegram (avisos y chat con el equipo): ${telegramLabel}`,
     `  · Postventa (fidelización día 3/30/90): ${email.postSales !== false ? 'preparada, siempre con tu aprobación' : 'apagada'}`,
     `  · Seguimientos: ${email.followUps !== false ? 'preparados, siempre con tu aprobación' : 'apagados'}`,

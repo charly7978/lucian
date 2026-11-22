@@ -186,8 +186,16 @@ console.log('eml', eml.status, eml.headers.get('content-type'), emlText.slice(0,
 if (eml.status !== 200) process.exitCode = 1;
 
 await api('/api/settings/secret/clear', { method: 'POST', body: JSON.stringify({ path: 'ai.apiKey' }) });
-const ask = await api('/api/ask', { method: 'POST', body: JSON.stringify({ question: '¿Qué hago esta semana?', agentId: 'director' }) });
-console.log('ask demo', ask.demo, ask.answer.slice(0, 80));
+// Sin modelo no hay agente: la API debe fallar con 409, nunca devolver texto
+// prefabricado ni un resumen disfrazado de respuesta del equipo.
+await expectStatus('/api/ask sin IA', 409, () => api('/api/ask', {
+  method: 'POST',
+  body: JSON.stringify({ question: '¿Qué hago esta semana?', agentId: 'director' }),
+}));
+await expectStatus('/api/missions modo automático sin IA', 400, () => api('/api/missions', {
+  method: 'POST',
+  body: JSON.stringify({ productId: product.id, mode: 'auto', depth: 'rapida', markets: ['España'] }),
+}));
 const backup = await fetch(`${base}/api/backup`);
 const buf = Buffer.from(await backup.arrayBuffer());
 console.log('backup', backup.status, buf.length, buf.slice(0, 2).toString());

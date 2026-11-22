@@ -1,7 +1,7 @@
 ﻿# Lucian ”” equipo de venta para lámparas de diseño impresas en 3D
 
 Lucian es un sistema **local-first** (todo vive en tu computadora) para un maker solo.
-No necesita Airtable ni Make. Funciona en **modo demo** sin ninguna clave de IA.
+No necesita Airtable ni Make. Sin clave de IA podés recorrer una **simulación marcada como Demo**; los 12 agentes son modelos de lenguaje reales y nunca devuelven respuestas prefabricadas.
 
 ## Cómo arrancar
 
@@ -23,17 +23,16 @@ Backups: desde Ajustes → Datos y respaldo, o `GET /api/backup` (ZIP).
 ## Qué podés hacer sin claves
 
 - Cargar productos con foto, precio, código y notas.
-- Lanzar misiones reales con IA (necesitás una clave de IA) y búsqueda sin clave de mejor esfuerzo.
-- Lanzar misiones en modo demo (datos simulados, marcados como ejemplo).
+- Lanzar misiones en modo demo (datos simulados, marcados como ejemplo). La simulación se elige explícitamente: el modo automático ya no cae en demo.
 - Revisar borradores, editarlos, marcarlos como enviados manualmente.
 - Descargar `.eml` para enviar desde tu correo.
-- Pedirle cosas al equipo (respuestas simuladas).
+- Recorrer la interfaz y la ayuda. Las consultas al equipo requieren IA.
 
 ## Qué necesitás para que sea real
 
 Configurá en **Ajustes**:
 
-- **Inteligencia artificial**: clave de OpenAI / OpenRouter / Anthropic / Gemini / Groq / DeepSeek / Mistral, o una URL local de Ollama. Sin esto, todo corre en modo demo.
+- **Inteligencia artificial**: clave de OpenAI / OpenRouter / Anthropic / Gemini / Groq / DeepSeek / Mistral, o una URL local de Ollama. Sin esto no hay agentes ni misiones reales: solo se puede simular en modo Demo. Las respuestas nunca se inventan ni se leen de un texto fijo.
 - **Búsqueda**: sin clave, Lucian consulta instancias públicas de SearXNG (y DuckDuckGo como último recurso). Esas instancias limitan consultas y pueden fallar: la app lo informa y no inventa resultados. Para misiones que tienen que vender en serio, configurá **Tavily / Brave / Serper** (tienen capa gratuita) o una **instancia SearXNG propia**.
 - **Hunter** (opcional): para enriquecer emails de compradores.
 - **Correo**: remitente. Para envío automático real, clave de Resend. Si no, podés descargar `.eml` o confirmar "ya lo envié".
@@ -127,9 +126,36 @@ Las variables tienen prioridad sobre lo guardado en disco.
 - **Fidelización**: marcar una conversación como **ganado** arranca el reloj de postventa ”” día 3 agradecimiento, día 30 feedback (reseña/referido), día 90 reorden ”” siempre con tu aprobación salvo piloto.
 - **Persuasión**: secuencias del Redactor Comercial, manejo de objeciones y tono configurable por mercados (Ajustes → Misión).
 - **Advertencias para vos**: Telegram (o WhatsApp) te avisa de misiones con error, red team en contra, bajas, bloqueos de envío, y cada mañana un digest con lo pendiente. Vos decidís siempre.
-- **Preguntas**: en **Equipo → Preguntale al equipo** (o por Telegram), los once especialistas responden con tus datos reales: productos, precios, misiones, conversaciones y aprendizajes.
+- **Preguntas**: en **Equipo → Preguntale al equipo** (o por Telegram), los doce especialistas —incluido el Asistente de Configuración— responden con tus datos reales: productos, precios, misiones, conversaciones y aprendizajes. Ninguno lee una respuesta escrita de antemano: todos consultan al modelo.
 - **Memoria**: el equipo guarda lo que cada misión enseña (`Aprendizajes`) para no repetir errores.
-- **Nada sale sin tu revisión** salvo que actives el **piloto automático** (opt-in, solo Resend/webhook, respeto total de límite diario y calentamiento).
+- **Nada sale sin tu revisión** salvo que actives el **piloto automático** (opt-in, solo Resend/webhook, respeto total del cupo por dominio, calentamiento y espaciado).
+- **Política única**: aprobás UNA vez las reglas en Ajustes → Política única y los agentes aprueban solos los avisos de verificación, sin pedirte revisar cada correo. Los bloqueos legales, las cotizaciones y el consentimiento documentado siguen intactos. Si cambiás una regla, se desactiva sola. Ver `docs/POLITICA-UNICA.md`.
+
+## El agente de Telegram
+
+Telegram es un **segundo canal para hablar con el mismo equipo de 12 agentes**, no un botón de comandos. Configurá el token y tu chat en **Ajustes → Notificaciones**.
+
+- Escribile en lenguaje natural: “¿qué lámpara conviene empujar este mes?”, “prepará una respuesta para Avanluce”, “¿por qué se frenó la misión de España?”. El director (o el especialista que corresponda) responde con un modelo real y con tus datos.
+- Los comandos con `/` (`/estado`, `/misiones`, `/resumen`, `/perfil`, `/olvidar`, …) son **atajos deterministas** para consultas rápidas. No sustituyen a la conversación.
+- El agente mantiene el hilo de la charla, recuerda tus preferencias y reglas, y adopta correcciones (“no, prefiero distribuidores, no hoteles”). Esa memoria la extrae el modelo con JSON estricto; el respaldo por patrones solo se usa si no hay IA.
+- Si una acción es irreversible (enviar, lanzar misión, cobrar), pedí confirmación con un botón o escribiendo “confirmar”. Sin confirmación no se ejecuta nada.
+- Los ajustes de estilo (`serio`, `directo`, `estratégico`) están en Ajustes → Notificaciones.
+
+## Catálogo completo de GALAPA
+
+El catálogo se importa desde `https://galapa.com.ar/productos` con:
+
+```powershell
+node tools/import-galapa.mjs --apply
+```
+
+El importador lee los 33 productos de la página (nombre, precio en ARS, stock, foto y URL), los fusiona con el resguardo real para conservar códigos, materiales, descripciones y fotos, descarga las imágenes que faltan y respalda la carpeta `data/` anterior antes de aplicar. Sin `--apply` solo muestra la vista previa.
+
+## Enviar 200 por día por dominio
+
+Podés cargar varios dominios o subdominios verificados en **Ajustes → Correo → Dominios de envío**, uno por línea: `dominio | remitente | límite diario | activo`. Cada dominio tiene cupo propio de hasta 200 correos/día; Lucian reparte los envíos entre los activos y aplica el espaciado por dominio. Con 10 dominios la capacidad teórica es 2.000/día y con 15, 3.000/día.
+
+Esto **no salta** las guardas: siguen siendo obligatorios el consentimiento documentado, la lista de no contactar, el dedupe y los límites reales del proveedor. En el plan gratuito de Resend el cupo total es de 100 correos/día (incluye los recibidos) y 3 dominios: para pasar de ahí necesitás un plan paid. Ver `docs/MULTI-DOMINIO.md`.
 
 ## Misiones con avisos
 
@@ -156,7 +182,7 @@ Para saber si vale la pena cargar todo el catálogo y qué hace falta, leé `doc
 
 ## Envío
 
-- El envío por defecto es manual (no se va nada). Opcionalmente activás el **piloto automático** en Ajustes → Correo: solo envía borradores que pasaron las guardas, con límite diario, calentamiento y minutos de espacio entre envíos.
+- El envío por defecto es manual (no se va nada). Opcionalmente activás el **piloto automático** en Ajustes → Correo: solo envía borradores que pasaron las guardas, con cupo por dominio, calentamiento y minutos de espacio entre envíos.
 - Los envíos manuales ("ya lo envié") no consumen el cupo de calentamiento.
 - Los emails de ejemplo (`example.com`) no se envían por Resend ni webhook; sí se pueden marcar como enviados manualmente para simular el flujo en demo.
 
