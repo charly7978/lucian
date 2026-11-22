@@ -37,7 +37,7 @@ import { diagnoseConnections, testConnection, getAiFailoverState, resetAiFailove
 import { startAutopilot, runAutopilot, getAutopilotState } from './lib/autopilot.mjs';
 import { verifyMetaSignature, hasDocumentedOptIn, resendIdempotencyKey } from './lib/security.mjs';
 import {
-  POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch, isPolicyActive, policyConfig,
+  POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch, policyConfig,
   policyFingerprint, policyStatus, revokePolicyPatch,
 } from './lib/policy.mjs';
 import { buildSalesAgenda, buildCatalogHealth } from './lib/sales-ops.mjs';
@@ -489,11 +489,8 @@ const outbox = new Outbox({
   store,
   deliver: async ({ threadId, draftId, sendDomain }) => {
     const settings = store.settings();
-    let channel = 'manual';
-    if (settings.email?.provider === 'resend' && settings.email?.resendKey) channel = 'resend';
-    else if (settings.email?.provider === 'gmail' && settings.email?.smtpUser && settings.email?.smtpPassword) channel = 'gmail';
-    else if (settings.email?.webhookUrl) channel = 'webhook';
-    return sendThreadMessage(threadId, { draftId, channel, automated: true, sendDomain });
+    if (!outbox.canAutopilot(settings)) throw new Error('El piloto de correo está pausado o falta configurar el proveedor.');
+    return sendThreadMessage(threadId, { draftId, channel: settings.email.provider, automated: true, sendDomain });
   },
   notify: notifier,
 });
@@ -566,6 +563,13 @@ const autopilotDeps = {
   runScheduledB2B: () => runScheduledB2B(store, { createMission, aiReady: isAIReady, searchInfo: searchProviderInfo }),
 };
 startAutopilot(store, notifier, (line) => console.log(line), autopilotDeps);
+
+async function scheduleB2BThread(thread, draftId) {
+  const mission = store.find('missions', thread.missionId);
+  if (mission?.b2bFocus) {
+    await outbox.scheduleMission(mission, { threadId: thread.id, draftId });
+  }
+}
 
 /* Extrae el procesamiento de un correo entrante para reutilizarlo
    desde el webhook y desde IMAP. Devuelve el hilo afectado. */
@@ -2421,6 +2425,9 @@ async function handle(req, res) {
     }
     notifier.refresh();
     await store.activity('settings', 'Ajustes actualizados.');
+    if (settings.mission?.scheduledB2B === true && settings.autopilot?.enabled !== false) {
+      await autopilotDeps.runScheduledB2B().catch(error => console.error('[Piloto B2B]', error.message));
+    }
     json(res, 200, { settings: maskSettings(settings), flags: settingsFlags(settings) });
     return;
   }
@@ -2443,6 +2450,7 @@ async function handle(req, res) {
       autopilotEnabled = true;
     }
     const applied = await applyPolicyToThreads(store, store.settings());
+    await outbox.enqueueAllReady({ b2bOnly: true });
     notifier.refresh();
     await store.activity('settings', `Política única aprobada (v${POLICY_VERSION}): ${applied.approved} borrador(es) aprobados sin revisión individual.`);
     json(res, 200, {
@@ -2464,6 +2472,7 @@ async function handle(req, res) {
 
   if (pathname === '/api/policy/apply' && method === 'POST') {
     const applied = await applyPolicyToThreads(store, store.settings());
+    await outbox.enqueueAllReady({ b2bOnly: true });
     json(res, 200, { ok: true, ...applied, policy: policyStatus(store.settings(), store) });
     return;
   }
@@ -3010,7 +3019,8 @@ async function handle(req, res) {
           if (body.contact[key] !== undefined) contact[key] = asString(body.contact[key]).slice(0, 300);
         }
         if (contact.email && !isValidEmail(contact.email)) throw new HttpError(400, 'El email del contacto no es válido.');
-        if (normalizeEmail(contact.email) !== normalizeEmail(target.contact?.email)) {
+        const emailChanged = normalizeEmail(contact.email) !== normalizeEmail(target.contact?.email);
+        if (emailChanged) {
           contact.permission = { status: 'unknown' }; // Un permiso nunca se transfiere a otra dirección.
         }
         if (body.contact.permission !== undefined) {
@@ -3021,10 +3031,13 @@ async function handle(req, res) {
           if (requested.status === 'opted_in') {
             const evidence = asString(requested.evidence).trim().slice(0, 600);
             if (evidence.length < 10) throw new HttpError(400, 'Describí dónde y cuándo se obtuvo el consentimiento (mínimo 10 caracteres).');
-            const sameEvidence = contact.permission?.status === 'opted_in' && contact.permission.evidence === evidence;
-            contact.permission = { status: 'opted_in', source: 'manual', evidence,
-              capturedAt: sameEvidence ? contact.permission.capturedAt : nowISO() };
-            permissionGranted = !sameEvidence;
+            const priorPermission = target.contact?.permission;
+            const sameEvidence = priorPermission?.status === 'opted_in' && asString(priorPermission.evidence).trim() === evidence;
+            if (!emailChanged || !sameEvidence) {
+              contact.permission = { status: 'opted_in', source: 'manual', evidence,
+                capturedAt: sameEvidence ? priorPermission.capturedAt : nowISO() };
+              permissionGranted = true;
+            }
           } else {
             contact.permission = { status: 'unknown' };
           }
@@ -3034,12 +3047,7 @@ async function handle(req, res) {
       target.updatedAt = nowISO();
       target.lastActivityAt = target.lastActivityAt || target.updatedAt;
       await store.set('threads', threads);
-      if (permissionGranted && isPolicyActive(store.settings())) {
-        const mission = store.find('missions', target.missionId);
-        if (mission?.b2bFocus && !isSuppressed(target.contact?.email, threadSuppressions(target), target.contact?.company)) {
-          await outbox.scheduleMission(mission, { threadId: target.id });
-        }
-      }
+      if (permissionGranted) await scheduleB2BThread(target);
       json(res, 200, { thread: target });
       return;
     }
@@ -3179,6 +3187,7 @@ async function handle(req, res) {
         || draft.body !== beforeEdit.body
         || draft.channel !== beforeEdit.channel
         || draft.language !== beforeEdit.language;
+      const approved = body.status === 'listo' && draft.status === 'revisar';
       if (body.status !== undefined) {
         if (!['listo', 'revisar', 'descartado'].includes(body.status)) {
           throw new HttpError(400, 'Estado de borrador inválido. Para marcar un envío usá el botón Enviar.');
@@ -3187,7 +3196,7 @@ async function handle(req, res) {
         if (draft.status === 'bloqueado' && body.status !== 'descartado') {
           throw new HttpError(400, draft.blockedReason || 'Este borrador está bloqueado por cumplimiento o red team.');
         }
-        if (body.status === 'listo' && draft.status === 'revisar') {
+        if (approved) {
           if (isSuppressed(thread.contact?.email, threadSuppressions(thread), thread.contact?.company)) {
             throw new HttpError(400, 'Ese contacto está en la lista de no contactar: no se puede aprobar un envío.');
           }
@@ -3211,6 +3220,7 @@ async function handle(req, res) {
       draft.updatedAt = nowISO();
       thread.updatedAt = nowISO();
       await store.set('threads', threads);
+      if (approved) await scheduleB2BThread(thread, draft.id);
       json(res, 200, { draft, thread });
       return;
     }
