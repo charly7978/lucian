@@ -450,7 +450,7 @@ const unverifiedMigration = await sanitizeLegacyThreads(store);
 if (unverifiedMigration.changed) {
   console.log(`  Verificación de hilos históricos: ${unverifiedMigration.changed} marcados${unverifiedMigration.discarded ? `, ${unverifiedMigration.discarded} borradores descartados` : ''}.`);
 }
-const interrupted = await releaseInterruptedMissions(store);
+const interrupted = await releaseInterruptedMissions(store, { staleAfterMs: 0 });
 if (interrupted.released) {
   console.log(`  Misiones interrumpidas liberadas: ${interrupted.released} (quedan reintentables).`);
 }

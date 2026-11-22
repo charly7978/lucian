@@ -116,6 +116,25 @@ try {
   }
   ok(store.tracked.length === 12, 'los 12 agentes registran su uso');
 
+  const telegramStore = makeStore(aiSettings);
+  const get = telegramStore.get;
+  const threads = [
+    ...Array.from({ length: 10 }, () => ({
+      contact: { company: 'Otra empresa' },
+      messages: [{ direction: 'out', body: 'Detalle ajeno. '.repeat(40) + 'MARCADOR_AJENO' }],
+      drafts: [{ body: 'BORRADOR_AJENO' }],
+    })),
+    { contact: { company: 'Hotel Aurora' }, messages: [{ body: 'Consulta por veinte lámparas' }],
+      drafts: [{ id: 'draft-hotel', body: 'Borrador para el hotel' }] },
+  ];
+  telegramStore.get = key => key === 'threads' ? threads : get(key);
+  calls.length = 0;
+  await askTeam({ question: 'Revisá el borrador de Hotel Aurora', channel: 'telegram', store: telegramStore });
+  const telegramPrompt = calls[0].body.messages.at(-1).content;
+  ok(telegramPrompt.includes('Consulta por veinte lámparas'), 'Telegram conserva el hilo pedido aunque quede fuera de los diez más recientes');
+  ok(telegramPrompt.includes('draft-hotel'), 'Telegram conserva el identificador y contexto del borrador pedido');
+  ok(!telegramPrompt.includes('BORRADOR_AJENO'), 'Telegram omite borradores de otras conversaciones');
+
   /* 5. Si el modelo no da texto, se informa el fallo: nunca se inventa una respuesta. */
   answerForModel = '';
   finishReason = 'length';

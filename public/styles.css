@@ -1347,6 +1347,7 @@ input[type="range"] { accent-color: var(--amber-deep); flex: 1; }
 .timeline-item.open .timeline-toggle { transform: rotate(180deg); }
 .timeline-body { padding: 0 15px 16px; border-top: 1px solid var(--line); display: none; }
 .timeline-item.open .timeline-body { display: block; animation: fadeIn .25s ease; }
+.live-update .timeline-item.open .timeline-body { animation: none; }
 .timeline-body-inner { padding-top: 14px; }
 
 .log { display: flex; flex-direction: column; gap: 0; max-height: 320px; overflow-y: auto; }

@@ -582,12 +582,13 @@ function updateShell() {
   }
 }
 
-function render() {
+function render({ live = false } = {}) {
   if (!S.state) return;
   const next = routeParts();
   const changedView = next.view !== S.route.view;
+  const navigated = changedView || next.id !== S.route.id;
   S.route = next;
-  if (next.view !== 'misiones' || next.id === 'nueva') disconnectMission();
+  if (next.view !== 'misiones' || !next.id || next.id === 'nueva') disconnectMission();
   updateShell();
   const view = $('#contenido');
   if (!view) return;
@@ -610,8 +611,24 @@ function render() {
     console.error(error);
     html = `<div class="empty"><div class="empty-illustration">${icon('alert')}</div><h3>Algo se rompió al dibujar esta pantalla</h3><p>${esc(error.message)}</p></div>`;
   }
-  view.innerHTML = `<div class="fade-in">${html}</div>`;
+  const current = view.firstElementChild;
+  if (live && !navigated && current) {
+    current.classList.add('live-update');
+    const template = document.createElement('template');
+    template.innerHTML = html.trim();
+    const existing = [...current.children];
+    const updated = [...template.content.children];
+    for (let i = 0; i < Math.max(existing.length, updated.length); i += 1) {
+      if (!existing[i]) current.append(updated[i]);
+      else if (!updated[i]) existing[i].remove();
+      else if (!existing[i].isEqualNode(updated[i])) existing[i].replaceWith(updated[i]);
+    }
+  } else {
+    view.innerHTML = `<div${navigated ? ' class="fade-in"' : ''}>${html}</div>`;
+  }
   view.setAttribute('tabindex', '-1');
+  const elapsed = $('#mission-step-elapsed');
+  if (elapsed) updateMissionElapsed(elapsed);
   if (changedView) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   bindView(next);
 }
@@ -625,7 +642,9 @@ function scheduleAutoRefresh() {
         const fresh = await api('/api/state', { silent: true });
         S.state = fresh;
         updateShell();
-        if (S.route.view === 'panel' || S.route.view === 'misiones') render();
+        const elapsed = $('#mission-step-elapsed');
+        if (elapsed) updateMissionElapsed(elapsed);
+        if (S.route.view === 'panel' || (S.route.view === 'misiones' && !S.route.id)) render({ live: true });
         if (!fresh.counts.activeMissions) scheduleAutoRefresh();
       } catch { /* silencio */ }
     }, 5000);
@@ -766,7 +785,7 @@ function renderPanel() {
   const heroTitle = active
     ? `El equipo está trabajando en <em>${esc(activeProduct?.name || active.name)}</em>.`
     : hasProducts
-      ? `Tu lámpara ya tiene <em>comprador</em>. Falta encontrarlo.`
+      ? `Buscá <em>compradores</em> para tu catálogo.`
       : `Tu próxima venta empieza con <em>una foto</em>.`;
   const heroSub = active
     ? `La misión avanza paso a paso. Podés entrar a la sala, leer lo que produce cada especialista y cancelar si algo no te cierra.`
@@ -811,11 +830,6 @@ function renderPanel() {
             ? `<a class="btn btn-ghost" href="#/productos">${icon('box')} Ver productos</a>`
             : `<button class="btn btn-ghost" type="button" data-action="demo-seed">${icon('sun')} Ver con datos de ejemplo</button>`}
         </div>
-        <div class="hero-meta">
-          <span><b>${AGENTS.length}</b> especialistas</span>
-          <span><b>0</b> planillas</span>
-          <span><b>100%</b> en tu computadora</span>
-        </div>
       </div>
       <div class="hero-art" aria-hidden="true">
         <div class="hero-glow"></div>
@@ -835,8 +849,6 @@ function renderPanel() {
         </div>
       </div>
     </section>
-
-    ${active ? activeMissionBanner(active) : ''}
 
     <section class="stat-grid">
       ${statCard('Por aprobar', counts.draftsToReview || 0, 'mail', counts.draftsToReview ? 'borradores esperando tu OK' : 'nada pendiente', '#/bandeja?filtro=revisar', counts.draftsToReview ? 'warm' : '')}
@@ -948,17 +960,6 @@ function statCard(label, value, iconName, foot, href, extra = '') {
   </a>`;
 }
 
-function activeMissionBanner(mission) {
-  return `<div class="card" style="padding:13px 16px;margin-bottom:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(100deg,#fff7e8,#fffaf1)">
-    <span class="avatar sm agent" style="background:linear-gradient(145deg,#c98a3c,#9c6722)">${icon('spark')}</span>
-    <div style="flex:1;min-width:200px">
-      <div class="between"><b style="font-size:12.5px">${esc(mission.name)}</b><span class="small muted">${mission.progress || 0}%</span></div>
-      <div class="progress mt-2"><div class="progress-bar" style="width:${Math.max(3, num(mission.progress))}%"></div></div>
-    </div>
-    <a class="btn btn-primary btn-sm" href="#/misiones/${encodeURIComponent(mission.id)}">Entrar a la sala ${icon('arrowRight')}</a>
-  </div>`;
-}
-
 function missionCard(mission) {
   const product = S.state.products.find((p) => p.id === mission.productId);
   const steps = arr(mission.steps);
@@ -980,7 +981,7 @@ function missionCard(mission) {
     <div class="mission-card-right">
       <div class="mission-card-progress">
         <div class="progress"><div class="progress-bar ${mission.status === 'done' ? 'ok' : mission.status === 'done_with_warnings' ? 'warn' : mission.status === 'error' ? 'danger' : ''}" style="width:${Math.max(2, num(mission.progress))}%"></div></div>
-        <div class="progress-label"><span>${mission.status === 'error' ? 'Con error' : ['done', 'done_with_warnings'].includes(mission.status) ? (!mission.demo && num(mission.stats?.prospects) === 0 ? 'Sin compradores' : 'Terminada') : mission.status === 'done_with_warnings' ? 'Con avisos' : 'Avance'}</span><b>${mission.progress || 0}%</b></div>
+        <div class="progress-label"><span>${mission.status === 'error' ? 'Con error' : ['done', 'done_with_warnings'].includes(mission.status) ? (!mission.demo && num(mission.stats?.prospects) === 0 ? 'Sin compradores' : mission.status === 'done_with_warnings' ? 'Con avisos' : 'Terminada') : 'Avance'}</span><b>${mission.progress || 0}%</b></div>
       </div>
       ${icon('chevronRight')}
     </div>
@@ -2081,7 +2082,6 @@ function renderMissions() {
   const campaignId = S.route.query?.get('campaign') || '';
   const missions = [...arr(S.state.missions)].filter(m => !campaignId || m.campaignId === campaignId).sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   const campaignInfo = arr(S.state.campaigns).find(c => c.id === campaignId);
-  const active = missions.filter((m) => ['running', 'queued'].includes(m.status));
   return `<div class="page-head">
     <div class="page-head-main">
       <p class="eyebrow">Sala de misión</p>
@@ -2096,21 +2096,14 @@ function renderMissions() {
     </div>
   </div>
 
-  ${active.length ? `<div class="card card-pad" style="margin-bottom:18px;background:linear-gradient(100deg,#fff7e8,#fffaf1)">
-    <div class="between"><div><p class="eyebrow">En curso</p><p style="font-family:var(--serif);font-size:21px;margin-top:3px">${esc(active[0].name)}</p></div><a class="btn btn-primary btn-sm" href="#/misiones/${encodeURIComponent(active[0].id)}">Entrar a la sala ${icon('arrowRight')}</a></div>
-    <div class="progress mt-3"><div class="progress-bar" style="width:${Math.max(3, num(active[0].progress))}%"></div></div>
-    <div class="progress-label"><span>${esc(MISSION_STATUS[active[0].status] || active[0].status)}</span><b>${active[0].progress || 0}%</b></div>
-  </div>` : ''}
-
   ${missions.length
     ? `<div class="mission-list">${missions.map(missionCard).join('')}</div>`
     : emptyState({
       iconName: 'spark',
       title: 'La primera misión empieza con una lámpara',
       text: 'Cargá un producto y elegí qué querés conseguir. El equipo se encarga del mercado, los precios, los compradores y los mensajes.',
-      actions: arr(S.state.products).length
-        ? `<a class="btn btn-primary" href="#/misiones/nueva">${icon('spark')} Lanzar una misión</a>`
-        : `<button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Cargar una lámpara</button>`,
+      actions: !arr(S.state.products).length
+        ? `<button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Cargar una lámpara</button>` : '',
     })}`;
 }
 
@@ -2318,7 +2311,7 @@ async function launchWizard() {
     S.mission = null;
     navigate(`#/misiones/${encodeURIComponent(missionId)}`);
     toast(result.mission.demo ? 'Misión demo lanzada. El equipo está simulando el trabajo.' : 'Misión lanzada. El equipo está trabajando.');
-    setTimeout(() => { S.mission = null; render(); }, 300);
+    void loadState({ render: false, silent: true });
   } catch (error) {
     toast(error.message, 'error');
     if (button) { button.disabled = false; button.innerHTML = `${icon('spark')} Lanzar misión`; }
@@ -2381,6 +2374,7 @@ function connectMission(id) {
     S.missionES = es;
     S.missionESId = id;
     es.onmessage = (event) => {
+      if (S.missionES !== es || S.route.id !== id) return;
       let data;
       try { data = JSON.parse(event.data); } catch { return; }
       if (data.type === 'mission' && data.mission) {
@@ -2389,7 +2383,6 @@ function connectMission(id) {
         S.mission.product = S.state.products.find((p) => p.id === data.mission.productId) || S.mission.product;
         if (['done', 'done_with_warnings', 'error', 'cancelled'].includes(data.mission.status)) {
           disconnectMission();
-          loadState({ silent: true });
           refreshMissionAfterFinish(id);
         } else {
           repaintMission();
@@ -2407,6 +2400,7 @@ function connectMission(id) {
       }
     };
     es.onerror = () => {
+      if (S.missionES !== es) return;
       es.close();
       S.missionES = null;
       if (!S.missionPoll) {
@@ -2429,8 +2423,9 @@ function disconnectMission() {
 async function refreshMissionAfterFinish(id) {
   try {
     const data = await api(`/api/missions/${encodeURIComponent(id)}`, { silent: true });
+    if (S.route.view !== 'misiones' || S.route.id !== id) return;
     S.mission = data;
-    if (S.route.view === 'misiones' && S.route.id === id) repaintMission();
+    repaintMission();
     const fresh = await api('/api/state', { silent: true });
     S.state = fresh;
     updateShell();
@@ -2439,10 +2434,14 @@ async function refreshMissionAfterFinish(id) {
 }
 
 function repaintMission() {
-  if (S.route.view !== 'misiones' || !S.route.id) return;
-  const y = window.scrollY;
-  render();
-  window.scrollTo({ top: y, behavior: 'auto' });
+  if (S.route.view !== 'misiones' || S.route.id !== S.mission?.mission?.id) return;
+  render({ live: true });
+}
+
+function updateMissionElapsed(element) {
+  const seconds = Math.max(0, Math.floor((Date.now() - Date.parse(element.dataset.startedAt)) / 1000));
+  if (!Number.isFinite(seconds)) return;
+  element.textContent = `${Math.floor(seconds / 60)} min ${String(seconds % 60).padStart(2, '0')} s en este paso`;
 }
 
 function missionDetailHTML(data) {
@@ -2450,6 +2449,7 @@ function missionDetailHTML(data) {
   const product = data.product || S.state.products.find((p) => p.id === m.productId);
   const steps = arr(m.steps);
   const doneCount = steps.filter((s) => s.status === 'done').length;
+  const runningStep = steps.find(step => step.status === 'running');
   const synthesis = obj(m.artifacts?.synthesis);
   const summary = m.summary || synthesis.resumen || synthesis.decision || '';
   const threads = arr(data.threads);
@@ -2475,6 +2475,7 @@ function missionDetailHTML(data) {
         <span>${icon('clock')} ${esc(relTime(m.finishedAt || m.startedAt || m.createdAt))}</span>
         ${m.stats?.tokens ? `<span>${icon('chart')} ${numFmt(m.stats.tokens)} tokens</span>` : ''}
       </div>
+    ${runningStep && status === 'running' ? `<p class="small muted">${esc(runningStep.title)} · <span id="mission-step-elapsed" data-started-at="${attr(runningStep.startedAt)}">En curso</span></p>` : ''}
     ${m.error ? `<div class="artifact-callout danger mt-3"><b>La misión se detuvo:</b> ${esc(m.error)}</div>` : ''}
     ${summary ? `<div class="mission-summary-callout"><b>${finished ? (warnings.length ? 'Resultado con avisos' : 'Resultado') : 'Enfoque'}:</b> ${esc(summary)}</div>` : ''}
       <div class="mission-hero-bottom">
