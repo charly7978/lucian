@@ -302,6 +302,26 @@ ok(verifiedArtifact.descartados.some((item) => /fuente|sitio/i.test(item.motivo)
   ok(result.released === 0, 'no libera una mision que nunca empezo');
   ok(queued.status === 'queued', 'la deja en cola para retomarla al arrancar');
 }
+
+{
+  const store = await freshStore();
+  const old = new Date(Date.now() - 20 * 60 * 1000).toISOString();
+  await store.set('missions', [{
+    id: 'mis_campana_retomable', campaignId: 'cmp_galapa', manualReviewOnly: true,
+    status: 'running', phase: 'research', currentStep: 'research', startedAt: old, updatedAt: old,
+    steps: [
+      { id: 'brief', status: 'done' },
+      { id: 'research', status: 'running', startedAt: old },
+    ],
+    artifacts: { brief: { tesis: 'Conservar la investigación guardada' } },
+  }]);
+  const result = await releaseInterruptedMissions(store, { staleAfterMs: 0, resumeCampaigns: true });
+  const resumed = store.find('missions', 'mis_campana_retomable');
+  ok(result.resumed === 1 && resumed.status === 'queued', 'retoma una campaña supervisada al reiniciar');
+  ok(resumed.steps[1].status === 'pending' && resumed.currentStep === null, 'vuelve a poner en espera el paso interrumpido');
+  ok(resumed.steps[0].status === 'done' && resumed.artifacts.brief.tesis && resumed.manualReviewOnly,
+    'conserva el trabajo terminado y la revisión previa al envío');
+}
 for (const dir of dirs) {
   await fs.rm(dir, { recursive: true, force: true });
 }

@@ -5021,10 +5021,10 @@ function settingsEmailHTML() {
   const configured = Boolean(S.state.flags?.email) || Boolean(email.webhookUrl);
   const body = `
     ${settingsStatusCard(
-      'Envío desde Lucian',
+      'Configuración de correo',
       configured,
       configured
-        ? 'El proveedor de correo está configurado. El piloto envía borradores listos con permiso documentado y dentro del cupo.'
+        ? 'El proveedor está configurado. Usá Probar envío para confirmar que Lucian pueda conectarse.'
         : 'Modo manual: preparás el mensaje, descargás el .eml o lo copiás, y lo enviás desde tu correo. Nada sale solo.',
       testButton('email', 'Probar envío', 'check') + (email.provider === 'gmail' ? ` ${testButton('inbox', 'Probar bandeja', 'mail')}` : ''),
     )}

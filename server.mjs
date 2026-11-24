@@ -459,9 +459,9 @@ const unverifiedMigration = await sanitizeLegacyThreads(store);
 if (unverifiedMigration.changed) {
   console.log(`  Verificación de hilos históricos: ${unverifiedMigration.changed} marcados${unverifiedMigration.discarded ? `, ${unverifiedMigration.discarded} borradores descartados` : ''}.`);
 }
-const interrupted = await releaseInterruptedMissions(store, { staleAfterMs: 0 });
+const interrupted = await releaseInterruptedMissions(store, { staleAfterMs: 0, resumeCampaigns: true });
 if (interrupted.released) {
-  console.log(`  Misiones interrumpidas liberadas: ${interrupted.released} (quedan reintentables).`);
+  console.log(`  Misiones interrumpidas: ${interrupted.resumed} retomadas en cola · ${interrupted.released - interrupted.resumed} reintentables.`);
 }
 
 const listeners = new Map();
@@ -634,9 +634,8 @@ async function processInboundEmail(inbound) {
 
 /* Una campaña de catálogo puede dejar misiones en cola durante horas. Si
    Lucian se reinicia, esos temporizadores en memoria se pierden. Acá se
-   retoman las misiones que nunca llegaron a empezar, en orden de creación.
-   Las que estaban "running" las libera releaseInterruptedMissions para que
-   el dueño pueda reintentarlas sin perder lo ya hecho. */
+   retoman las misiones en cola, incluidas las campañas supervisadas
+   recuperadas por releaseInterruptedMissions. */
 function resumeQueuedMissions() {
   const queued = store.get('missions')
     .filter((mission) => mission && mission.status === 'queued')
@@ -3721,12 +3720,12 @@ function readinessLines() {
       ? 'cambió: volvé a aprobarla en Ajustes → Política única'
       : 'apagada (aprobación borrador por borrador)';
   const lines = [
-    '  Listo para funcionar:',
+    '  Estado de la configuración:',
     `  · Política única: ${policyLabel}`,
     `  · IA: ${aiLabel}`,
     `  · Datos: ${DATA_DIR}`,
     `  · Búsqueda: ${settings.search?.provider || 'duckduckgo'}${settings.search?.provider === 'tavily' && !(settings.search?.tavilyKey || settings.search?.apiKey) ? ' (sin clave: usa solo la rotación sin clave)' : ''}`,
-    `  · Correo: ${emailLabel}${email.autopilot ? ' · piloto automático ACTIVO' : ''}`,
+    `  · Correo configurado: ${emailLabel}${email.autopilot ? ' · piloto automático ACTIVO' : ''}`,
     startupDomains.domains.length
       ? `  · Dominios de envío: ${startupDomains.domains.filter((d) => d.enabled).map((d) => `${d.domain} ${d.used}/${d.limit}`).join(' · ')} · capacidad ${startupDomains.capacity}/día`
       : `  · Calentamiento: ${email.warmup !== false ? 'activo' : 'desactivado'} · límite diario ${email.dailyLimit ?? 20}`,

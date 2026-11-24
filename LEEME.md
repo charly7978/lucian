@@ -159,6 +159,8 @@ La sincronización marca como **En venta** los artículos con disponibilidad en 
 
 **Productos → Campaña GALAPA** preselecciona los artículos disponibles y propone Argentina como mercado. Con IA y búsqueda conectadas, Lucian prepara los mensajes para los compradores que pueda verificar. Revisá los borradores desde **Bandeja** y los avisos de misión desde Telegram.
 
+Si se reinicia Lucian, las campañas supervisadas recuperan la cola y retoman los pasos que estaban pendientes. Los borradores conservan la revisión previa al envío.
+
 ## Enviar 200 por día por dominio
 
 Podés cargar varios dominios o subdominios verificados en **Ajustes → Correo → Dominios de envío**, uno por línea: `dominio | remitente | límite diario | activo`. Cada dominio tiene cupo propio de hasta 200 correos/día; Lucian reparte los envíos entre los activos y aplica el espaciado por dominio. Con 10 dominios la capacidad teórica es 2.000/día y con 15, 3.000/día.
