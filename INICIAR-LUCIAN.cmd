@@ -1,7 +1,7 @@
 @echo off
 setlocal
 chcp 65001 >nul
-TITLE LUCIAN - INICIO SIMPLE
+TITLE LUCIAN - INICIO
 pushd "%~dp0" 2>nul
 if errorlevel 1 (
   echo ERROR: No se pudo entrar a la carpeta de Lucian.
@@ -28,20 +28,21 @@ set "LUCIAN_REQUIRE_AUTH=0"
 set "LUCIAN_NO_OPEN="
 echo.
 echo ============================================
-echo    LUCIAN - VERSION LOCAL PARA PROBAR
+echo    LUCIAN - CATALOGO Y VENTAS
 echo ============================================
 echo.
 echo Se abrira el navegador. Si no se abre,
 echo visita http://localhost:4321
 echo.
-echo Este sistema usa archivos locales, aislados
-echo de la instalacion anterior.
-echo No cierres esta ventana durante la prueba.
+echo Tus datos y ajustes se guardan en esta carpeta.
+echo Deja abierta esta ventana mientras usas Lucian.
 echo.
-node server.mjs
+node tools\start-local.mjs
 set "RC=%ERRORLEVEL%"
-echo.
-echo El servidor se detuvo. Codigo: %RC%.
-pause
+if not "%RC%" == "0" (
+  echo.
+  echo Lucian se detuvo con codigo %RC%.
+  pause
+)
 popd
 exit /b %RC%

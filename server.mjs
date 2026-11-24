@@ -53,6 +53,7 @@ import { obtainResendDeliveryReport, applyResendDeliveryReport } from './lib/res
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = process.env.LUCIAN_DATA_DIR ? path.resolve(process.env.LUCIAN_DATA_DIR) : path.join(__dirname, 'data');
+const INSTALLATION_ID = crypto.createHash('sha256').update(process.platform === 'win32' ? DATA_DIR.toLowerCase() : DATA_DIR).digest('hex').slice(0, 16);
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const VERSION = '1.0.0';
 const HOST = process.env.LUCIAN_HOST || '127.0.0.1';
@@ -2360,6 +2361,7 @@ async function handle(req, res) {
       ok: true,
       app: 'lucian',
       version: VERSION,
+      installation: INSTALLATION_ID,
       ai: isAIReady(store.settings()),
       demo: settingsFlags(store.settings()).demo,
       uptime: Math.round(process.uptime()),
