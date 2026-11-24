@@ -47,6 +47,7 @@ import { campaignPriceMap, campaignProductView } from './lib/campaign-pricing.mj
 import { buildCampaignBoard } from './lib/campaign-board.mjs';
 import { buildOfferKit, buildBulkOfferRows, buildChannelReadiness } from './lib/sales-offers.mjs';
 import { buildPublicCatalog } from './lib/public-catalog.mjs';
+import { syncGalapaCatalog } from './lib/galapa-catalog.mjs';
 
 import { obtainResendDeliveryReport, applyResendDeliveryReport } from './lib/resend-delivery.mjs';
 
@@ -442,6 +443,14 @@ function buildSales(threads, products, currency = 'USD') {
 
 const store = new Store(DATA_DIR);
 await store.init();
+let galapaSync;
+function syncStorefront() {
+  galapaSync ??= syncGalapaCatalog(store).then(async result => {
+    if (!store.get('meta').galapaInitialized) await store.setMeta({ galapaInitialized: true });
+    return result;
+  }).finally(() => { galapaSync = null; });
+  return galapaSync;
+}
 const legacyMigration = await migrateLegacyDrafts(store);
 if (legacyMigration.changed) {
   console.log(`  Migración de guardas: ${legacyMigration.changed} borrador(es) revisados.`);
@@ -2583,8 +2592,7 @@ async function handle(req, res) {
     return;
   }
 
-  // Exporta un micrositio estático completo, sin datos privados ni claves.
-  // No publica ni crea pedidos: el comprador envía una consulta iniciada por él.
+  // Exporta fichas públicas con enlaces a la tienda o a canales de consulta.
   if (pathname === '/api/sales/public-catalog' && method === 'POST') {
     const body = await readJson(req, 256 * 1024);
     if (body.confirm !== true) throw new HttpError(400, 'Revisá la selección y confirmá el contenido público antes de exportar.');
@@ -2622,6 +2630,12 @@ async function handle(req, res) {
     const body = await readJson(req);
     const product = await createProduct(body);
     json(res, 201, { product });
+    return;
+  }
+
+  if (pathname === '/api/products/sync-galapa' && method === 'POST') {
+    try { json(res, 200, await syncStorefront()); }
+    catch (error) { throw new HttpError(502, `No se pudo sincronizar con GALAPA. ${error.message}`); }
     return;
   }
 
@@ -3631,6 +3645,9 @@ for (let attempt = 0; attempt < 8; attempt += 1) {
 }
 
 const url = `http://localhost:${port}`;
+if (!process.env.LUCIAN_DATA_DIR && !store.get('products').length && !store.get('meta').galapaInitialized) {
+  syncStorefront().catch(error => console.warn(`[GALAPA] Importación inicial pendiente: ${error.message}`));
+}
 const lanMode = HOST === '0.0.0.0' || HOST === '::';
 const lanUrl = lanMode
   ? `http://<IP-de-esta-PC>:${port}`

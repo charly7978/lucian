@@ -686,6 +686,7 @@ function maybeShowWelcome() {
     </div>`,
     footer: `<button class="btn btn-ghost" type="button" data-action="welcome-demo">${demoLoaded ? 'Seguir con los ejemplos' : 'Ver con datos de ejemplo'}</button>
       <button class="btn btn-ghost" type="button" data-action="welcome-skip">Solo mirar</button>
+      ${products ? '' : `<button class="btn btn-ghost" type="button" data-action="sync-galapa">Importar catálogo GALAPA</button>`}
       <button class="btn btn-primary" type="button" data-action="welcome-start">${products ? 'Cargar otra lámpara' : 'Cargar mi primera lámpara'}</button>`,
   });
 }
@@ -1299,7 +1300,7 @@ function renderProductRoute(id) {
         ${margin !== null ? `<span class="fact">${icon('chart')} margen ${margin}%</span>` : ''}
         ${product.capacityPerWeek ? `<span class="fact">${icon('clock')} ${product.capacityPerWeek}/sem</span>` : ''}
         ${product.leadTimeDays ? `<span class="fact">${icon('truck')} ${product.leadTimeDays} días</span>` : ''}
-        ${product.paymentLink ? `<a class="fact" href="${attr(safeUrl(product.paymentLink))}" target="_blank" rel="noopener noreferrer">${icon('dollar')} Link de pago</a>` : ''}
+        ${product.storefront?.available && safeUrl(product.storefront.url) ? `<a class="fact" href="${attr(safeUrl(product.storefront.url))}" target="_blank" rel="noopener noreferrer">${icon('globe')} Comprar en GALAPA</a>` : !product.storefront && safeUrl(product.paymentLink) ? `<a class="fact" href="${attr(safeUrl(product.paymentLink))}" target="_blank" rel="noopener noreferrer">${icon('dollar')} Link de pago</a>` : ''}
       </div>
       ${product.description ? `<p style="margin-top:10px;color:var(--ink-2);font-size:13.5px;line-height:1.6">${esc(product.description)}</p>` : ''}
       ${product.notes ? `<p class="tiny muted" style="margin-top:8px">${esc(product.notes)}</p>` : ''}
@@ -1343,19 +1344,22 @@ function bindProductRoute(id) { /* sin filtros adicionales */ }
 
 function renderProducts() {
   const products = arr(S.state.products);
+  const forSale = products.filter(p => !p.demo && p.status === 'listo' && p.storefront?.available).length;
   return `<div class="page-head">
     <div class="page-head-main">
       <p class="eyebrow">Catálogo</p>
       <h2 class="page-title">Tus lámparas, con todo lo que el equipo necesita.</h2>
-      <p class="page-sub">Foto, precio, código y notas. Cuanto mejor el punto de partida, mejor el plan que devuelve el equipo.</p>
+      <p class="page-sub">${forSale ? `${forSale} ${forSale === 1 ? 'artículo disponible' : 'artículos disponibles'} en GALAPA.` : 'Administrá las fichas y sincronizá los artículos publicados en GALAPA.'}</p>
     </div>
     <div class="page-actions">
       <button class="btn btn-ghost" type="button" data-action="import-products">${icon('upload')} Importar CSV</button>
+      <button class="btn btn-ghost" type="button" data-action="sync-galapa">${icon('refresh')} Sincronizar GALAPA</button>
+      <a class="btn btn-primary" href="https://galapa.com.ar/productos" target="_blank" rel="noopener noreferrer">${icon('globe')} Ver tienda GALAPA</a>
       <button class="btn btn-accent" type="button" data-action="offer-kit" ${products.length ? '' : 'disabled'}>${icon('spark')} Crear kit de ventas</button>
-      <button class="btn btn-primary" type="button" data-action="public-catalog" ${products.length ? '' : 'disabled'}>${icon('globe')} Exportar sitio de venta</button>
+      <button class="btn btn-ghost" type="button" data-action="public-catalog" ${products.length ? '' : 'disabled'}>${icon('download')} Exportar catálogo</button>
       <button class="btn btn-ghost" type="button" data-action="campaign-catalog" ${products.length ? '' : 'disabled'}>${icon('spark')} Campaña de catálogo</button>
       <button class="btn btn-accent" type="button" data-action="quote-catalog" ${products.length ? '' : 'disabled'}>${icon('dollar')} Cotizar todo el catálogo</button>
-      ${S.ui.selectedProducts.length ? `<button class="btn btn-accent" type="button" data-action="campaign-selected">${icon('spark')} Poner a la venta (${S.ui.selectedProducts.length})</button>` : ''}
+      ${S.ui.selectedProducts.length ? `<button class="btn btn-accent" type="button" data-action="campaign-selected">${icon('spark')} Campaña para seleccionados (${S.ui.selectedProducts.length})</button>` : ''}
       <button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Nueva lámpara</button>
     </div>
     <input type="file" id="product-import-input" accept=".csv,text/csv" hidden>
@@ -1404,11 +1408,11 @@ function productCard(product) {
   const margin = product.price > 0 && product.cost > 0 ? Math.round(((product.price - product.cost) / product.price) * 100) : null;
   return `<article class="product-card ${S.ui.selectedProducts.includes(product.id) ? 'selected' : ''}">
     <div class="product-photo">
-      <label class="product-select" title="Seleccionar para poner a la venta">
+      <label class="product-select" title="Seleccionar ${attr(product.name)}">
         <input type="checkbox" data-action="toggle-product-select" data-id="${attr(product.id)}" ${S.ui.selectedProducts.includes(product.id) ? 'checked' : ''}>
       </label>
       ${productImage(product)}
-      <div class="product-badges">${demoBadge(product.demo)}<span class="badge ${product.status === 'listo' ? 'badge-ok' : product.status === 'archivado' ? 'badge-neutral' : 'badge-warn'}">${esc(product.status || 'borrador')}</span></div>
+      <div class="product-badges">${demoBadge(product.demo)}<span class="badge ${product.status === 'listo' ? 'badge-ok' : product.status === 'archivado' ? 'badge-neutral' : 'badge-warn'}">${esc(product.status === 'listo' && product.storefront?.available ? 'En venta' : product.storefront && !product.storefront.available && product.status !== 'archivado' ? 'Sin disponibilidad' : product.status || 'borrador')}</span></div>
       <span class="product-price-tag">${esc(money(product.price, product.currency))}</span>
     </div>
     <div class="product-body">
@@ -1421,6 +1425,7 @@ function productCard(product) {
         ${margin !== null ? `<span>${icon('chart')} margen ${margin}%</span>` : ''}
       </div>
       <div class="product-actions">
+        ${product.status === 'listo' && product.storefront?.available && safeUrl(product.storefront.url) ? `<a class="btn btn-primary btn-sm" href="${attr(safeUrl(product.storefront.url))}" target="_blank" rel="noopener noreferrer">${icon('globe')} Ver en tienda</a>` : ''}
         <button class="btn btn-ghost btn-sm" type="button" data-action="edit-product" data-id="${attr(product.id)}">${icon('edit')} Editar</button>
         <button class="btn btn-ghost btn-sm" type="button" data-action="offer-kit" data-id="${attr(product.id)}">${icon('spark')} Oferta</button>
         <a class="btn btn-primary btn-sm" href="#/misiones/nueva?product=${encodeURIComponent(product.id)}">${icon('spark')} Misión</a>
@@ -1479,6 +1484,22 @@ function chooseProducts(mode) {
     S.ui.selectedProducts = [...new Set([...S.ui.selectedProducts, ...values.map(item => item.id)])];
   }
   render();
+}
+
+async function syncGalapaUI(button) {
+  button.disabled = true;
+  try {
+    const result = await api('/api/products/sync-galapa', { method: 'POST' });
+    closeModal(true);
+    await loadState({ silent: true, render: false });
+    navigate('#/productos');
+    const pending = result.missingPhotos.length ? ` Fotos pendientes: ${result.missingPhotos.join(', ')}.` : '';
+    toast(`GALAPA: ${result.active} de ${result.total} artículos a la venta.${pending}`, pending ? 'info' : 'ok');
+  } catch (error) {
+    toast(error.message || 'No se pudo sincronizar con GALAPA.', 'error');
+  } finally {
+    button.disabled = false;
+  }
 }
 
 function openBulkProductModal() {
@@ -1712,30 +1733,30 @@ async function launchCampaign() {
   } catch (error) { toast(error.message || 'No se pudo iniciar la campaña.', 'error'); }
 }
 
-/* V7: catálogo real exportable sin pago ni publicación automáticos. */
 function openPublicCatalogModal() {
-  const products = arr(S.state?.products).filter(p => p && p.id && !p.demo && p.status !== 'archivado');
+  const products = arr(S.state?.products).filter(p => p && p.id && !p.demo && p.status !== 'archivado' && (!p.storefront || p.storefront.available));
   if (!products.length) { toast('No hay lámparas activas para compartir.', 'error'); return; }
   const selected = arr(S.ui.selectedProducts).filter(id => products.some(p => p.id === id));
   const ids = new Set(selected.length ? selected : products.map(p => p.id));
   const brand = S.state.brand || {};
+  const onlyGalapa = products.every(p => p.storefront);
   openModal({
-    title: 'Crear catálogo público para recibir consultas',
-    subtitle: 'Genera un sitio estático con fichas, fotos y enlaces de consulta. No publica ni cobra automáticamente.',
+    title: 'Exportar catálogo para compradores',
+    subtitle: 'Descargá fichas con fotos, precios y enlaces de compra en GALAPA o de consulta.',
     size: 'modal-lg',
     body: `<form id="public-catalog-form" class="form-grid" autocomplete="off">
-      <div class="field full"><label>Nombre comercial que verá el comprador</label><input class="input" name="brand" maxlength="65" value="${attr(brand.name || 'Lámparas de diseño')}" required></div>
+      <div class="field full"><label>Nombre comercial que verá el comprador</label><input class="input" name="brand" maxlength="65" value="${attr(onlyGalapa ? 'GALAPA' : brand.name || 'Lámparas de diseño')}" required></div>
       <div class="field full"><label>Presentación de la colección</label><textarea class="textarea" name="intro" rows="3" maxlength="380">${esc(brand.tagline || 'Conocé nuestras lámparas de diseño y consultá medidas, disponibilidad y entrega.')}</textarea></div>
       <div class="field"><label>WhatsApp comercial con código de país</label><input class="input" name="whatsapp" inputmode="tel" placeholder="54911XXXXXXXX" maxlength="30"><p class="field-hint">Solo números internacionales; el cliente te escribirá primero.</p></div>
       <div class="field"><label>Email público para recibir consultas</label><input class="input" type="email" name="email" maxlength="120" value="${attr(brand.email || '')}" placeholder="ventas@tudominio.com"></div>
       <div class="field full"><div class="between" style="gap:10px;flex-wrap:wrap"><b>Lámparas para incluir</b><span class="small muted">${products.length} activas</span></div>
         <div class="mt-2" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" type="button" data-action="public-catalog-all">Seleccionar todas</button><button class="btn btn-ghost btn-sm" type="button" data-action="public-catalog-none">Quitar selección</button></div>
         <div style="max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px">
-          ${products.map(p => `<label style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:7px 3px;border-bottom:1px solid var(--line)"><input type="checkbox" name="publicCatalogProduct" value="${attr(p.id)}" ${ids.has(p.id) ? 'checked' : ''}><span style="flex:1;min-width:180px">${esc(p.name)} · ${esc(money(p.price, p.currency))}${(!arr(p.photos).length || !(num(p.price)>0)) ? ' · <b style="color:var(--danger)">incompleta</b>' : ''}</span><input class="input" aria-label="Precio especial de ${attr(p.name)}" type="number" step="0.01" min="0.01" name="priceOverride__${attr(p.id)}" style="max-width:140px" placeholder="Precio especial"></label>`).join('')}
+          ${products.map(p => `<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:7px 3px;border-bottom:1px solid var(--line)"><label style="display:flex;gap:9px;align-items:center;flex:1;min-width:180px"><input type="checkbox" name="publicCatalogProduct" value="${attr(p.id)}" ${ids.has(p.id) ? 'checked' : ''}><span>${esc(p.name)} · ${esc(money(p.price, p.currency))}${(!arr(p.photos).length || !(num(p.price)>0)) ? ' · <b style="color:var(--danger)">incompleta</b>' : ''}</span></label>${p.storefront ? '<span class="small muted">Precio de GALAPA</span>' : `<input class="input" aria-label="Precio especial de ${attr(p.name)}" type="number" step="0.01" min="0.01" name="priceOverride__${attr(p.id)}" style="max-width:140px" placeholder="Precio especial">`}</div>`).join('')}
         </div>
         <p class="field-hint">Se excluyen automáticamente fichas sin precio positivo, sin foto válida o con fotografía ilegible. Ningún producto se elimina del catálogo privado.</p>
       </div>
-      <div class="field full"><p class="small muted"><b>Importante:</b> se descargará un ZIP de páginas HTML. Para que otras personas lo vean, después tenés que publicarlo en un hosting HTTPS o plataforma de ventas. El sitio genera consultas, no procesa pagos ni garantiza cumplimiento de Google Merchant.</p></div>
+      <div class="field full"><p class="small muted">El ZIP contiene un sitio HTML para publicar en un hosting HTTPS. Los artículos de GALAPA abren la tienda oficial para comprar.</p></div>
     </form>`,
     footer: `<button class="btn btn-ghost" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-primary" type="button" data-action="export-public-catalog">${icon('download')} Revisar y descargar sitio</button>`,
   });
@@ -1751,11 +1772,14 @@ async function exportPublicCatalogUI() {
   const priceOverrides={};
   for(const id of productIds){const value=String(fd.get(`priceOverride__${id}`)||'').trim();if(value)priceOverrides[id]=value;}
   const body = { brand: String(fd.get('brand')||'').trim(), intro: String(fd.get('intro')||'').trim(), whatsapp: String(fd.get('whatsapp')||'').trim(), email: String(fd.get('email')||'').trim(), productIds,priceOverrides,confirm: true };
-  if (!body.whatsapp && !body.email) { toast('Ingresá un WhatsApp o correo para recibir consultas.', 'error'); return; }
+  if (!body.whatsapp && !body.email && arr(S.state?.products).some(p => productIds.includes(p.id) && !p.storefront)) {
+    toast('Ingresá un WhatsApp o correo para las fichas sin compra en línea.', 'error');
+    return;
+  }
   const confirmed = await confirmAction({
     title: 'Exportar sitio comercial',
     message: `Seleccionaste ${productIds.length} lámparas; ${eligible.length} tienen al menos una foto y precio positivo. Se exportarán solo aquellas cuyas fotos puedan leerse.`,
-    details: `Se publicarán ${Object.keys(priceOverrides).length} precios especiales de esta colección sin modificar el catálogo original. Se incluyen fotografías, descripción, código, precio y contacto; nunca costos internos, claves ni datos de clientes. No publica anuncios ni cobra.`,
+    details: `El sitio incluirá ${Object.keys(priceOverrides).length} precios especiales. Los enlaces de compra llevan a la tienda GALAPA.`,
     confirmLabel: 'Descargar mi catálogo',
   });
   if (!confirmed) return;
@@ -6233,6 +6257,7 @@ async function handleAction(action, el) {
     case 'copy-offer-piece': await copyOfferPiece(el.dataset.part); return;
     case 'download-offer-kit': downloadOfferKit(); return;
     case 'import-products': $('#product-import-input')?.click(); return;
+    case 'sync-galapa': await syncGalapaUI(el); return;
     case 'campaign-catalog': openCampaignModal(); return;
     case 'campaign-selected': {
       if (!S.ui.selectedProducts.length) { toast('Seleccioná al menos un producto.', 'error'); return; }
