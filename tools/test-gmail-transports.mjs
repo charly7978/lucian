@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
-import { fetchNewEmails } from '../lib/imap.mjs';
+import { fetchNewEmails, readGmailInboxCursor } from '../lib/imap.mjs';
 import { sendWithGmailSmtp, testGmailSmtp } from '../lib/smtp.mjs';
 import { maskSettings } from '../lib/store.mjs';
 
@@ -62,5 +62,11 @@ const probe = fixture('* OK Gmail listo\r\n', command => `${command.split(' ')[0
 await fetchNewEmails({ user, appPassword, verifyOnly: true }, probe.connect);
 assert.equal(probe.commands.length, 2);
 assert.match(probe.commands[1], /EXAMINE INBOX/);
+const cursor = fixture('* OK Gmail listo\r\n', command => {
+  const tag = command.split(' ')[0];
+  return command.includes('EXAMINE') ? `* OK [UIDNEXT 1] Siguiente UID\r\n${tag} OK Ready\r\n` : `${tag} OK Ready\r\n`;
+}, { binary: true });
+assert.equal(await readGmailInboxCursor({ user, appPassword }, cursor.connect), 0);
+assert.equal(cursor.commands.length, 2, 'Leer el cursor no abre correos existentes');
 assert.notEqual(maskSettings({ email: { smtpPassword: appPassword } }).email.smtpPassword, appPassword);
 console.log('OK Gmail: autenticación SMTP realista, rechazo, envío, lectura IMAP por UID, UTF-8 y credencial enmascarada.');

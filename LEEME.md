@@ -35,7 +35,7 @@ Configurá en **Ajustes**:
 - **Inteligencia artificial**: clave de OpenAI / OpenRouter / Anthropic / Gemini / Groq / DeepSeek / Mistral, o una URL local de Ollama. Sin esto no hay agentes ni misiones reales: solo se puede simular en modo Demo. Las respuestas nunca se inventan ni se leen de un texto fijo.
 - **Búsqueda**: sin clave, Lucian consulta instancias públicas de SearXNG (y DuckDuckGo como último recurso). Esas instancias limitan consultas y pueden fallar: la app lo informa y no inventa resultados. Para misiones que tienen que vender en serio, configurá **Tavily / Brave / Serper** (tienen capa gratuita) o una **instancia SearXNG propia**.
 - **Hunter** (opcional): para enriquecer emails de compradores.
-- **Correo**: Gmail con contraseña de aplicación para SMTP y bandeja IMAP, o Resend con remitente verificado para envío. Desde **Ajustes → Correo**, guardá tu conexión y usá **Probar envío**. Con Gmail, **Probar bandeja** también autentica IMAP. El servidor donde corre Lucian necesita acceso a `smtp.gmail.com:465` e `imap.gmail.com:993`.
+- **Correo**: Gmail con contraseña de aplicación para SMTP y bandeja IMAP, o Resend con remitente verificado para envío. Desde **Ajustes → Correo**, guardá tu conexión y usá **Probar envío**. Con Gmail, **Probar bandeja** también autentica IMAP. Al conectar una cuenta por primera vez, Lucian recibe los mensajes nuevos desde ese momento. El servidor donde corre Lucian necesita acceso a `smtp.gmail.com:465` e `imap.gmail.com:993`.
 - **Notificaciones**: token de Telegram (recomendado, fácil) y/o WhatsApp Cloud API (requiere webhook público).
 - **Misiones**: mercados, tono, profundidad por defecto.
 

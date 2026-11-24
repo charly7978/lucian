@@ -32,7 +32,7 @@ import { Outbox } from './lib/outbox.mjs';
 import { productReadiness } from './lib/readiness.mjs';
 import { buildQuote, quoteLanguage, quoteNumber, quoteTotals, quoteTotalsMulti, roundMoney, validUntilDate } from './lib/quotes.mjs';
 import { createZip, readZip } from './lib/zip.mjs';
-import { fetchNewEmails } from './lib/imap.mjs';
+import { fetchNewEmails, readGmailInboxCursor } from './lib/imap.mjs';
 import { diagnoseConnections, testConnection, getAiFailoverState, resetAiFailover } from './lib/connections.mjs';
 import { startAutopilot, runAutopilot, getAutopilotState } from './lib/autopilot.mjs';
 import { verifyMetaSignature, hasDocumentedOptIn, resendIdempotencyKey } from './lib/security.mjs';
@@ -522,7 +522,15 @@ async function pollGmailInbox() {
   try {
     const meta = store.get('meta') || {};
     const account = crypto.createHash('sha256').update(email.smtpUser.trim().toLowerCase()).digest('hex');
-    const sinceUid = meta.gmailInboxAccount && meta.gmailInboxAccount !== account ? 0 : Number(meta.gmailLastUid) || 0;
+    const savedUid = Number(meta.gmailLastUid);
+    const hasCursor = meta.gmailLastUid != null && Number.isSafeInteger(savedUid) && savedUid >= 0
+      && (meta.gmailInboxAccount === account || (!meta.gmailInboxAccount && savedUid > 0));
+    if (!hasCursor) {
+      const gmailLastUid = await readGmailInboxCursor({ user: email.smtpUser, appPassword: email.smtpPassword });
+      await store.setMeta({ gmailInboxAccount: account, gmailLastUid });
+      return;
+    }
+    const sinceUid = savedUid;
     const messages = await fetchNewEmails({
       user: email.smtpUser,
       appPassword: email.smtpPassword,
