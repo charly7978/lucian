@@ -1357,7 +1357,7 @@ function renderProducts() {
       <a class="btn btn-primary" href="https://galapa.com.ar/productos" target="_blank" rel="noopener noreferrer">${icon('globe')} Ver tienda GALAPA</a>
       <button class="btn btn-accent" type="button" data-action="offer-kit" ${products.length ? '' : 'disabled'}>${icon('spark')} Crear kit de ventas</button>
       <button class="btn btn-ghost" type="button" data-action="public-catalog" ${products.length ? '' : 'disabled'}>${icon('download')} Exportar catálogo</button>
-      <button class="btn btn-ghost" type="button" data-action="campaign-catalog" ${products.length ? '' : 'disabled'}>${icon('spark')} Campaña de catálogo</button>
+      ${forSale ? `<button class="btn btn-accent" type="button" data-action="campaign-galapa">${icon('spark')} Campaña GALAPA (${forSale})</button>` : `<button class="btn btn-ghost" type="button" data-action="campaign-catalog" ${products.length ? '' : 'disabled'}>${icon('spark')} Campaña de catálogo</button>`}
       <button class="btn btn-accent" type="button" data-action="quote-catalog" ${products.length ? '' : 'disabled'}>${icon('dollar')} Cotizar todo el catálogo</button>
       ${S.ui.selectedProducts.length ? `<button class="btn btn-accent" type="button" data-action="campaign-selected">${icon('spark')} Campaña para seleccionados (${S.ui.selectedProducts.length})</button>` : ''}
       <button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Nueva lámpara</button>
@@ -1554,12 +1554,12 @@ async function applyBulkProductChanges() {
   } catch (error) { toast(error.message || 'No se pudo modificar el catálogo.', 'error'); }
 }
 
-function openCampaignModal(productIds = null) {
+function openCampaignModal(productIds = null, { galapa = false } = {}) {
   const selectedIds = [...new Set(productIds || S.ui.selectedProducts || [])];
   const products = arr(S.state.products).filter(p => p.status !== 'archivado' && (!selectedIds.length || selectedIds.includes(p.id)));
   if (!products.length) { toast('Primero elegí alguna lámpara activa.', 'error'); return; }
   const settings = S.state.settings || {};
-  const markets = arr(settings.mission?.markets).filter(Boolean);
+  const markets = galapa ? ['Argentina'] : arr(settings.mission?.markets).filter(Boolean);
   const goals = [
     ['conseguir-mayoristas','Conseguir mayoristas y tiendas de diseño'],
     ['vender-directo','Venta directa de piezas'],
@@ -1583,14 +1583,14 @@ function openCampaignModal(productIds = null) {
     <input type="number" class="input" name="campaignPrice:${attr(p.id)}" data-original="${attr(String(p.price || 0))}" data-currency="${attr(p.currency || 'USD')}" min="0.01" step="0.01" value="${attr(String(p.price || 0))}" aria-label="Precio de campaña de ${attr(p.name)}">
   </div>`).join('');
   openModal({
-    title: 'Diseñador de campañas comerciales · V5.2',
+    title: galapa ? 'Campaña del catálogo GALAPA' : 'Campaña de catálogo',
     subtitle: `${products.length} lámpara${products.length === 1 ? '' : 's'} seleccionada${products.length === 1 ? '' : 's'} · todas las aptas en cola · aprobación previa`,
     size: 'modal-lg',
     body: `<form id="campaign-form" autocomplete="off">
       <input type="hidden" name="productIds" value="${attr(products.map(p => p.id).join(','))}">
       <div class="form-section"><p class="form-section-title">1. Objetivo y compradores</p>
       <div class="form-grid">
-        <div class="field full"><label>Nombre de campaña</label><input class="input" name="name" maxlength="100" placeholder="Lámparas orgánicas · interioristas Buenos Aires"></div>
+        <div class="field full"><label>Nombre de campaña</label><input class="input" name="name" maxlength="100" ${galapa ? 'value="GALAPA · Catálogo completo"' : 'placeholder="Ej. Lámparas para interioristas de Buenos Aires"'}></div>
         <div class="field full"><label>Qué queremos conseguir</label><select class="select" name="goal">${goals.map(([v,l]) => `<option value="${attr(v)}">${esc(l)}</option>`).join('')}</select></div>
         <div class="field full"><label>Tipo de comprador ideal</label><select class="select" name="audience">${audiences.map(([v,l]) => `<option value="${attr(v)}">${esc(l)}</option>`).join('')}</select></div>
         <div class="field full"><label>Perfil detallado de comprador (opcional)</label><textarea class="textarea" name="buyerProfile" rows="2" placeholder="Ej.: estudio de arquitectura residencial, proyectos premium, compras por volumen a partir de 5 unidades"></textarea></div>
@@ -5026,7 +5026,7 @@ function settingsEmailHTML() {
       configured
         ? 'El proveedor de correo está configurado. El piloto envía borradores listos con permiso documentado y dentro del cupo.'
         : 'Modo manual: preparás el mensaje, descargás el .eml o lo copiás, y lo enviás desde tu correo. Nada sale solo.',
-      testButton('resend', 'Probar Resend', 'send') + ` ${testButton('email', 'Revisar configuración', 'check')}`,
+      testButton('email', 'Probar envío', 'check') + (email.provider === 'gmail' ? ` ${testButton('inbox', 'Probar bandeja', 'mail')}` : ''),
     )}
     <div class="form-grid">
       <div class="field full"><label for="email-provider">Cómo se envían los correos</label><select class="select" id="email-provider" name="emailProvider">${EMAIL_PROVIDERS.map(([value, label]) => `<option value="${value}" ${email.provider === value ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select><p class="field-hint">Manual es la opción más segura para empezar. Resend requiere un dominio verificado. El webhook es para quien ya tiene Make, n8n o un servidor propio.</p></div>
@@ -5330,7 +5330,7 @@ function renderConnections() {
   ${S.autopilot ? `<div class="artifact-callout ok"><b>🤖 Piloto de conexiones activo</b>Revisa tus integraciones cada ${S.autopilot.intervalMinutes || 10} min, cambia de IA si hay fallos, reintenta y te avisa por Telegram. ${S.autopilot.actions?.length ? `Última acción: ${esc(S.autopilot.actions[0])}.` : 'Sin incidencias.'} <button class="btn btn-ghost btn-xs mt-2" type="button" data-action="autopilot-run">${icon('play')} Ejecutar ahora</button></div>` : ''}
 
   <section class="stat-grid">
-    ${statCard('Conexiones listas', `${okCount}/${conns.length}`, 'check', 'funcionando', '', '')}
+    ${statCard('Conexiones configuradas', `${okCount}/${conns.length}`, 'check', '', '', '')}
     ${statCard('IA de respaldo', fo.fallbackActive ? 'Activa' : 'En espera', 'spark', fo.fallbackActive ? 'cambió de proveedor' : ' lista para activarse', '', fo.fallbackActive ? 'warm' : '')}
   </section>
 
@@ -5343,7 +5343,7 @@ function renderConnections() {
           <b style="font-size:13px">${esc(c.name)}</b>
           <div class="tiny muted">${esc(c.detail || '')}</div>
         </div>
-        <span class="badge badge-${c.ok ? 'ok' : 'warn'}">${c.ok ? 'Listo' : 'Pendiente'}</span>
+        <span class="badge badge-${c.ok ? 'ok' : 'warn'}">${c.ok ? 'Configurada' : 'Pendiente'}</span>
         <button class="btn btn-ghost btn-xs" type="button" data-action="connection-test" data-id="${attr(c.id)}">${icon('refresh')} Probar</button>
       </div>`).join('')}
     </div>
@@ -6259,6 +6259,12 @@ async function handleAction(action, el) {
     case 'import-products': $('#product-import-input')?.click(); return;
     case 'sync-galapa': await syncGalapaUI(el); return;
     case 'campaign-catalog': openCampaignModal(); return;
+    case 'campaign-galapa': {
+      const ids = arr(S.state.products).filter(p => !p.demo && p.status === 'listo' && p.storefront?.available).map(p => p.id);
+      if (!ids.length) { toast('Sincronizá GALAPA para cargar los artículos disponibles.', 'error'); return; }
+      openCampaignModal(ids, { galapa: true });
+      return;
+    }
     case 'campaign-selected': {
       if (!S.ui.selectedProducts.length) { toast('Seleccioná al menos un producto.', 'error'); return; }
       openCampaignModal(S.ui.selectedProducts);

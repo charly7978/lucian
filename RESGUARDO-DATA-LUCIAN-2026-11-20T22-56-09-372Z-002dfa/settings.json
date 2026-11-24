@@ -36,7 +36,7 @@
   },
   "ai": {
     "provider": "pollinations",
-    "apiKey": "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",
+    "apiKey": "",
     "baseUrl": "https://text.pollinations.ai/openai",
     "model": "openai-fast",
     "visionModel": "",
@@ -53,7 +53,7 @@
     "cacheHours": 24
   },
   "hunter": {
-    "apiKey": "792887c9fe6d7eb5a5070229d5578321b7b69a6b",
+    "apiKey": "",
     "enabled": true
   },
   "autopilot": {
@@ -72,9 +72,9 @@
   },
   "email": {
     "provider": "gmail",
-    "resendKey": "re_VJzBBC2s_Ac41J5BvUWhaunP7aEexEGNM",
+    "resendKey": "",
     "smtpUser": "charlyameghino@gmail.com",
-    "smtpPassword": "jtlezoybsgnzevwl",
+    "smtpPassword": "",
     "from": "Lucian <charlyameghino@gmail.com>",
     "replyTo": "charlyameghino@gmail.com",
     "footer": "",
@@ -92,7 +92,7 @@
     "paused": false,
     "telegram": {
       "enabled": true,
-      "token": "9290322689:AAGwOxYN6OQhkfWKEBFQx-NBOD2sq6GKCVs",
+      "token": "",
       "chatId": "5144879357",
       "digestHour": 9
     },
@@ -101,7 +101,7 @@
       "token": "",
       "phoneNumberId": "",
       "to": "",
-      "verifyToken": "lmb-4a75509a-8d1",
+      "verifyToken": "",
       "apiVersion": "v23.0"
     },
     "events": {

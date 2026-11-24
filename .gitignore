@@ -1,6 +1,10 @@
 # Datos locales (contienen claves y misiones)
 data/
 lumbre/data/
+/.env
+/.env.*
+!/.env.example
+/RESGUARDO-*/
 
 # Estado de herramientas de IA y editores
 .andromity/

@@ -521,7 +521,8 @@ async function pollGmailInbox() {
   imapBusy = true;
   try {
     const meta = store.get('meta') || {};
-    const sinceUid = Number(meta.gmailLastUid) || 0;
+    const account = crypto.createHash('sha256').update(email.smtpUser.trim().toLowerCase()).digest('hex');
+    const sinceUid = meta.gmailInboxAccount && meta.gmailInboxAccount !== account ? 0 : Number(meta.gmailLastUid) || 0;
     const messages = await fetchNewEmails({
       user: email.smtpUser,
       appPassword: email.smtpPassword,
@@ -530,6 +531,8 @@ async function pollGmailInbox() {
     });
     let maxUid = sinceUid;
     for (const msg of messages) {
+      const current = store.settings().email;
+      if (current.provider !== 'gmail' || current.smtpUser !== email.smtpUser || current.imapEnabled === false) break;
       try {
         await processInboundEmail({
           from: msg.from,
@@ -544,9 +547,12 @@ async function pollGmailInbox() {
         if (msg.uid > maxUid) maxUid = msg.uid;
       } catch (error) {
         console.error('[Lucian] No se pudo procesar un correo entrante:', error.message);
+        break;
       }
     }
-    if (maxUid !== sinceUid) await store.setMeta({ gmailLastUid: maxUid });
+    if (maxUid !== sinceUid || meta.gmailInboxAccount !== account) {
+      await store.setMeta({ gmailInboxAccount: account, gmailLastUid: maxUid });
+    }
   } catch (error) {
     console.error('[Lucian] IMAP Gmail:', error.message);
   } finally {
@@ -556,9 +562,10 @@ async function pollGmailInbox() {
 
 function startImapPolling() {
   if (imapTimer) clearInterval(imapTimer);
+  imapTimer = null;
   const settings = store.settings();
   const email = settings.email || {};
-  if (email.provider !== 'gmail' || !email.smtpUser || !email.smtpPassword) return;
+  if (email.provider !== 'gmail' || !email.smtpUser || !email.smtpPassword || email.imapEnabled === false) return;
   const minutes = Math.max(1, Math.min(60, Number(email.imapPollMinutes) || 2));
   imapTimer = setInterval(pollGmailInbox, minutes * 60 * 1000);
   imapTimer.unref?.();
@@ -982,6 +989,7 @@ async function createMission(body, { b2bFocus = false } = {}) {
   // modelo produciría pasos vacíos o inventados. La simulación solo se elige
   // de forma explícita.
   const demo = requestedMode === 'demo';
+  if (!demo && product.demo) throw new HttpError(400, 'Esta ficha de ejemplo solo está disponible en modo Demo.');
   if (!demo && !isAIReady(settings)) {
     throw new HttpError(400, 'Los agentes solo funcionan con un modelo de IA. Configurá un proveedor en Ajustes → Inteligencia artificial, o elegí explícitamente el modo Demo para simular.');
   }
@@ -1089,6 +1097,7 @@ function previewCatalogCampaign(body = {}) {
     const missing = productReadiness(campaignProduct).missing.filter(x => x.critical).map(x => x.label);
     const reasons = [];
     if (p.status === 'archivado') reasons.push('archivada');
+    if (mode === 'real' && p.demo) reasons.push('ficha de ejemplo');
     if (active.has(p.id)) reasons.push('misión ya activa');
     if (mode === 'real' && missing.length) reasons.push(...missing);
     if (mode === 'real' && body.skipRecent === true && recent.has(p.id)) reasons.push('prospectada en los últimos 7 días');
@@ -1167,6 +1176,10 @@ async function createCampaign(body = {}) {
 
   for (let index = 0; index < pool.length; index += 1) {
     const product = pool[index];
+    if (!demo && product.demo) {
+      skipped.push({ productId: product.id, name: product.name, reason: 'ficha de ejemplo' });
+      continue;
+    }
     if (active.has(product.id) || currentRecent.has(product.id)) {
       skipped.push({ productId: product.id, name: product.name, reason: active.has(product.id) ? 'ya tiene una misión en curso' : 'ya fue prospectada en los últimos 7 días' });
       continue;
@@ -1211,6 +1224,7 @@ async function createCampaign(body = {}) {
           priceOverrides.has(product.id)
             ? `Precio aprobado exclusivamente para esta campaña: ${priceOverrides.get(product.id)} ${product.currency || 'USD'}. No modificar el precio general del catálogo.`
             : 'Usar el precio y la moneda del catálogo; no inventar descuentos.',
+          galapaProductUrl(product.storefront?.url) ? `Ficha oficial de compra: ${product.storefront.url}` : '',
           'No inventar plazos, disponibilidad, homologaciones ni datos de contacto.',
           'Todos los compradores y borradores necesitan revisión humana. No enviar automáticamente.',
         ].join('\n'),
@@ -2096,6 +2110,7 @@ async function restoreBackup(buffer) {
   const migrated = await migrateLegacyDrafts(store);
   const sanitized = await sanitizeLegacyThreads(store);
   notifier.refresh();
+  startImapPolling();
   return {
     products: store.get('products').length,
     missions: store.get('missions').length,
@@ -2138,9 +2153,14 @@ async function runIntegrationTest(target) {
     return { email: account.email || '', plan: account.plan_name || account.plan || '', credito: account.credits ?? null };
   }
   if (target === 'email') {
-    const from = settings.email?.from || '';
-    if (!from) throw new Error('Falta configurar el remitente.');
-    return { remitente: from, proveedor: settings.email.provider, limite: dailyLimitInfo(settings, store.get('threads')) };
+    const result = await testConnection('email', settings);
+    if (!result.ok) throw new Error(result.detail);
+    return { detalle: result.detail, proveedor: settings.email.provider, limite: dailyLimitInfo(settings, store.get('threads')) };
+  }
+  if (target === 'inbox') {
+    const result = await testConnection('inbox', settings);
+    if (!result.ok) throw new Error(result.detail);
+    return { detalle: result.detail };
   }
   throw new HttpError(400, 'Prueba desconocida.');
 }
@@ -2428,11 +2448,13 @@ async function handle(req, res) {
       if (!validation.ok) throw new HttpError(400, validation.errors.join(' '));
     }
     const prevToken = store.settings()?.notify?.telegram?.token;
-    const settings = await store.saveSettings(body);
-    if (body?.notify?.telegram?.token && body.notify.telegram.token !== prevToken) {
+    await store.saveSettings(body);
+    const settings = store.settings();
+    if (settings.notify?.telegram?.token !== prevToken) {
       await store.setMeta({ telegramOffset: 0 });
     }
     notifier.refresh();
+    if (body.email) startImapPolling();
     await store.activity('settings', 'Ajustes actualizados.');
     if (settings.mission?.scheduledB2B === true && settings.autopilot?.enabled !== false) {
       await autopilotDeps.runScheduledB2B().catch(error => console.error('[Piloto B2B]', error.message));
@@ -2489,6 +2511,8 @@ async function handle(req, res) {
   if (pathname === '/api/settings/secret/clear' && method === 'POST') {
     const body = await readJson(req);
     await store.clearSecret(asString(body.path));
+    if (body.path === 'email.smtpPassword') startImapPolling();
+    if (body.path === 'notify.telegram.token') notifier.refresh();
     json(res, 200, { settings: maskSettings(store.settings()), flags: settingsFlags(store.settings()) });
     return;
   }
