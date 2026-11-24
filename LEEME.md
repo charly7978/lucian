@@ -145,13 +145,13 @@ Telegram es un **segundo canal para hablar con el mismo equipo de 12 agentes**, 
 
 La tienda pública es [galapa.com.ar/productos](https://galapa.com.ar/productos). Cada artículo disponible lleva a su ficha de Tiendanube para comprar y elegir el medio de pago y el envío.
 
-Lucian carga el catálogo de GALAPA al iniciar por primera vez con el catálogo local vacío. Para actualizar precios y disponibilidad, usá **Productos → Sincronizar GALAPA**. También podés sincronizar por terminal con:
+Lucian carga el catálogo de GALAPA al iniciar por primera vez con el catálogo local vacío o al detectar fichas de una importación anterior de GALAPA. Para actualizar precios y disponibilidad, usá **Productos → Sincronizar GALAPA**. Con Lucian cerrado, también podés sincronizar por terminal con:
 
 ```powershell
 node tools/import-galapa.mjs --apply
 ```
 
-La sincronización marca como **En venta** los artículos con disponibilidad en la tienda. Conserva los identificadores, códigos, costos, notas y fotos existentes, junto con las demás fichas y el historial comercial. Sin `--apply` muestra únicamente el conteo de la tienda. Si usás `LUCIAN_DATA_DIR`, la carga se hace desde el botón o el comando.
+La sincronización marca como **En venta** los artículos con disponibilidad en la tienda. Conserva los identificadores, códigos, costos, notas y fotos existentes, junto con las demás fichas y el historial comercial. Sin `--apply` muestra únicamente el conteo de la tienda. Si usás `LUCIAN_DATA_DIR` para un catálogo nuevo, la carga se hace desde el botón o el comando.
 
 **Productos → Exportar catálogo** permite descargar un sitio con enlaces de compra y los precios de la última sincronización. Si lo publicás en otro hosting, volvé a exportarlo al cambiar precios o disponibilidad en GALAPA.
 

@@ -47,7 +47,7 @@ import { campaignPriceMap, campaignProductView } from './lib/campaign-pricing.mj
 import { buildCampaignBoard } from './lib/campaign-board.mjs';
 import { buildOfferKit, buildBulkOfferRows, buildChannelReadiness } from './lib/sales-offers.mjs';
 import { buildPublicCatalog } from './lib/public-catalog.mjs';
-import { syncGalapaCatalog } from './lib/galapa-catalog.mjs';
+import { galapaProductUrl, syncGalapaCatalog } from './lib/galapa-catalog.mjs';
 
 import { obtainResendDeliveryReport, applyResendDeliveryReport } from './lib/resend-delivery.mjs';
 
@@ -3645,7 +3645,12 @@ for (let attempt = 0; attempt < 8; attempt += 1) {
 }
 
 const url = `http://localhost:${port}`;
-if (!process.env.LUCIAN_DATA_DIR && !store.get('products').length && !store.get('meta').galapaInitialized) {
+const localProducts = store.get('products');
+const firstGalapaSync = !store.get('meta').galapaInitialized && (
+  (!process.env.LUCIAN_DATA_DIR && !localProducts.length)
+  || localProducts.some(product => !product.demo && !product.storefront && galapaProductUrl(product.paymentLink))
+);
+if (firstGalapaSync) {
   syncStorefront().catch(error => console.warn(`[GALAPA] Importación inicial pendiente: ${error.message}`));
 }
 const lanMode = HOST === '0.0.0.0' || HOST === '::';
