@@ -3,6 +3,8 @@
    Vanilla JS, sin dependencias. Estado local + API del servidor.
    ============================================================ */
 
+import { DEFAULT_CATALOG_FILTERS, catalogFilterOptions, filterCatalog } from './catalog-filters.mjs';
+
 /* ─────────────────────────────────────────────────────────────
    1. Constantes de dominio
    ───────────────────────────────────────────────────────────── */
@@ -291,8 +293,7 @@ const S = {
   latestPlan: null,
   wizard: null,
   ui: {
-    productQuery: '',
-    productStatus: 'todos',
+    productFilters: { ...DEFAULT_CATALOG_FILTERS },
     selectedProducts: [],
     inboxFilter: 'todos',
     inboxQuery: '',
@@ -1344,11 +1345,18 @@ function bindProductRoute(id) { /* sin filtros adicionales */ }
 
 function renderProducts() {
   const products = arr(S.state.products);
+  const productIds = new Set(products.map(product => product.id));
+  S.ui.selectedProducts = S.ui.selectedProducts.filter(id => productIds.has(id));
   const forSale = products.filter(p => !p.demo && p.status === 'listo' && p.storefront?.available).length;
+  const options = catalogFilterOptions(products);
+  const filters = S.ui.productFilters;
+  if (!options.categories.some(([value]) => filters.category === value)) filters.category = '';
+  if (!options.currencies.includes(filters.currency)) filters.currency = '';
+  const result = filterCatalog(products, filters, S.ui.selectedProducts);
   return `<div class="page-head">
     <div class="page-head-main">
       <p class="eyebrow">Catálogo</p>
-      <h2 class="page-title">Tus lámparas, con todo lo que el equipo necesita.</h2>
+      <h2 class="page-title">Productos</h2>
       <p class="page-sub">${forSale ? `${forSale} ${forSale === 1 ? 'artículo disponible' : 'artículos disponibles'} en GALAPA.` : 'Administrá las fichas y sincronizá los artículos publicados en GALAPA.'}</p>
     </div>
     <div class="page-actions">
@@ -1366,22 +1374,15 @@ function renderProducts() {
   </div>
 
   ${products.length ? `
-  <div class="filterbar">
-    <div class="search-field">${icon('search')}<input class="input" id="product-search" type="search" placeholder="Buscar por nombre, código o material”¦" value="${attr(S.ui.productQuery)}"></div>
-    <select class="select" id="product-status-filter" style="max-width:180px">
-      ${[['todos', 'Todos los estados'], ['listo', 'Listos'], ['borrador', 'Borradores'], ['archivado', 'Archivados']].map(([v, l]) => `<option value="${v}" ${S.ui.productStatus === v ? 'selected' : ''}>${l}</option>`).join('')}
-    </select>
-    <span class="small muted" id="product-count">${products.length} ${products.length === 1 ? 'producto' : 'productos'}</span>
-  </div>
-  <div class="card card-pad" style="margin-bottom:14px;display:flex;gap:9px;align-items:center;flex-wrap:wrap">
-    <b class="small">${S.ui.selectedProducts.length} seleccionadas</b>
-    <button class="btn btn-ghost btn-sm" type="button" data-action="select-visible-products">Seleccionar visibles (${filteredProducts().length})</button>
-    <button class="btn btn-ghost btn-sm" type="button" data-action="select-all-products">Seleccionar las ${products.length}</button>
-    <button class="btn btn-ghost btn-sm" type="button" data-action="clear-products-selection">Quitar selección</button>
+  ${renderProductFilters(options, products.length, result)}
+  <div class="card catalog-selection">
+    <b class="small" id="product-selection-count" aria-live="polite">${esc(productSelectionLabel(products, result.visible))}</b>
+    <button class="btn btn-ghost btn-sm" type="button" data-action="select-visible-products" ${result.priceError || !result.visible.length ? 'disabled' : ''}>Seleccionar visibles (${result.visible.length})</button>
+    <button class="btn btn-ghost btn-sm" type="button" data-action="select-all-products">Seleccionar catálogo completo</button>
+    <button class="btn btn-ghost btn-sm" type="button" data-action="clear-products-selection" ${S.ui.selectedProducts.length ? '' : 'disabled'}>Quitar selección</button>
     ${S.ui.selectedProducts.length ? `<button class="btn btn-primary btn-sm" type="button" data-action="bulk-edit-products">Editar precios / archivar (${S.ui.selectedProducts.length})</button>` : ''}
-    <span class="tiny muted">Podés elegir una, varias o todas; no se ejecutan cambios sin vista previa.</span>
   </div>
-  <div class="product-grid" id="product-grid">${productGridHTML()}</div>` : emptyState({
+  <div class="product-grid" id="product-grid">${productGridHTML(result.visible)}</div>` : emptyState({
     iconName: 'box',
     title: 'Todavía no hay lámparas',
     text: 'Cargá tu primera pieza con una foto, un precio y dos o tres notas. El equipo se encarga de convertir eso en un plan comercial.',
@@ -1389,18 +1390,41 @@ function renderProducts() {
   })}`;
 }
 
-function filteredProducts() {
-  const q = S.ui.productQuery.trim().toLowerCase();
-  return arr(S.state.products).filter((p) => {
-    if (S.ui.productStatus !== 'todos' && p.status !== S.ui.productStatus) return false;
-    if (!q) return true;
-    return [p.name, p.code, p.category, p.materials, p.description, p.notes].some((v) => String(v || '').toLowerCase().includes(q));
-  });
+function renderProductFilters(options, total, result) {
+  const values = S.ui.productFilters;
+  const select = (name, label, choices) => `<label class="field"><span>${label}</span><select class="select" name="${name}">${choices.map(([value, text]) => `<option value="${attr(value)}" ${values[name] === value ? 'selected' : ''}>${esc(text)}</option>`).join('')}</select></label>`;
+  const singleCurrency = options.currencies.length === 1 ? ` (${options.currencies[0]})` : '';
+  const price = (name, label) => `<label class="field"><span>${esc(label + singleCurrency)}</span><input class="input" type="number" inputmode="decimal" name="${name}" value="${attr(values[name])}" min="0" step="any" aria-describedby="product-price-error" aria-invalid="${Boolean(result.priceError)}"></label>`;
+  return `<form class="card catalog-filters" id="product-filters" aria-label="Filtros del catálogo">
+    <div class="catalog-filter-fields">
+      <label class="field catalog-search"><span>Buscar</span><input class="input" id="product-search" name="query" type="search" placeholder="Nombre, código o material" value="${attr(values.query)}"></label>
+      ${select('category', 'Categoría', [['', 'Todas'], ...options.categories])}
+      ${select('availability', 'Disponibilidad en GALAPA', [['', 'Toda'], ['available', 'Disponible'], ['unavailable', 'Sin disponibilidad'], ['unlinked', 'Sin vínculo a GALAPA']])}
+      ${select('status', 'Estado en Lucian', [['', 'Todos'], ['listo', 'Listos'], ['borrador', 'Borradores'], ['archivado', 'Archivados']])}
+      ${select('details', 'Datos de venta', [['', 'Todos'], ['ready', 'Con precio y foto'], ['missing', 'Falta precio o foto'], ['no-price', 'Sin precio'], ['no-photo', 'Sin foto']])}
+      ${options.currencies.length > 1 ? select('currency', 'Moneda', [['', 'Todas'], ...options.currencies.map(code => [code, code])]) : ''}
+      ${price('minPrice', 'Precio desde')}
+      ${price('maxPrice', 'Precio hasta')}
+      ${select('sort', 'Ordenar', [['', 'Orden del catálogo'], ['name', 'Nombre (A–Z)'], ['price-low', 'Menor precio por moneda'], ['price-high', 'Mayor precio por moneda']])}
+    </div>
+    <p class="field-error" id="product-price-error" role="status" ${result.priceError ? '' : 'hidden'}>${esc(result.priceError)}</p>
+    <div class="catalog-filter-footer">
+      <label class="catalog-selected-only"><input type="checkbox" name="selectedOnly" ${values.selectedOnly ? 'checked' : ''}> Solo seleccionadas</label>
+      <span class="small muted" id="product-count" aria-live="polite">${result.visible.length} de ${total} productos</span>
+      <button class="btn btn-ghost btn-sm" type="button" data-action="reset-product-filters">Limpiar filtros</button>
+    </div>
+  </form>`;
 }
 
-function productGridHTML() {
-  const products = filteredProducts();
-  if (!products.length) return `<div class="card card-pad" style="grid-column:1/-1;text-align:center;color:var(--muted)">No hay productos que coincidan con el filtro.</div>`;
+function productSelectionLabel(products, visible) {
+  const selected = new Set(S.ui.selectedProducts);
+  const total = products.filter(product => selected.has(product.id)).length;
+  const outside = total - visible.filter(product => selected.has(product.id)).length;
+  return `${total} ${total === 1 ? 'seleccionada' : 'seleccionadas'}${outside ? ` · ${outside} fuera del filtro` : ''}`;
+}
+
+function productGridHTML(products) {
+  if (!products.length) return `<div class="card card-pad catalog-empty">No hay productos que coincidan con los filtros.</div>`;
   return products.map(productCard).join('');
 }
 
@@ -1409,7 +1433,7 @@ function productCard(product) {
   return `<article class="product-card ${S.ui.selectedProducts.includes(product.id) ? 'selected' : ''}">
     <div class="product-photo">
       <label class="product-select" title="Seleccionar ${attr(product.name)}">
-        <input type="checkbox" data-action="toggle-product-select" data-id="${attr(product.id)}" ${S.ui.selectedProducts.includes(product.id) ? 'checked' : ''}>
+        <input type="checkbox" aria-label="Seleccionar ${attr(product.name)}" data-action="toggle-product-select" data-id="${attr(product.id)}" ${S.ui.selectedProducts.includes(product.id) ? 'checked' : ''}>
       </label>
       ${productImage(product)}
       <div class="product-badges">${demoBadge(product.demo)}<span class="badge ${product.status === 'listo' ? 'badge-ok' : product.status === 'archivado' ? 'badge-neutral' : 'badge-warn'}">${esc(product.status === 'listo' && product.storefront?.available ? 'En venta' : product.storefront && !product.storefront.available && product.status !== 'archivado' ? 'Sin disponibilidad' : product.status || 'borrador')}</span></div>
@@ -1435,24 +1459,27 @@ function productCard(product) {
 }
 
 function bindProducts() {
-  const search = $('#product-search');
-  if (search) {
-    search.addEventListener('input', () => {
-      S.ui.productQuery = search.value;
-      $('#product-grid').innerHTML = productGridHTML();
-      const count = $('#product-count');
-      if (count) count.textContent = `${filteredProducts().length} ${filteredProducts().length === 1 ? 'producto' : 'productos'}`;
-    });
-  }
-  const filter = $('#product-status-filter');
-  if (filter) {
-    filter.addEventListener('change', () => {
-      S.ui.productStatus = filter.value;
-      $('#product-grid').innerHTML = productGridHTML();
-      const count = $('#product-count');
-      if (count) count.textContent = `${filteredProducts().length} ${filteredProducts().length === 1 ? 'producto' : 'productos'}`;
-    });
-  }
+  const filters = $('#product-filters');
+  filters?.addEventListener('submit', event => event.preventDefault());
+  filters?.addEventListener('input', event => {
+    const field = event.target;
+    if (!Object.hasOwn(DEFAULT_CATALOG_FILTERS, field.name)) return;
+    S.ui.productFilters[field.name] = field.type === 'checkbox' ? field.checked : field.validity?.badInput ? 'inválido' : field.value;
+    const products = arr(S.state.products);
+    const { visible, priceError } = filterCatalog(products, S.ui.productFilters, S.ui.selectedProducts);
+    $('#product-grid').innerHTML = productGridHTML(visible);
+    $('#product-count').textContent = `${visible.length} de ${products.length} productos`;
+    $('#product-selection-count').textContent = productSelectionLabel(products, visible);
+    const selectVisible = $('[data-action="select-visible-products"]');
+    selectVisible.textContent = `Seleccionar visibles (${visible.length})`;
+    selectVisible.disabled = Boolean(priceError || !visible.length);
+    const error = $('#product-price-error');
+    error.textContent = priceError;
+    error.hidden = !priceError;
+    for (const input of $$('[aria-describedby="product-price-error"]', filters)) {
+      input.setAttribute('aria-invalid', String(Boolean(priceError)));
+    }
+  });
   const importInput = $('#product-import-input');
   if (importInput) {
     importInput.addEventListener('change', async () => {
@@ -1480,10 +1507,16 @@ function bindProducts() {
 function chooseProducts(mode) {
   if (mode === 'clear') S.ui.selectedProducts = [];
   else {
-    const values = mode === 'all' ? arr(S.state.products) : filteredProducts();
+    const all = arr(S.state.products);
+    const { visible, priceError } = filterCatalog(all, S.ui.productFilters, S.ui.selectedProducts);
+    if (mode === 'visible' && priceError) return;
+    const values = mode === 'all' ? all : visible;
     S.ui.selectedProducts = [...new Set([...S.ui.selectedProducts, ...values.map(item => item.id)])];
   }
   render();
+  const action = { clear: 'clear-products-selection', all: 'select-all-products', visible: 'select-visible-products' }[mode];
+  const button = $(`[data-action="${action}"]:enabled`);
+  (button || $('#product-search'))?.focus();
 }
 
 async function syncGalapaUI(button) {
@@ -6273,6 +6306,11 @@ async function handleAction(action, el) {
     case 'select-visible-products': chooseProducts('visible'); return;
     case 'select-all-products': chooseProducts('all'); return;
     case 'clear-products-selection': chooseProducts('clear'); return;
+    case 'reset-product-filters':
+      S.ui.productFilters = { ...DEFAULT_CATALOG_FILTERS };
+      render();
+      $('#product-search')?.focus();
+      return;
     case 'bulk-edit-products': openBulkProductModal(); return;
     case 'bulk-apply-products': await applyBulkProductChanges(); return;
     case 'toggle-product-select': {
@@ -6281,7 +6319,11 @@ async function handleAction(action, el) {
       const idx = S.ui.selectedProducts.indexOf(id);
       if (idx === -1) S.ui.selectedProducts.push(id);
       else S.ui.selectedProducts.splice(idx, 1);
-      if (S.route.view === 'productos' && !S.route.id) render();
+      if (S.route.view === 'productos' && !S.route.id) {
+        render();
+        ($(`[data-action="toggle-product-select"][data-id="${CSS.escape(id)}"]`)
+          || $('#product-filters [name="selectedOnly"]'))?.focus();
+      }
       return;
     }
     case 'launch-campaign': await launchCampaign(); return;

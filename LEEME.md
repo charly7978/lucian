@@ -159,6 +159,8 @@ La sincronización marca como **En venta** los artículos con disponibilidad en 
 
 **Productos → Campaña GALAPA** preselecciona los artículos disponibles y propone Argentina como mercado. Con IA y búsqueda conectadas, Lucian prepara los mensajes para los compradores que pueda verificar. Revisá los borradores desde **Bandeja** y los avisos de misión desde Telegram.
 
+En **Productos**, combiná categoría, disponibilidad, estado, datos de venta, moneda y rango de precios. **Seleccionar visibles** agrega los resultados a tu selección y el contador muestra si quedaron fichas seleccionadas fuera del filtro. Podés usar esa selección para campañas o ediciones masivas.
+
 Si se reinicia Lucian, las campañas supervisadas recuperan la cola y retoman los pasos que estaban pendientes. Los borradores conservan la revisión previa al envío.
 
 ## Enviar 200 por día por dominio

@@ -881,6 +881,39 @@ table { border-collapse: collapse; width: 100%; }
   gap: 10px;
   margin-bottom: 18px;
 }
+.catalog-filters {
+  display: grid;
+  gap: .75rem;
+  padding: 1rem;
+  margin-bottom: .75rem;
+}
+.catalog-filter-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: .75rem;
+}
+.catalog-filter-fields .field > span {
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 650;
+}
+.catalog-filter-footer, .catalog-selection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem .75rem;
+}
+.catalog-filter-footer {
+  border-top: 1px solid var(--line);
+  padding-top: .5rem;
+}
+.catalog-filter-footer [data-action="reset-product-filters"] { margin-inline-start: auto; }
+.catalog-selected-only { display: flex; gap: .5rem; align-items: center; font-size: 13px; }
+.catalog-selection { padding: .5rem .75rem; margin-bottom: 1rem; }
+.catalog-empty { grid-column: 1 / -1; text-align: center; color: var(--muted); }
+@media (min-width: 640px) {
+  .catalog-search { grid-column: span 2; }
+}
 .search-field {
   position: relative;
   flex: 1 1 230px;
