@@ -5248,9 +5248,12 @@ async function testConnectionUI(id, button) {
   const original = button?.innerHTML;
   if (button) { button.disabled = true; button.innerHTML = `${icon('refresh', 'spin')} Probando…`; }
   try {
-    const result = await api('/api/connections/test', { method: 'POST', body: { id } });
+    const result = id === 'search'
+      ? await api('/api/settings/test', { method: 'POST', body: { target: 'search' } })
+      : await api('/api/connections/test', { method: 'POST', body: { id } });
     const label = S.connections?.connections?.find((connection) => connection.id === id)?.name || id;
-    toast(`${label} · ${result.detail}`, result.ok ? 'ok' : 'error');
+    const detail = result.detail || result.error || `${num(result.result?.resultados)} resultados en ${result.result?.motor || 'la web'}`;
+    toast(`${label} · ${detail}`, result.ok ? 'ok' : 'error');
     await fetchConnections();
   } catch (error) {
     toast(error.message, 'error');

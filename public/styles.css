@@ -300,7 +300,7 @@ details[open] > .disclosure-label .icon { transform: rotate(180deg); }
 .footer a:hover { color: var(--amber-deep); text-decoration: underline; }
 .footer-sep { opacity: .5; }
 
-.mobile-menu, .mobile-nav, .mobile-drawer { display: none; }
+.topbar .mobile-menu, .mobile-nav, .mobile-drawer { display: none; }
 
 /* ============================================================
    Arranque
@@ -1651,7 +1651,7 @@ input[type="range"] { accent-color: var(--amber-deep); flex: 1; }
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; }
   .sidebar { display: none; }
-  .mobile-menu { display: inline-grid; }
+  .topbar .mobile-menu { display: inline-grid; }
   .mobile-nav {
     display: flex;
     position: fixed;
