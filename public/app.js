@@ -516,32 +516,36 @@ function navigate(hash) {
 }
 
 const VIEW_META = {
-  panel: ['Hoy', 'Tu centro de operaciones'],
-  productos: ['Productos', 'Tu catálogo'],
-  producto: ['Lámpara', 'La ruta completa del producto'],
-  misiones: ['Misiones', 'El equipo en acción'],
-  ventas: ['Ventas', 'Lo vendido y lo que está por cerrar'],
-  bandeja: ['Conversaciones', 'Compradores reales, no leads'],
-  contenido: ['Contenido', 'Narrativa y redes'],
-  equipo: ['Equipo', `${AGENTS.length} especialistas`],
-  mercados: ['Mercados', 'Inteligencia acumulada'],
-  conexiones: ['Conexiones', 'Estado de tus integraciones'],
-  ajustes: ['Ajustes', 'Tu sistema'],
+  panel: 'Inicio',
+  productos: 'Productos',
+  misiones: 'Campañas',
+  ventas: 'Ventas',
+  bandeja: 'Bandeja',
+  contenido: 'Contenido',
+  equipo: 'Equipo',
+  mercados: 'Mercados',
+  conexiones: 'Conexiones',
+  ajustes: 'Ajustes',
 };
 
 function updateShell() {
   if (!S.state) return;
   const { view } = S.route;
-  $$('.nav-item, .mobile-nav a, .mobile-drawer-panel > a').forEach((el) => {
-    const target = el.dataset.nav;
-    el.classList.toggle('active', target === view || (view === 'bandeja' && target === 'bandeja'));
+  $$('[data-nav]').forEach((el) => {
+    const active = el.dataset.nav === view;
+    if (active && !el.classList.contains('active')) {
+      const tools = el.closest('.nav-more');
+      if (tools) tools.open = true;
+    }
+    el.classList.toggle('active', active);
+    if (active) el.setAttribute('aria-current', 'page');
+    else el.removeAttribute('aria-current');
   });
   const counts = S.state.counts || {};
   const countMap = {
     products: counts.products,
     activeMissions: counts.activeMissions,
-    drafts: counts.drafts,
-    contentIdeas: counts.contentIdeas,
+    drafts: arr(S.state.threads).filter((thread) => !thread.demo && (thread.awaitingReply || num(thread.reviewCount) > 0)).length,
     sold: S.state.sales?.sold || 0,
   };
   $$('[data-count]').forEach((el) => {
@@ -551,25 +555,8 @@ function updateShell() {
     el.classList.toggle('hot', el.dataset.count === 'drafts' && value > 0);
   });
 
-  const modeCard = $('#mode-card');
-  const title = $('#mode-title');
-  const sub = $('#mode-sub');
-  if (S.state.flags?.ai) {
-    modeCard?.classList.add('live');
-    if (title) title.textContent = 'IA conectada';
-    if (sub) sub.textContent = `${S.state.flags.aiProvider || 'proveedor'} · las misiones corren con datos reales.`;
-  } else {
-    modeCard?.classList.remove('live');
-    if (title) title.textContent = 'Modo demo';
-    if (sub) sub.textContent = 'Configurá una IA para trabajar con datos reales.';
-  }
-
-  const meta = VIEW_META[view] || VIEW_META.panel;
-  $('#topbar-title').textContent = meta[0];
-  $('#topbar-eyebrow').textContent = meta[1];
+  $('#topbar-title').textContent = VIEW_META[view] || VIEW_META.panel;
   $('#footer-version').textContent = `v${S.state.app?.version || '1.0'}`;
-  const quickDemo = $('#quick-demo');
-  if (quickDemo) quickDemo.style.display = S.state.counts?.products ? 'none' : '';
 
   if (view === 'misiones' && S.route.id && S.route.id !== 'nueva' && S.mission?.mission?.name) {
     $('#topbar-title').textContent = S.mission.mission.name;
@@ -577,7 +564,7 @@ function updateShell() {
   if (view === 'bandeja' && S.route.id && S.thread?.thread?.contact?.company) {
     $('#topbar-title').textContent = S.thread.thread.contact.company;
   }
-  if (view === 'producto' && S.route.id) {
+  if (view === 'productos' && S.route.id) {
     const product = arr(S.state.products).find((p) => p.id === S.route.id);
     if (product) $('#topbar-title').textContent = product.name;
   }
@@ -588,6 +575,13 @@ function render({ live = false } = {}) {
   const next = routeParts();
   const changedView = next.view !== S.route.view;
   const navigated = changedView || next.id !== S.route.id;
+  const inboxFilter = next.query.get('filtro');
+  if (next.view === 'bandeja' && inboxFilter && (changedView || inboxFilter !== S.route.query?.get('filtro'))) {
+    if (INBOX_FILTERS.some(([value]) => value === inboxFilter)) {
+      S.ui.inboxFilter = inboxFilter;
+      S.ui.inboxQuery = '';
+    }
+  }
   S.route = next;
   if (next.view !== 'misiones' || !next.id || next.id === 'nueva') disconnectMission();
   updateShell();
@@ -632,6 +626,7 @@ function render({ live = false } = {}) {
   if (elapsed) updateMissionElapsed(elapsed);
   if (changedView) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   bindView(next);
+  if (changedView && next.view === 'conexiones') fetchConnections();
 }
 
 function scheduleAutoRefresh() {
@@ -652,9 +647,10 @@ function scheduleAutoRefresh() {
   }
 }
 
-function maybeShowWelcome() {
+function maybeShowWelcome({ force = false } = {}) {
   const onboarding = S.state?.onboarding;
   if (!onboarding || onboarding.done || S.ui.welcomeDismissed || S.ui.onboardingShown) return;
+  if (!force && arr(S.state.products).some((product) => !product.demo)) return;
   if (document.body.classList.contains('modal-open')) return;
   S.ui.onboardingShown = true;
   const products = S.state.counts?.products || 0;
@@ -696,261 +692,75 @@ function maybeShowWelcome() {
    8. Panel
    ───────────────────────────────────────────────────────────── */
 
-function panelSalesHTML() {
-  const sales = S.state.sales || {};
-  const won = arr(sales.won);
-  if (!won.length) {
-    return `<section class="section">
-      <div class="section-head">
-        <div><h2 class="section-title">Ventas</h2><p class="section-sub">Todavía no hay ventas cerradas. Cuando aceptes una cotización o marques una conversación como Ganada, aparece acá.</p></div>
-        <a class="section-link" href="#/ventas">Ver ventas ${icon('arrowRight')}</a>
-      </div>
-      <div class="card card-pad" style="text-align:center">
-        <p class="muted small">Las cotizaciones abiertas y los ingresos los ves en la vista de Ventas. Aceptar una cotización no confirma un pago. Los cobros se registran manualmente.</p>
-      </div>
-    </section>`;
-  }
-  return `<section class="section">
-    <div class="section-head">
-      <div><h2 class="section-title">Ventas recientes</h2><p class="section-sub">${won.length} venta${won.length === 1 ? '' : 's'} · ${money(sales.revenue || 0, sales.currency)} informados manualmente (no conciliados).</p></div>
-      <a class="section-link" href="#/ventas">Ver todas ${icon('arrowRight')}</a>
-    </div>
-    <div class="card" style="padding:6px 0">
-      ${won.slice(0, 4).map((w) => `<a class="thread-row" href="#/bandeja/${encodeURIComponent(w.threadId)}" style="text-decoration:none">
-        <div class="thread-row-top">
-          <span class="avatar sm">${esc(initials(w.company || '?'))}</span>
-          <div style="min-width:0;flex:1">
-            <div class="thread-company">${esc(w.company)} <span class="badge badge-ok">Ganada</span></div>
-            <div class="thread-person">${esc(w.productName)}${w.quoteNumber ? ` · ${esc(w.quoteNumber)}` : ''}</div>
-          </div>
-          <b style="color:var(--ok)">${esc(money(w.total, w.currency))}</b>
-        </div>
-        <div class="thread-preview">${esc(w.acceptedAt ? `Cerrada ${relTime(w.acceptedAt)}` : 'Venta cerrada')}</div>
-      </a>`).join('')}
-    </div>
-  </section>`;
-}
-
-function panelDecisionsHTML() {
-  const threads = arr(S.state.threads);
-  const reviewThreads = threads.filter((t) => num(t.reviewCount) > 0).slice(0, 5);
-  const inbound = threads.filter((t) => t.awaitingReply).slice(0, 4);
-  if (!reviewThreads.length && !inbound.length) return '';
-  return `<section class="section" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px">
-    ${reviewThreads.length ? `<div>
-      <div class="section-head"><div><h2 class="section-title">Para aprobar</h2><p class="section-sub">${reviewThreads.length} conversación${reviewThreads.length === 1 ? '' : 'es'} con borradores por revisar.</p></div><a class="section-link" href="#/bandeja?filtro=revisar">Ver todas ${icon('arrowRight')}</a></div>
-      <div class="card" style="padding:6px 0">
-        ${reviewThreads.map((t) => `<a class="thread-row" href="#/bandeja/${encodeURIComponent(t.id)}" style="text-decoration:none">
-          <div class="thread-row-top">
-            <span class="avatar sm">${esc(initials(t.contact?.company || '?'))}</span>
-            <div style="min-width:0;flex:1">
-              <div class="thread-company">${esc(t.contact?.company || 'Contacto')} <span class="badge badge-warn">${t.reviewCount} por aprobar</span></div>
-              <div class="thread-person">${esc(truncate(t.draftPreview?.subject || t.nextStep || 'Borrador pendiente', 60))}</div>
-            </div>
-            <span class="thread-score">${esc(t.score || 0)}</span>
-          </div>
-        </a>`).join('')}
-      </div>
-    </div>` : '<div></div>'}
-    ${inbound.length ? `<div>
-      <div class="section-head"><div><h2 class="section-title">Te escribieron</h2><p class="section-sub">${inbound.length} respuesta${inbound.length === 1 ? '' : 's'} por leer.</p></div><a class="section-link" href="#/bandeja?filtro=responder">Ver todas ${icon('arrowRight')}</a></div>
-      <div class="card" style="padding:6px 0">
-        ${inbound.map((t) => `<a class="thread-row" href="#/bandeja/${encodeURIComponent(t.id)}" style="text-decoration:none">
-          <div class="thread-row-top">
-            <span class="avatar sm">${esc(initials(t.contact?.company || '?'))}</span>
-            <div style="min-width:0;flex:1">
-              <div class="thread-company">${esc(t.contact?.company || 'Contacto')} ${t.demo ? '<span class="badge badge-demo">Ejemplo</span>' : '<span class="badge badge-ok">Real</span>'}</div>
-              <div class="thread-person">${esc(truncate(t.lastMessage?.body || '', 70))}</div>
-            </div>
-            <span class="thread-score">${esc(t.score || 0)}</span>
-          </div>
-        </a>`).join('')}
-      </div>
-    </div>` : '<div></div>'}
-  </section>`;
+function campaignProgressHTML(campaign) {
+  const stages = [
+    [campaign.total, 'Total'],
+    [campaign.active, 'En curso'],
+    [campaign.queued, 'En cola'],
+    [campaign.completed, 'Terminadas'],
+    [campaign.warnings, 'Con avisos', 'warn'],
+    [campaign.failed, 'Con error', 'danger'],
+    [campaign.cancelled, 'Canceladas'],
+  ];
+  return `<dl class="campaign-progress" aria-label="Estado de las misiones">${stages
+    .filter(([count, label]) => count || label === 'Total')
+    .map(([count, label, tone]) => `<div class="${tone ? `is-${tone}` : ''}"><dt>${label}</dt><dd>${num(count)}</dd></div>`)
+    .join('')}</dl>`;
 }
 
 function renderPanel() {
-  const s = S.state;
-  const brand = s.brand || {};
-  const counts = s.counts || {};
-  const active = arr(s.missions).find((m) => ['running', 'queued'].includes(m.status));
-  const products = arr(s.products);
-  const threads = arr(s.threads);
-  const hotThreads = [...threads].filter((t) => ['interesado', 'negociando', 'respondio'].includes(t.stage)).sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 4);
-  const latestMissions = [...arr(s.missions)].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)).slice(0, 3);
-  const activeProduct = active ? products.find((p) => p.id === active.productId) : null;
-  const hasProducts = products.length > 0;
-  const missingBrand = !brand.maker || (!brand.website && !brand.instagram) || !brand.email;
-  const onboardingDone = s.onboarding?.done;
-
-  const heroTitle = active
-    ? `El equipo está trabajando en <em>${esc(activeProduct?.name || active.name)}</em>.`
-    : hasProducts
-      ? `Buscá <em>compradores</em> para tu catálogo.`
-      : `Tu próxima venta empieza con <em>una foto</em>.`;
-  const heroSub = active
-    ? `La misión avanza paso a paso. Podés entrar a la sala, leer lo que produce cada especialista y cancelar si algo no te cierra.`
-    : hasProducts
-      ? `Lucian investiga el mercado, calcula aduanas y precios, busca compradores concretos y deja los mensajes listos para que los revises. Vos decidís qué se envía.`
-      : `Cargá una lámpara con sus fotos, precio y notas. El equipo arma el plan comercial completo: a quién venderle, a qué precio, con qué mensaje y qué contenido.`;
-
-  const onboardBanner = !onboardingDone
-    ? `<div class="onboard">
-        <div>
-          <h2>Poné Lucian a tu nombre</h2>
-          <p>Completá tu marca y tu correo para que los mensajes salgan con tu identidad, no con datos de ejemplo.</p>
-          <div class="onboard-steps">
-            <span class="onboard-step ${brand.name ? 'done' : ''}"><span class="num">${brand.name ? '✓' : '1'}</span> Nombre de marca</span>
-            <span class="onboard-step ${brand.maker ? 'done' : ''}"><span class="num">${brand.maker ? '✓' : '2'}</span> Quién está detrás</span>
-            <span class="onboard-step ${brand.email ? 'done' : ''}"><span class="num">${brand.email ? '✓' : '3'}</span> Correo de contacto</span>
-          </div>
-        </div>
-        <div class="onboard-actions"><a class="btn btn-ghost btn-sm" href="#/ajustes?tab=marca">Completar marca</a></div>
-      </div>`
-    : missingBrand && (hasProducts || arr(s.missions).length)
-      ? `<div class="onboard">
-          <div><h2 class="card-title">Faltan datos de tu marca</h2><p>Sin tu nombre, ciudad y web, los mensajes pierden confianza. Se completan en un minuto.</p></div>
-          <div class="onboard-actions"><a class="btn btn-ghost btn-sm" href="#/ajustes?tab=marca">Completar ahora</a></div>
-        </div>`
-      : '';
+  const { brand, flags, settings } = S.state;
+  const products = arr(S.state.products).filter((product) => !product.demo);
+  const available = products.filter((product) => product.status === 'listo' && product.storefront?.available).length;
+  const threads = arr(S.state.threads).filter((thread) => !thread.demo);
+  const drafts = threads.reduce((total, thread) => total + num(thread.reviewCount), 0);
+  const replies = threads.filter((thread) => thread.awaitingReply).length;
+  const sales = num(S.state.sales?.sold);
+  const campaigns = arr(S.state.campaigns).filter((campaign) => !campaign.demo);
+  const campaign = campaigns.find((item) => item.active || item.queued) || campaigns[0];
+  const mission = arr(S.state.missions).find((item) => !item.demo && ['running', 'queued'].includes(item.status));
+  const campaignUrl = campaign ? `#/misiones?campaign=${encodeURIComponent(campaign.id)}` : '';
+  const missingBrand = !brand?.maker || (!brand.website && !brand.instagram) || !brand.email;
+  const channels = [
+    [settings?.email?.provider === 'gmail' ? 'Gmail' : 'Correo', flags?.email],
+    ['Telegram', flags?.telegram],
+    ['IA', flags?.ai, flags?.aiProvider === 'ollama' ? 'Local configurada' : 'Configurada'],
+  ];
+  const stats = [
+    ['Artículos en venta', available, 'box', '#/productos'],
+    ['Borradores por aprobar', drafts, 'mail', '#/bandeja?filtro=revisar'],
+    ['Conversaciones por responder', replies, 'message', '#/bandeja?filtro=responder'],
+    ['Ventas registradas', sales, 'dollar', '#/ventas'],
+  ];
 
   return `
-    ${onboardBanner}
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="hero-kicker"><span class="dot"></span>${esc(brand.name || 'Lucian')} · ${esc(brand.city || 'atelier digital')}</span>
-        <h2 class="hero-title">${heroTitle}</h2>
-        <p class="hero-sub">${heroSub}</p>
-        <div class="hero-actions">
-          ${active
-            ? `<a class="btn btn-accent" href="#/misiones/${encodeURIComponent(active.id)}">${icon('play')} Entrar a la sala</a>`
-            : hasProducts
-              ? `<a class="btn btn-accent" href="#/misiones/nueva">${icon('spark')} Lanzar una misión</a>`
-              : `<button class="btn btn-accent" type="button" data-action="new-product">${icon('plus')} Cargar mi primera lámpara</button>`}
-          ${hasProducts
-            ? `<a class="btn btn-ghost" href="#/productos">${icon('box')} Ver productos</a>`
-            : `<button class="btn btn-ghost" type="button" data-action="demo-seed">${icon('sun')} Ver con datos de ejemplo</button>`}
-        </div>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="hero-glow"></div>
-        <div class="hero-lamp">
-          <svg viewBox="0 0 200 230" fill="none">
-            <path d="M64 116h72L120 46H80L64 116Z" fill="#60a5fa"/>
-            <path d="M100 116v58" stroke="#3b82f6" stroke-width="3"/>
-            <path d="M77 178h46" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="100" cy="123" r="5" fill="#eff6ff"/>
-            <path d="M100 20v10M40 48l8 7M160 48l-8 7M30 116h9M161 116h9" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
-            <ellipse cx="100" cy="188" rx="72" ry="9" fill="#60a5fa" opacity=".08"/>
-          </svg>
-        </div>
-        <div class="hero-note">
-          <b>${active ? 'Misión en curso' : s.latestPlan ? (arr(s.latestPlan.mission?.warnings).length ? 'Plan con avisos' : 'Plan listo') : 'Siguiente paso'}</b>
-          ${active ? `${active.progress || 0}% completado · ${esc(active.currentStep || 'preparando')}` : s.latestPlan ? esc(truncate(s.latestPlan.decision || s.latestPlan.resumen, 90)) : 'Cargá una foto. El equipo hace el resto.'}
-        </div>
-      </div>
+    <section class="home-summary" aria-label="Resumen de ventas">
+      ${stats.map(([label, value, iconName, href]) => `
+        <a class="home-metric" href="${href}"><span>${icon(iconName)} ${label}</span><strong>${value}</strong></a>
+      `).join('')}
     </section>
-
-    <section class="stat-grid">
-      ${statCard('Por aprobar', counts.draftsToReview || 0, 'mail', counts.draftsToReview ? 'borradores esperando tu OK' : 'nada pendiente', '#/bandeja?filtro=revisar', counts.draftsToReview ? 'warm' : '')}
-      ${statCard('Te escribieron', counts.awaitingReply || 0, 'message', counts.awaitingReply ? 'respuestas por leer' : 'sin novedades', '#/bandeja?filtro=responder', counts.awaitingReply ? 'warm' : '')}
-      ${statCard('Ventas cerradas', S.state.sales?.sold || 0, 'dollar', S.state.sales?.revenue ? `${money(S.state.sales.revenue, S.state.sales.currency)} cobros informados` : 'todavía ninguna', '#/ventas', (S.state.sales?.sold || 0) ? 'warm' : '')}
-      ${statCard('Piezas de contenido', counts.content || 0, 'image', 'ideas, borradores y publicadas', '#/contenido')}
-      ${statCard(
-        'Capacidad de envío',
-        s.limits?.domains?.length ? (s.limits.capacity || 0) : (s.limits?.limit || 0),
-        'send',
-        s.limits?.domains?.length
-          ? `${s.limits.domains.length} dominio${s.limits.domains.length === 1 ? '' : 's'} · ${s.limits.used || 0} usados hoy`
-          : `${s.limits?.used || 0} usados hoy · 1 remitente`,
-        '#/ajustes?tab=correo',
-      )}
+    <section class="home-campaign panel" aria-labelledby="home-campaign-title">
+      <div class="home-heading">
+        <div>
+          <h2 class="section-title" id="home-campaign-title">${campaign ? `Campaña ${esc(campaign.name)}` : mission ? esc(mission.name) : 'Campañas'}</h2>
+          <p class="section-sub">${campaign ? `${campaign.buyersRecorded} ${campaign.buyersRecorded === 1 ? 'conversación vinculada' : 'conversaciones vinculadas'}` : mission ? 'Misión en curso' : 'Todavía no hay campañas reales.'}</p>
+        </div>
+        ${campaign ? `<a class="btn btn-primary" href="${campaignUrl}">Ver campaña ${icon('arrowRight')}</a>`
+          : mission ? `<a class="btn btn-primary" href="#/misiones/${encodeURIComponent(mission.id)}">Ver misión ${icon('arrowRight')}</a>`
+          : products.length ? '<a class="btn btn-primary" href="#/productos">Ir al catálogo</a>'
+          : `<button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Cargar un producto</button>`}
+      </div>
+      ${campaign ? campaignProgressHTML(campaign) : ''}
     </section>
-
-    ${panelSalesHTML()}
-    ${panelDecisionsHTML()}
-
-    <div class="section" style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.9fr);gap:22px">
-      <div>
-        <div class="section-head">
-          <div><h2 class="section-title">Misiones</h2><p class="section-sub">Cada misión es una pasada completa del equipo.</p></div>
-          <a class="section-link" href="#/misiones">Ver todas ${icon('arrowRight')}</a>
-        </div>
-        ${latestMissions.length
-          ? `<div class="mission-list">${latestMissions.map(missionCard).join('')}</div>`
-          : `<div class="card card-pad" style="text-align:center;padding:34px 20px">
-              <p style="font-family:var(--serif);font-size:22px">Todavía no hay misiones.</p>
-              <p class="muted small" style="margin-top:5px">Elegí una lámpara y contale al equipo qué querés conseguir.</p>
-              <div class="cluster" style="justify-content:center;margin-top:14px">
-                ${hasProducts ? `<a class="btn btn-primary btn-sm" href="#/misiones/nueva">${icon('spark')} Lanzar la primera</a>` : `<button class="btn btn-primary btn-sm" type="button" data-action="new-product">${icon('plus')} Cargar producto</button>`}
-              </div>
-            </div>`}
+    <section class="home-connections" aria-labelledby="home-connections-title">
+      <div class="home-heading">
+        <h2 class="section-title" id="home-connections-title">Conexiones</h2>
+        <a class="section-link" href="#/conexiones">Ver y probar ${icon('arrowRight')}</a>
       </div>
-      <div>
-        <div class="section-head">
-          <div><h2 class="section-title">Lo que pasó</h2><p class="section-sub">Sin ruido. Solo señales.</p></div>
-        </div>
-        <div class="card card-pad">
-          ${arr(s.activity).length ? `<div class="activity">${arr(s.activity).slice(0, 8).map(activityRow).join('')}</div>` : '<p class="muted small">Las novedades del equipo van a aparecer acá.</p>'}
-        </div>
-      </div>
-    </div>
-
-    <div class="section" style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);gap:22px">
-      <div>
-        <div class="section-head">
-          <div><h2 class="section-title">Bandeja prioritaria</h2><p class="section-sub">Personas que ya mostraron interés.</p></div>
-          <a class="section-link" href="#/bandeja">Abrir bandeja ${icon('arrowRight')}</a>
-        </div>
-        <div class="card" style="padding:6px 0">
-          ${hotThreads.length
-            ? hotThreads.map((t) => `
-              <a class="thread-row" href="#/bandeja/${encodeURIComponent(t.id)}" style="text-decoration:none">
-                <div class="thread-row-top">
-                  <span class="avatar sm">${esc(initials(t.contact?.company || '?'))}</span>
-                  <div style="min-width:0;flex:1">
-                    <div class="thread-company">${esc(t.contact?.company || 'Contacto')} ${stageBadge(t.stage)}</div>
-                    <div class="thread-person">${esc(t.contact?.name || '')}${t.contact?.country ? ` · ${esc(t.contact.country)}` : ''}</div>
-                  </div>
-                  <span class="thread-score">${t.score || 0}</span>
-                </div>
-                <div class="thread-preview ${t.lastMessage?.direction === 'in' ? 'in' : ''}">${esc(t.lastMessage?.body || t.draftPreview?.body || t.nextStep || 'Sin mensajes todavía.')}</div>
-              </a>`).join('')
-            : `<div style="padding:26px 20px;text-align:center"><p class="muted small">Todavía no hay conversaciones calientes. Las misiones crean la bandeja por vos.</p></div>`}
-        </div>
-      </div>
-      <div>
-        <div class="section-head">
-          <div><h2 class="section-title">${s.latestPlan ? 'El plan de 7 días' : 'Cómo trabaja el equipo'}</h2><p class="section-sub">${s.latestPlan ? 'Lo que dejó la última misión.' : `${AGENTS.length} especialistas, una sola persona al mando.`}</p></div>
-          ${s.latestPlan?.mission?.id ? `<a class="section-link" href="#/misiones/${encodeURIComponent(s.latestPlan.mission.id)}">Ver misión ${icon('arrowRight')}</a>` : ''}
-        </div>
-        ${s.latestPlan
-          ? `<div class="card card-pad">
-              <p class="eyebrow">Decisión</p>
-              <p style="font-family:var(--serif);font-size:20px;line-height:1.35;margin-top:6px">${esc(s.latestPlan.decision || s.latestPlan.resumen || '')}</p>
-              <div class="plan-days mt-3">
-                ${arr(s.latestPlan.plan_7_dias).slice(0, 3).map((d, i) => `<div class="plan-day"><span class="plan-num">${esc(d.dia || i + 1)}</span><div class="plan-content"><h3>${esc(d.accion || '')}</h3><div class="plan-meta"><span>${esc(d.tiempo || '')}</span></div></div></div>`).join('')}
-              </div>
-            </div>`
-          : `<div class="card card-pad">
-              <div class="flow">
-                ${['Brief', 'Mercado', 'Aduanas', 'Precios', 'Compradores', 'Mensajes', 'Contenido', 'Cumplimiento', 'Red team', 'Plan final'].map((step, i, list) => `<span class="flow-step"><b>${i + 1}</b>${step}</span>${i < list.length - 1 ? `<span class="flow-arrow">${icon('chevronRight')}</span>` : ''}`).join('')}
-              </div>
-              <p class="small muted" style="margin-top:8px;line-height:1.55">El equipo no escribe nada en tu nombre sin que lo revises. Cumplimiento y Abogado del Diablo están ahí para frenarte antes de una promesa riesgosa.</p>
-              <a class="btn btn-ghost btn-sm mt-3" href="#/equipo">${icon('users')} Conocer al equipo</a>
-            </div>`}
-      </div>
-    </div>
-
-    <section class="section">
-      <div class="section-head">
-        <div><h2 class="section-title">El equipo</h2><p class="section-sub">No es un chatbot. Son roles con un trabajo distinto.</p></div>
-        <a class="section-link" href="#/equipo">Ver los ${AGENTS.length} ${icon('arrowRight')}</a>
-      </div>
-      <div class="team-grid">
-        ${AGENTS.slice(0, 6).map(agentMiniCard).join('')}
-      </div>
+      <dl class="home-channel-list">
+        ${channels.map(([label, ready, status]) => `<div><dt>${label}</dt><dd><span class="status-dot ${ready ? 'ok' : 'muted'}"></span>${ready ? status || 'Configurado' : 'Sin configurar'}</dd></div>`).join('')}
+      </dl>
+      ${missingBrand ? '<p class="small"><a class="section-link" href="#/ajustes?tab=marca">Completar datos de la marca</a></p>' : ''}
     </section>`;
 }
 
@@ -988,24 +798,6 @@ function missionCard(mission) {
       ${icon('chevronRight')}
     </div>
   </a>`;
-}
-
-function activityRow(item) {
-  const iconName = item.type === 'reply' ? 'message' : item.type === 'mission' ? 'spark' : item.type === 'outreach' ? 'send' : item.type === 'content' ? 'image' : item.type === 'product' ? 'box' : 'sun';
-  return `<div class="activity-item">
-    <span class="activity-icon ${esc(item.type || '')}">${icon(iconName)}</span>
-    <div style="min-width:0"><div class="activity-text">${esc(item.text || '')}</div><div class="activity-time">${esc(relTime(item.at))} · ${esc(dateTime(item.at))}</div></div>
-  </div>`;
-}
-
-function agentMiniCard(agent) {
-  const usage = S.state?.usage?.[agent.id] || 0;
-  return `<div class="agent-card" style="--agent-tint:${agent.color}22">
-    <div class="agent-top">${agentAvatar(agent.id)}<div><div class="agent-name">${esc(agent.name)}</div><div class="agent-role">${esc(agent.role)}</div></div></div>
-    <p class="agent-bio">${esc(truncate(agent.bio, 130))}</p>
-    <div class="agent-focus">${agent.focus.map((f) => `<span>${esc(f)}</span>`).join('')}</div>
-    ${usage ? `<div class="agent-usage">${icon('spark')} <b>${usage}</b> participaciones</div>` : ''}
-  </div>`;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1353,22 +1145,25 @@ function renderProducts() {
   if (!options.categories.some(([value]) => filters.category === value)) filters.category = '';
   if (!options.currencies.includes(filters.currency)) filters.currency = '';
   const result = filterCatalog(products, filters, S.ui.selectedProducts);
-  return `<div class="page-head">
+  return `<div class="page-head catalog-head">
     <div class="page-head-main">
-      <p class="eyebrow">Catálogo</p>
-      <h2 class="page-title">Productos</h2>
+      <h2 class="page-title">Catálogo</h2>
       <p class="page-sub">${forSale ? `${forSale} ${forSale === 1 ? 'artículo disponible' : 'artículos disponibles'} en GALAPA.` : 'Administrá las fichas y sincronizá los artículos publicados en GALAPA.'}</p>
     </div>
     <div class="page-actions">
-      <button class="btn btn-ghost" type="button" data-action="import-products">${icon('upload')} Importar CSV</button>
-      <button class="btn btn-ghost" type="button" data-action="sync-galapa">${icon('refresh')} Sincronizar GALAPA</button>
-      <a class="btn btn-primary" href="https://galapa.com.ar/productos" target="_blank" rel="noopener noreferrer">${icon('globe')} Ver tienda GALAPA</a>
-      <button class="btn btn-accent" type="button" data-action="offer-kit" ${products.length ? '' : 'disabled'}>${icon('spark')} Crear kit de ventas</button>
-      <button class="btn btn-ghost" type="button" data-action="public-catalog" ${products.length ? '' : 'disabled'}>${icon('download')} Exportar catálogo</button>
-      ${forSale ? `<button class="btn btn-accent" type="button" data-action="campaign-galapa">${icon('spark')} Campaña GALAPA (${forSale})</button>` : `<button class="btn btn-ghost" type="button" data-action="campaign-catalog" ${products.length ? '' : 'disabled'}>${icon('spark')} Campaña de catálogo</button>`}
-      <button class="btn btn-accent" type="button" data-action="quote-catalog" ${products.length ? '' : 'disabled'}>${icon('dollar')} Cotizar todo el catálogo</button>
-      ${S.ui.selectedProducts.length ? `<button class="btn btn-accent" type="button" data-action="campaign-selected">${icon('spark')} Campaña para seleccionados (${S.ui.selectedProducts.length})</button>` : ''}
       <button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Nueva lámpara</button>
+      ${forSale ? `<button class="btn btn-ghost" type="button" data-action="campaign-galapa">${icon('spark')} Campaña GALAPA (${forSale})</button>` : products.length ? `<button class="btn btn-ghost" type="button" data-action="campaign-catalog">${icon('spark')} Campaña de catálogo</button>` : ''}
+      <details class="page-action-menu">
+        <summary class="btn btn-ghost disclosure-label">Más acciones ${icon('chevronDown')}</summary>
+        <div class="action-options">
+          <button class="btn btn-ghost" type="button" data-action="sync-galapa">${icon('refresh')} Sincronizar GALAPA</button>
+          <a class="btn btn-ghost" href="https://galapa.com.ar/productos" target="_blank" rel="noopener noreferrer">${icon('globe')} Ver tienda GALAPA</a>
+          <button class="btn btn-ghost" type="button" data-action="import-products">${icon('upload')} Importar CSV</button>
+          <button class="btn btn-ghost" type="button" data-action="public-catalog" ${products.length ? '' : 'disabled'}>${icon('download')} Exportar catálogo</button>
+          <button class="btn btn-ghost" type="button" data-action="offer-kit" ${products.length ? '' : 'disabled'}>${icon('spark')} Crear kit de ventas</button>
+          <button class="btn btn-ghost" type="button" data-action="quote-catalog" ${products.length ? '' : 'disabled'}>${icon('dollar')} Cotizar todo el catálogo</button>
+        </div>
+      </details>
     </div>
     <input type="file" id="product-import-input" accept=".csv,text/csv" hidden>
   </div>
@@ -1381,17 +1176,23 @@ function renderProducts() {
     <button class="btn btn-ghost btn-sm" type="button" data-action="select-all-products">Seleccionar catálogo completo</button>
     <button class="btn btn-ghost btn-sm" type="button" data-action="clear-products-selection" ${S.ui.selectedProducts.length ? '' : 'disabled'}>Quitar selección</button>
     ${S.ui.selectedProducts.length ? `<button class="btn btn-primary btn-sm" type="button" data-action="bulk-edit-products">Editar precios / archivar (${S.ui.selectedProducts.length})</button>` : ''}
+    ${S.ui.selectedProducts.length ? `<button class="btn btn-ghost btn-sm" type="button" data-action="campaign-selected">${icon('spark')} Campaña para seleccionados (${S.ui.selectedProducts.length})</button>` : ''}
   </div>
   <div class="product-grid" id="product-grid">${productGridHTML(result.visible)}</div>` : emptyState({
     iconName: 'box',
     title: 'Todavía no hay lámparas',
-    text: 'Cargá tu primera pieza con una foto, un precio y dos o tres notas. El equipo se encarga de convertir eso en un plan comercial.',
-    actions: `<button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Cargar mi primera lámpara</button><button class="btn btn-ghost" type="button" data-action="demo-seed">${icon('sun')} Ver con datos de ejemplo</button>`,
+    text: 'Agregá tu primera lámpara o sincronizá los artículos publicados en GALAPA.',
+    actions: `<button class="btn btn-ghost" type="button" data-action="demo-seed">${icon('sun')} Ver con datos de ejemplo</button>`,
   })}`;
+}
+
+function advancedFilterCount(values) {
+  return ['status', 'details', 'currency', 'minPrice', 'maxPrice', 'sort'].filter((name) => values[name]).length;
 }
 
 function renderProductFilters(options, total, result) {
   const values = S.ui.productFilters;
+  const advancedCount = advancedFilterCount(values);
   const select = (name, label, choices) => `<label class="field"><span>${label}</span><select class="select" name="${name}">${choices.map(([value, text]) => `<option value="${attr(value)}" ${values[name] === value ? 'selected' : ''}>${esc(text)}</option>`).join('')}</select></label>`;
   const singleCurrency = options.currencies.length === 1 ? ` (${options.currencies[0]})` : '';
   const price = (name, label) => `<label class="field"><span>${esc(label + singleCurrency)}</span><input class="input" type="number" inputmode="decimal" name="${name}" value="${attr(values[name])}" min="0" step="any" aria-describedby="product-price-error" aria-invalid="${Boolean(result.priceError)}"></label>`;
@@ -1400,13 +1201,18 @@ function renderProductFilters(options, total, result) {
       <label class="field catalog-search"><span>Buscar</span><input class="input" id="product-search" name="query" type="search" placeholder="Nombre, código o material" value="${attr(values.query)}"></label>
       ${select('category', 'Categoría', [['', 'Todas'], ...options.categories])}
       ${select('availability', 'Disponibilidad en GALAPA', [['', 'Toda'], ['available', 'Disponible'], ['unavailable', 'Sin disponibilidad'], ['unlinked', 'Sin vínculo a GALAPA']])}
-      ${select('status', 'Estado en Lucian', [['', 'Todos'], ['listo', 'Listos'], ['borrador', 'Borradores'], ['archivado', 'Archivados']])}
-      ${select('details', 'Datos de venta', [['', 'Todos'], ['ready', 'Con precio y foto'], ['missing', 'Falta precio o foto'], ['no-price', 'Sin precio'], ['no-photo', 'Sin foto']])}
-      ${options.currencies.length > 1 ? select('currency', 'Moneda', [['', 'Todas'], ...options.currencies.map(code => [code, code])]) : ''}
-      ${price('minPrice', 'Precio desde')}
-      ${price('maxPrice', 'Precio hasta')}
-      ${select('sort', 'Ordenar', [['', 'Orden del catálogo'], ['name', 'Nombre (A–Z)'], ['price-low', 'Menor precio por moneda'], ['price-high', 'Mayor precio por moneda']])}
     </div>
+    <details class="catalog-advanced" ${S.ui.productAdvancedOpen || result.priceError ? 'open' : ''}>
+      <summary class="btn btn-ghost btn-sm disclosure-label">Más filtros <span id="advanced-filter-count" ${advancedCount ? '' : 'hidden'}>${advancedCount ? `(${advancedCount})` : ''}</span>${icon('chevronDown')}</summary>
+      <div class="catalog-filter-fields">
+        ${select('status', 'Estado en Lucian', [['', 'Todos'], ['listo', 'Listos'], ['borrador', 'Borradores'], ['archivado', 'Archivados']])}
+        ${select('details', 'Datos de venta', [['', 'Todos'], ['ready', 'Con precio y foto'], ['missing', 'Falta precio o foto'], ['no-price', 'Sin precio'], ['no-photo', 'Sin foto']])}
+        ${options.currencies.length > 1 ? select('currency', 'Moneda', [['', 'Todas'], ...options.currencies.map(code => [code, code])]) : ''}
+        ${price('minPrice', 'Precio desde')}
+        ${price('maxPrice', 'Precio hasta')}
+        ${select('sort', 'Ordenar', [['', 'Orden del catálogo'], ['name', 'Nombre (A–Z)'], ['price-low', 'Menor precio por moneda'], ['price-high', 'Mayor precio por moneda']])}
+      </div>
+    </details>
     <p class="field-error" id="product-price-error" role="status" ${result.priceError ? '' : 'hidden'}>${esc(result.priceError)}</p>
     <div class="catalog-filter-footer">
       <label class="catalog-selected-only"><input type="checkbox" name="selectedOnly" ${values.selectedOnly ? 'checked' : ''}> Solo seleccionadas</label>
@@ -1460,11 +1266,18 @@ function productCard(product) {
 
 function bindProducts() {
   const filters = $('#product-filters');
+  $('.catalog-advanced', filters || document)?.addEventListener('toggle', (event) => {
+    S.ui.productAdvancedOpen = event.currentTarget.open;
+  });
   filters?.addEventListener('submit', event => event.preventDefault());
   filters?.addEventListener('input', event => {
     const field = event.target;
     if (!Object.hasOwn(DEFAULT_CATALOG_FILTERS, field.name)) return;
     S.ui.productFilters[field.name] = field.type === 'checkbox' ? field.checked : field.validity?.badInput ? 'inválido' : field.value;
+    const advancedCount = advancedFilterCount(S.ui.productFilters);
+    const advancedBadge = $('#advanced-filter-count');
+    advancedBadge.textContent = advancedCount ? `(${advancedCount})` : '';
+    advancedBadge.hidden = !advancedCount;
     const products = arr(S.state.products);
     const { visible, priceError } = filterCatalog(products, S.ui.productFilters, S.ui.selectedProducts);
     $('#product-grid').innerHTML = productGridHTML(visible);
@@ -2138,30 +1951,36 @@ async function saveProduct() {
 function renderMissions() {
   const campaignId = S.route.query?.get('campaign') || '';
   const missions = [...arr(S.state.missions)].filter(m => !campaignId || m.campaignId === campaignId).sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-  const campaignInfo = arr(S.state.campaigns).find(c => c.id === campaignId);
+  const campaigns = arr(S.state.campaigns);
+  const campaignInfo = campaigns.find(c => c.id === campaignId);
   return `<div class="page-head">
     <div class="page-head-main">
-      <p class="eyebrow">Sala de misión</p>
-      <h2 class="page-title">${campaignId ? `Campaña: ${esc(campaignInfo?.name || campaignId)}` : 'Un objetivo por misión. Sin dispersarse.'}</h2>
-      <p class="page-sub">Cada pasada del equipo investiga, calcula, escribe y se contradice antes de darte un plan. Podés seguirla en vivo o leer el resultado cuando termine.</p>
+      <h2 class="page-title">${campaignId ? esc(campaignInfo?.name || 'Campaña no encontrada') : 'Campañas y misiones'}</h2>
     </div>
     <div class="page-actions">
-      ${campaignId ? `<a class="btn btn-ghost" href="#/misiones">Ver todas las misiones</a>` : ''}
+      ${campaignId ? `<a class="btn btn-ghost" href="#/misiones">Volver a campañas</a>` : ''}
       ${arr(S.state.products).length ? `<button class="btn btn-ghost" type="button" data-action="campaign-catalog">${icon('spark')} Campaña de catálogo</button>` : ''}
-      ${!campaignId && missions.length ? `<button class="btn btn-danger" type="button" data-action="delete-all-missions">${icon('trash')} Borrar todas (${missions.length})</button>` : ''}
       <button class="btn btn-primary" type="button" data-action="new-mission">${icon('plus')} Nueva misión</button>
     </div>
   </div>
 
+  ${campaignInfo ? `<div class="panel mission-summary">${campaignProgressHTML(campaignInfo)}</div>` : ''}
+  ${!campaignId && campaigns.length ? `<section class="panel mission-summary" aria-label="Campañas guardadas">
+    <ul class="campaign-links">${campaigns.map((campaign) => `<li><a class="section-link" href="#/misiones?campaign=${encodeURIComponent(campaign.id)}">${esc(campaign.name)} ${icon('arrowRight')}</a> <span class="small muted">${campaign.total} ${campaign.total === 1 ? 'misión' : 'misiones'}</span> ${demoBadge(campaign.demo)}</li>`).join('')}</ul>
+  </section>` : ''}
   ${missions.length
     ? `<div class="mission-list">${missions.map(missionCard).join('')}</div>`
     : emptyState({
       iconName: 'spark',
-      title: 'La primera misión empieza con una lámpara',
-      text: 'Cargá un producto y elegí qué querés conseguir. El equipo se encarga del mercado, los precios, los compradores y los mensajes.',
-      actions: !arr(S.state.products).length
+      title: 'Todavía no hay misiones',
+      text: campaignId ? 'Las misiones de esta campaña aparecerán acá.' : 'Elegí un producto y un objetivo para iniciar una misión.',
+      actions: !campaignId && !arr(S.state.products).length
         ? `<button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Cargar una lámpara</button>` : '',
-    })}`;
+    })}
+  ${!campaignId && missions.length ? `<details class="mission-management">
+    <summary class="btn btn-ghost btn-sm disclosure-label">Administrar misiones ${icon('chevronDown')}</summary>
+    <div class="mt-2"><button class="btn btn-danger btn-sm" type="button" data-action="delete-all-missions">${icon('trash')} Borrar todas (${missions.length})</button></div>
+  </details>` : ''}`;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -2992,9 +2811,7 @@ function renderInbox(id) {
 
   return `<div class="page-head">
     <div class="page-head-main">
-      <p class="eyebrow">Bandeja</p>
-      <h2 class="page-title">Personas, no leads.</h2>
-      <p class="page-sub">Cada conversación es un comprador: real o de ejemplo. Mirá si te escribió en serio, qué quiere y qué tenés que aprobar. Nada se envía sin que lo confirmes.</p>
+      <h2 class="page-title">Mensajes y borradores</h2>
     </div>
     <div class="page-actions">
       ${S.state.flags?.email && S.state.settings?.email?.provider === 'gmail' ? `<button class="btn btn-ghost btn-sm" type="button" data-action="check-inbox">${icon('refresh')} Revisar correos</button>` : ''}
@@ -5345,31 +5162,22 @@ function settingsHelpHTML() {
 function renderConnections() {
   const data = S.connections || { connections: [], aiFailover: {} };
   const conns = arr(data.connections);
-  const okCount = conns.filter((c) => c.ok).length;
   const fo = data.aiFailover || {};
+  const autopilot = S.state.settings?.autopilot;
   return `<div class="page-head">
     <div class="page-head-main">
-      <p class="eyebrow">Conexiones</p>
-      <h2 class="page-title">Tus integraciones, bajo control.</h2>
-      <p class="page-sub">Los agentes diagnostican cada conexión y cambian automáticamente a la IA de respaldo si tu proveedor se queda sin cuota. Vos solo intervenís cuando falta una clave.</p>
+      <h2 class="page-title">Estado y pruebas</h2>
+      <p class="page-sub">Los estados indican qué servicios están configurados. Usá «Probar» para verificar que respondan.</p>
     </div>
     <div class="page-actions">
-      <button class="btn btn-ghost" type="button" data-action="connections-refresh">${icon('refresh')} Volver a diagnosticar</button>
-      <a class="btn btn-primary" href="#/ajustes?tab=ia">${icon('settings')} Configurar</a>
+      <button class="btn btn-ghost" type="button" data-action="connections-refresh">${icon('refresh')} Actualizar estado</button>
+      <a class="btn btn-primary" href="#/ajustes">${icon('settings')} Abrir ajustes</a>
     </div>
   </div>
 
-  ${fo.fallbackActive || fo.primaryFailures >= 2 ? `<div class="artifact-callout warn"><b>IA de respaldo activa</b>El proveedor principal tuvo ${fo.primaryFailures} fallo(s): ${esc(fo.lastError || 'cuota agotada')}. Lucian está usando Ollama local (gratis e ilimitado). ${fo.lastFailureAt ? `Último fallo: ${relTime(new Date(fo.lastFailureAt).toISOString())}.` : ''}</div>` : ''}
-  ${S.autopilot ? `<div class="artifact-callout ok"><b>🤖 Piloto de conexiones activo</b>Revisa tus integraciones cada ${S.autopilot.intervalMinutes || 10} min, cambia de IA si hay fallos, reintenta y te avisa por Telegram. ${S.autopilot.actions?.length ? `Última acción: ${esc(S.autopilot.actions[0])}.` : 'Sin incidencias.'} <button class="btn btn-ghost btn-xs mt-2" type="button" data-action="autopilot-run">${icon('play')} Ejecutar ahora</button></div>` : ''}
-
-  <section class="stat-grid">
-    ${statCard('Conexiones configuradas', `${okCount}/${conns.length}`, 'check', '', '', '')}
-    ${statCard('IA de respaldo', fo.fallbackActive ? 'Activa' : 'En espera', 'spark', fo.fallbackActive ? 'cambió de proveedor' : ' lista para activarse', '', fo.fallbackActive ? 'warm' : '')}
-  </section>
-
-  <section class="section">
-    <div class="section-head"><div><h2 class="section-title">Estado de cada conexión</h2><p class="section-sub">Clic en "Probar" para verificarla en tiempo real.</p></div></div>
-    <div class="card" style="padding:6px 0">
+  ${fo.primaryFailures > 0 ? `<div class="artifact-callout warn"><b>La IA registró fallos</b>${esc(fo.lastError || 'Probá la conexión para consultar el estado actual.')}${fo.lastFailureAt ? ` · ${esc(relTime(new Date(fo.lastFailureAt).toISOString()))}` : ''}</div>` : ''}
+  <section class="panel" aria-label="Estado de cada conexión">
+    ${S.ui.connectionsError || !conns.length ? `<p class="small muted" role="status">${S.ui.connectionsError ? esc(S.ui.connectionsError) : 'Cargando conexiones…'}</p>` : ''}
       ${conns.map((c) => `<div class="conn-row">
         <span class="status-dot ${c.ok ? 'ok' : 'muted'}"></span>
         <div style="min-width:0;flex:1">
@@ -5377,10 +5185,10 @@ function renderConnections() {
           <div class="tiny muted">${esc(c.detail || '')}</div>
         </div>
         <span class="badge badge-${c.ok ? 'ok' : 'warn'}">${c.ok ? 'Configurada' : 'Pendiente'}</span>
-        <button class="btn btn-ghost btn-xs" type="button" data-action="connection-test" data-id="${attr(c.id)}">${icon('refresh')} Probar</button>
+        ${c.id === 'fallback' ? '' : `<button class="btn btn-ghost btn-xs" type="button" data-action="connection-test" data-id="${attr(c.id)}" aria-label="Probar ${attr(c.name)}">${icon('refresh')} Probar</button>`}
       </div>`).join('')}
-    </div>
   </section>
+  ${S.autopilot && autopilot?.enabled !== false ? `<div class="artifact-callout info"><b>Diagnóstico automático</b>${S.autopilot.lastCheck ? `Última revisión ${esc(relTime(S.autopilot.lastCheck))}.` : 'Todavía no se registró una revisión.'} <button class="btn btn-ghost btn-xs" type="button" data-action="autopilot-run">${icon('play')} Ejecutar ahora</button></div>` : ''}
 
   <section class="section">
     <div class="section-head"><div><h2 class="section-title">Configurar con IA (lenguaje natural)</h2><p class="section-sub">Contale qué querés lograr y los agentes ajustan mercados, tono, límites y seguimientos por vos.</p></div></div>
@@ -5421,20 +5229,19 @@ function contentCalendarHTML() {
 }
 
 async function fetchConnections() {
-  // Solo renderiza en la PRIMERA carga. Si renderizara siempre, bindView
-  // volvería a llamarla y se generaría un bucle que reinicia la animación.
-  const firstLoad = !S.connections;
+  if (S.ui.connectionsLoading) return false;
+  S.ui.connectionsLoading = true;
   try {
     S.connections = await api('/api/connections', { silent: true });
     S.autopilot = await api('/api/autopilot', { silent: true }).catch(() => null);
-    if (firstLoad && S.route.view === 'conexiones') render();
-  } catch { /* silencio */ }
-}
-
-async function loadConnections() {
-  // Para el botón "Volver a diagnosticar": trae datos y actualiza la vista.
-  await fetchConnections();
-  if (S.route.view === 'conexiones') render();
+    S.ui.connectionsError = '';
+  } catch (error) {
+    S.ui.connectionsError = error.message || 'No se pudieron cargar las conexiones.';
+  } finally {
+    S.ui.connectionsLoading = false;
+    if (S.route.view === 'conexiones') render();
+  }
+  return !S.ui.connectionsError;
 }
 
 async function testConnectionUI(id, button) {
@@ -5442,8 +5249,9 @@ async function testConnectionUI(id, button) {
   if (button) { button.disabled = true; button.innerHTML = `${icon('refresh', 'spin')} Probando…`; }
   try {
     const result = await api('/api/connections/test', { method: 'POST', body: { id } });
-    toast(result.ok ? `${id}: ${result.detail}` : `${id}: ${result.detail}`, result.ok ? 'ok' : 'error');
-    await loadConnections();
+    const label = S.connections?.connections?.find((connection) => connection.id === id)?.name || id;
+    toast(`${label} · ${result.detail}`, result.ok ? 'ok' : 'error');
+    await fetchConnections();
   } catch (error) {
     toast(error.message, 'error');
   } finally {
@@ -5934,7 +5742,7 @@ async function resetOnboarding() {
   S.ui.welcomeDismissed = false;
   await setOnboarding({ done: false });
   render();
-  maybeShowWelcome();
+  maybeShowWelcome({ force: true });
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -5944,9 +5752,16 @@ async function resetOnboarding() {
 function toggleMobileNav(force) {
   const drawer = $('#mobile-drawer');
   if (!drawer) return;
-  const open = typeof force === 'boolean' ? force : !drawer.classList.contains('open');
+  const wasOpen = drawer.classList.contains('open');
+  const open = typeof force === 'boolean' ? force : !wasOpen;
+  if (open === wasOpen) return;
+  const trigger = $('.mobile-menu');
+  if (!open && drawer.contains(document.activeElement)) trigger?.focus();
   drawer.classList.toggle('open', open);
+  drawer.inert = !open;
   drawer.setAttribute('aria-hidden', String(!open));
+  trigger?.setAttribute('aria-expanded', String(open));
+  if (open) $('[data-action="toggle-mobile-nav"]', drawer)?.focus();
 }
 
 function closeMobileNav() {
@@ -6529,10 +6344,10 @@ async function handleAction(action, el) {
     }
     case 'save-publish': await savePublish(el.dataset.id); return;
     case 'social-open': await socialOpen(el.dataset.network, el.dataset.url); return;
-    case 'connections-refresh': await loadConnections(); toast('Diagnóstico actualizado.'); return;
+    case 'connections-refresh': if (await fetchConnections()) toast('Diagnóstico actualizado.'); return;
     case 'autopilot-run': {
       const r = await api('/api/autopilot/run', { method: 'POST' });
-      await loadConnections();
+      await fetchConnections();
       toast(r.actions?.length ? `Piloto: ${r.actions.join(' | ')}` : 'Piloto: todo en orden, sin acciones necesarias.');
       return;
     }
@@ -6584,6 +6399,8 @@ async function handleAction(action, el) {
 }
 
 function onGlobalClick(event) {
+  const drawer = event.target.closest('#mobile-drawer');
+  if (drawer && (drawer === event.target || event.target.closest('a[data-nav]'))) closeMobileNav();
   const el = event.target.closest('[data-action]');
   if (!el) return;
   if (el.classList.contains('disabled') || el.getAttribute('aria-disabled') === 'true') return;
@@ -6661,7 +6478,6 @@ function bindView(route) {
   else if (route.view === 'bandeja') bindInbox();
   else if (route.view === 'contenido') bindContent();
   else if (route.view === 'equipo') bindTeam();
-  else if (route.view === 'conexiones') fetchConnections();
   else if (route.view === 'ajustes') bindSettings();
 }
 
@@ -6670,6 +6486,7 @@ function bindView(route) {
    ───────────────────────────────────────────────────────────── */
 
 function init() {
+  for (const element of $$('[data-icon]')) element.innerHTML = icon(element.dataset.icon);
   // Las claves no se aceptan por URL: pueden quedar en historiales y registros.
   try {
     const params = new URLSearchParams(location.search);
@@ -6689,7 +6506,7 @@ function init() {
     if (main && window.innerWidth > 760) main.focus({ preventScroll: true });
   });
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 760) closeMobileNav();
+    if (window.innerWidth > 900) closeMobileNav();
   });
   if (!location.hash) {
     try { history.replaceState(null, '', '#/panel'); } catch { /* noop */ }
