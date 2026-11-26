@@ -811,6 +811,7 @@ function renderXalapa() {
   const direct = S.route.query.get('canal') === 'directo';
   const selected = products.find((p) => p.id === S.ui.xalapaProduct);
   const snapshot = S.ui.xalapaSearch || { results: {}, running: [] };
+  const sales = snapshot.sales;
   const starting = S.ui.xalapaStarting;
   const searching = (key) => starting === 'todos' || starting === key || snapshot.running.includes(key);
   const productPicker = `<label class="field xalapa-product-picker">
@@ -848,6 +849,21 @@ function renderXalapa() {
       <a class="btn btn-ghost" href="#/buscar?canal=directo">Venta directa y redes</a>
     </div>
   </div>
+  ${sales ? `<section class="panel sales-next" aria-label="Seguimiento de ventas">
+    <div class="home-heading">
+      <div>
+        <h3 class="card-title">${snapshot.active ? 'Seguimiento automático activo' : 'Seguimiento automático pausado'}</h3>
+        <p class="section-sub">${sales.checkout} ${sales.checkout === 1 ? 'ficha de compra enviada' : 'fichas de compra enviadas'} · ${sales.quotes} ${sales.quotes === 1 ? 'solicitud por cantidad' : 'solicitudes por cantidad'}${sales.waiting ? ` · ${sales.waiting} ${sales.waiting === 1 ? 'envío en cola' : 'envíos en cola'}` : ''}</p>
+        <p class="section-sub">${sales.storeSync?.status === 'ok' ? `${sales.paid} ${sales.paid === 1 ? 'pedido de GALAPA pagado' : 'pedidos de GALAPA pagados'} en los últimos 30 días`
+          : sales.storeSync?.status === 'error' ? 'La lectura de pedidos requiere revisión.' : 'Conectá Tiendanube para ver los pedidos pagados.'}</p>
+        ${sales.review ? `<a class="section-link" href="#/bandeja">${sales.review} conversaciones con envíos por revisar</a>` : ''}
+      </div>
+      <div class="cluster">
+        <button class="btn btn-ghost btn-sm" type="button" data-action="xalapa-toggle" data-active="${snapshot.active}">${snapshot.active ? 'Pausar' : 'Activar'}</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-action="xalapa-connect-store">${snapshot.storeId ? 'Ver conexión Tiendanube' : 'Conectar Tiendanube'}</button>
+      </div>
+    </div>
+  </section>` : ''}
   ${products.length ? productPicker : '<p class="small">Activá una lámpara en <a href="#/productos">Productos</a> para empezar.</p>'}
   ${S.ui.xalapaError ? `<p class="field-error mt-2" role="alert">${esc(S.ui.xalapaError)}</p>` : ''}
   ${XALAPA_CHANNELS.map(([key, label]) => {
@@ -882,8 +898,8 @@ function renderXalapa() {
 
 function scheduleXalapaRefresh() {
   clearTimeout(S.ui.xalapaTimer);
-  if (S.route.view === 'buscar' && S.route.query.get('canal') !== 'directo' && S.ui.xalapaSearch?.running.length) {
-    S.ui.xalapaTimer = setTimeout(refreshXalapa, 2500);
+  if (S.route.view === 'buscar' && S.route.query.get('canal') !== 'directo') {
+    S.ui.xalapaTimer = setTimeout(refreshXalapa, S.ui.xalapaSearch?.running.length ? 2500 : 15000);
   }
 }
 
@@ -907,17 +923,50 @@ async function startXalapaSearch(channel) {
   if (S.ui.xalapaStarting) return;
   S.ui.xalapaSearchVersion = (S.ui.xalapaSearchVersion || 0) + 1;
   S.ui.xalapaStarting = channel;
+  const productId = S.route.view === 'buscar' ? $('#xalapa-product')?.value : S.ui.xalapaProduct;
   S.ui.xalapaError = '';
   if (S.route.view !== 'buscar' || S.route.query.get('canal') === 'directo') navigate('#/buscar');
   else render();
   try {
-    S.ui.xalapaSearch = await api('/api/xalapa/search', { method: 'POST', body: { channel }, silent: true });
+    S.ui.xalapaSearch = await api('/api/xalapa/search', { method: 'POST', body: { channel, productId }, silent: true });
   } catch (error) {
     S.ui.xalapaError = error.message;
   } finally {
     S.ui.xalapaStarting = '';
     if (S.route.view === 'buscar') render({ live: true });
     scheduleXalapaRefresh();
+  }
+}
+
+function openGalapaOrders() {
+  const id = S.ui.xalapaSearch?.storeId || '';
+  openModal({
+    title: 'Pedidos de GALAPA',
+    subtitle: 'Lucian lee los pedidos pagados de tu Tiendanube.',
+    body: `<div class="stack">
+      <label class="field"><span>ID de tienda</span><input class="input" id="galapa-store-id" inputmode="numeric" value="${attr(id)}"></label>
+      <label class="field"><span>Token con permiso de lectura de pedidos</span><input class="input" id="galapa-store-token" type="password" autocomplete="new-password"></label>
+      <p class="field-error" id="galapa-store-error" role="alert"></p>
+    </div>`,
+    footer: '<button class="btn btn-ghost" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-primary" type="button" data-action="xalapa-save-store">Verificar y conectar</button>',
+  });
+}
+
+async function connectGalapaOrders(button) {
+  button.disabled = true;
+  $('#galapa-store-error').textContent = '';
+  try {
+    S.ui.xalapaSearch = await api('/api/xalapa/store', {
+      method: 'PUT', body: { storeId: $('#galapa-store-id').value, token: $('#galapa-store-token').value },
+    });
+    closeModal();
+    render({ live: true });
+    toast('Pedidos de GALAPA sincronizados.');
+  } catch (error) {
+    const notice = $('#galapa-store-error');
+    if (notice) notice.textContent = error.message;
+  } finally {
+    button.disabled = false;
   }
 }
 
@@ -3192,19 +3241,20 @@ function threadDraftsHTML(thread) {
   if (!drafts.length) return '<div class="soft"><p class="small muted">Sin borradores todavía. Podés crear uno desde cero o analizar una respuesta para que el equipo lo prepare.</p></div>';
   const editing = S.ui.threadDraftEdit;
   return drafts.map((draft) => {
+    const queued = ['queued', 'sending'].includes(draft.xalapaAuto?.state);
     const sent = draft.status === 'enviado';
     const discarded = draft.status === 'descartado';
     const blocked = draft.status === 'bloqueado';
     const review = draft.status === 'revisar';
     const ready = draft.status === 'listo';
-    const isEditing = editing === draft.id && !sent && !discarded && !blocked;
+    const isEditing = editing === draft.id && !sent && !discarded && !blocked && !queued;
     const body = draft.body || '';
     return `<div class="draft-card ${sent || discarded ? 'sent' : ''} ${review ? 'review' : ''} ${blocked ? 'blocked' : ''}" data-draft-card="${attr(draft.id)}">
       <div class="draft-head">
         <div style="min-width:0;flex:1">
           <div class="draft-subject">${esc(draft.subject || '(sin asunto)')}</div>
           <div class="thread-badges" style="margin-top:5px">
-            ${draftStatusBadge(draft)}
+            ${queued ? '<span class="badge badge-info">En cola automática</span>' : draftStatusBadge(draft)}
             ${suppressed ? '<span class="badge badge-danger">No contactar</span>' : ''}
             <span class="badge badge-neutral">${esc(CHANNEL_LABEL[draft.channel] || draft.channel || 'email')}</span>
             <span class="badge badge-neutral">${esc((draft.language || 'es').toUpperCase())}</span>
@@ -3236,13 +3286,13 @@ function threadDraftsHTML(thread) {
           </div>`
         : `<div class="draft-body">${esc(body || '(vacío)')}</div>
           <div class="draft-actions">
-            ${ready && !suppressed ? `<button class="btn btn-primary btn-xs" type="button" data-action="send-draft" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}">${icon('send')} Enviar</button>` : ''}
+            ${ready && !queued && !suppressed ? `<button class="btn btn-primary btn-xs" type="button" data-action="send-draft" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}">${icon('send')} Enviar</button>` : ''}
             ${review && !suppressed ? `<button class="btn btn-accent btn-xs" type="button" data-action="approve-draft" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}">${icon('check')} Aprobar</button>` : ''}
-            ${review || ready ? `<button class="btn btn-ghost btn-xs" type="button" data-action="edit-draft" data-draft-id="${attr(draft.id)}">${icon('edit')} Editar</button>` : ''}
+            ${(review || ready) && !queued ? `<button class="btn btn-ghost btn-xs" type="button" data-action="edit-draft" data-draft-id="${attr(draft.id)}">${icon('edit')} Editar</button>` : ''}
             ${!blocked ? copyButton(`${draft.subject ? `Asunto: ${draft.subject}\n\n` : ''}${body}`, 'Copiar') : ''}
-            ${ready && !suppressed && isEmail(thread.contact?.email) ? `<button class="btn btn-ghost btn-xs" type="button" data-action="download-eml" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}">${icon('download')} .eml</button>` : ''}
-            ${!sent && !discarded ? `<button class="btn btn-ghost btn-xs" type="button" data-action="discard-draft" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}">Descartar</button>` : ''}
-            ${!sent ? `<button class="btn btn-ghost btn-xs" type="button" data-action="delete-draft" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}" title="Borrar borrador">${icon('trash')}</button>` : ''}
+            ${ready && !queued && !suppressed && isEmail(thread.contact?.email) ? `<button class="btn btn-ghost btn-xs" type="button" data-action="download-eml" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}">${icon('download')} .eml</button>` : ''}
+            ${!sent && !discarded && draft.xalapaAuto?.state !== 'sending' ? `<button class="btn btn-ghost btn-xs" type="button" data-action="discard-draft" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}">Descartar</button>` : ''}
+            ${!sent && !queued ? `<button class="btn btn-ghost btn-xs" type="button" data-action="delete-draft" data-id="${attr(thread.id)}" data-draft-id="${attr(draft.id)}" title="Borrar borrador">${icon('trash')}</button>` : ''}
             ${sent ? `<span class="tiny muted">Enviado por ${esc(CHANNEL_LABEL[draft.sentChannel] || draft.sentChannel || 'manual')} · ${esc(dateTime(draft.sentAt))}</span>` : ''}
           </div>`}
     </div>`;
@@ -6292,6 +6342,16 @@ async function handleAction(action, el) {
     }
     case 'toggle-mobile-nav': toggleMobileNav(); return;
     case 'xalapa-search': await startXalapaSearch(el.dataset.channel); return;
+    case 'xalapa-connect-store': openGalapaOrders(); return;
+    case 'xalapa-save-store': await connectGalapaOrders(el); return;
+    case 'xalapa-toggle': {
+      el.disabled = true;
+      try {
+        await api('/api/settings', { method: 'PUT', body: { sales: { xalapaAuto: el.dataset.active !== 'true' } } });
+        await refreshXalapa();
+      } finally { el.disabled = false; }
+      return;
+    }
     case 'xalapa-contact': await openXalapaContact(el); return;
     case 'xalapa-copy': await copyToClipboard(el.dataset.copy, 'Mensaje copiado.'); return;
     case 'reload-state': await loadState(); return;

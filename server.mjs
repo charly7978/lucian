@@ -49,6 +49,11 @@ import { buildOfferKit, buildBulkOfferRows, buildChannelReadiness } from './lib/
 import { buildPublicCatalog } from './lib/public-catalog.mjs';
 import { galapaProductUrl, syncGalapaCatalog } from './lib/galapa-catalog.mjs';
 import { XALAPA_SEARCH_VERSION, XALAPA_SEGMENTS, findXalapaProspects, xalapaProducts } from './lib/xalapa-sales.mjs';
+import {
+  XALAPA_OUTREACH_SOURCE, allowsXalapaAutoMail, classifyXalapaInquiry,
+  mailReference, makeXalapaReply, repliesToThread, xalapaSalesSummary,
+} from './lib/xalapa-pilot.mjs';
+import { syncGalapaOrders } from './lib/galapa-orders.mjs';
 
 import { obtainResendDeliveryReport, applyResendDeliveryReport } from './lib/resend-delivery.mjs';
 
@@ -207,33 +212,98 @@ function needsInboxTriage(thread) {
   );
 }
 
-const xalapaSearches = new Set();
+const xalapaSearches = new Map();
 const XALAPA_REFRESH_MS = 10 * 60 * 1000;
 
 function xalapaSearchState() {
-  return { results: store.get('meta').xalapaProspects || {}, running: [...xalapaSearches] };
+  const meta = store.get('meta');
+  const settings = store.settings().sales || {};
+  return { results: meta.xalapaProspects || {}, running: [...xalapaSearches.keys()],
+    sales: xalapaSalesSummary(store.get('threads'), meta), active: settings.xalapaAuto === true,
+    storeId: settings.tiendanube?.storeId || '' };
 }
 
-function startXalapaSearch(channel) {
+function xalapaStatusText() {
+  const { sales, running, active } = xalapaSearchState();
+  const lines = [
+    'Xalapa · ventas y pedidos',
+    running.length ? 'Búsqueda en curso.' : `${sales.prospects} sitios comprobados en la última búsqueda.`,
+    `Propuestas enviadas: ${sales.sent}. Fichas de compra enviadas: ${sales.checkout}.`,
+    `Solicitudes por cantidad: ${sales.quotes}.`,
+    sales.storeSync?.status === 'ok' ? `Pedidos pagados en GALAPA en los últimos 30 días: ${sales.paid}.`
+      : sales.storeSync?.status === 'error' ? 'No se pudo actualizar el registro de pedidos de GALAPA.'
+      : 'Conectá Tiendanube en Lucian para ver los pedidos pagados.',
+  ];
+  if (sales.review) lines.push(`${sales.review} envíos necesitan revisión en Bandeja.`);
+  if (sales.waiting) lines.push(`${sales.waiting} mensajes en cola.`);
+  if (!active) lines.push('El envío automático está pausado.');
+  lines.push('Para iniciar otra búsqueda, mandá /cazar, /cazar hoteles o /cazar mayoristas.');
+  return lines.join('\n');
+}
+
+function checkXalapaHunt(channel, productId) {
+  if (channel !== 'todos' && !Object.hasOwn(XALAPA_SEGMENTS, channel)) throw new HttpError(400, 'Elegí hoteles, mayoristas o ambos.');
+  const products = xalapaProducts(store.get('products'));
+  const product = productId ? products.find((item) => item.id === productId) : products[0];
+  if (!product) throw new HttpError(400, 'Elegí una lámpara disponible en GALAPA.');
+  const search = searchProviderInfo(store.settings());
+  if (search.provider === 'none' || !search.ready) throw new HttpError(400, 'La búsqueda está desactivada. Revisá Ajustes → Búsqueda.');
+  return product;
+}
+
+async function startXalapaSearch(channel, productId) {
+  const product = checkXalapaHunt(channel, productId);
   const keys = channel === 'todos' ? Object.keys(XALAPA_SEGMENTS) : [channel];
+  const started = [];
   for (const key of keys) {
-    const previous = xalapaSearchState().results[key];
-    if (xalapaSearches.has(key) || (previous?.version === XALAPA_SEARCH_VERSION && previous.status === 'found'
-      && Date.now() - Date.parse(previous.at) < XALAPA_REFRESH_MS)) continue;
-    xalapaSearches.add(key);
-    void (async () => {
+    if (xalapaSearches.has(key)) continue;
+    const pending = store.setMeta({ xalapaPendingHunts: {
+      ...store.get('meta').xalapaPendingHunts, [key]: product.id,
+    } });
+    const task = (async () => {
       try {
-        const result = await findXalapaProspects(store.settings(), key);
+        await pending;
+        const previous = xalapaSearchState().results[key];
+        const result = previous?.version === XALAPA_SEARCH_VERSION && previous.status === 'found'
+          && Date.now() - Date.parse(previous.at) < XALAPA_REFRESH_MS
+          ? previous : await findXalapaProspects(store.settings(), key);
         await store.setMeta({ xalapaProspects: { ...xalapaSearchState().results, [key]: result } });
+        let saved = 0;
+        let queued = 0;
+        if (store.settings().sales?.xalapaAuto) {
+          for (const prospect of result.prospects) {
+            try {
+              const record = await saveXalapaProspect({ channel: key, prospectId: prospect.id, productId: product.id });
+              if (!record.existing) saved += 1;
+              if (await queueXalapaPresentation(record.threadId, prospect.email)) queued += 1;
+            } catch (error) {
+              if (error.status !== 409) console.error('[Lucian] Contacto Xalapa:', error.message);
+            }
+          }
+        }
+        return { found: result.prospects.length, saved, queued, available: result.status !== 'unavailable' };
       } catch (error) {
         console.error('[Lucian] Búsqueda Xalapa:', error.message);
-        await store.setMeta({
-          xalapaProspects: { ...xalapaSearchState().results, [key]: { at: nowISO(), status: 'error', prospects: [] } },
-        }).catch(() => {});
+        return { found: 0, saved: 0, queued: 0, available: false };
       } finally {
+        const remaining = { ...store.get('meta').xalapaPendingHunts };
+        delete remaining[key];
+        await store.setMeta({ xalapaPendingHunts: remaining }).catch((error) => console.error('[Lucian]', error.message));
         xalapaSearches.delete(key);
       }
     })();
+    xalapaSearches.set(key, task);
+    started.push(task);
+  }
+  if (started.length && store.settings().sales?.xalapaAuto) {
+    void Promise.all(started).then(async (results) => {
+      const found = results.reduce((n, result) => n + result.found, 0);
+      const queued = results.reduce((n, result) => n + result.queued, 0);
+      const saved = results.reduce((n, result) => n + result.saved, 0);
+      const unavailable = results.some((result) => !result.available);
+      await processXalapaMail();
+      await notifier.notify(`Xalapa · búsqueda terminada\n${found} sitios comprobados · ${saved} contactos nuevos · ${queued} propuestas autorizadas programadas.${unavailable ? '\nHubo un canal sin respuesta del buscador.' : ''}\nEscribí /ventas para ver los envíos y pedidos.`, { kind: 'xalapa' });
+    }).catch((error) => console.error('[Lucian]', error.message));
   }
   return xalapaSearchState();
 }
@@ -271,7 +341,7 @@ async function saveXalapaProspect({ channel, prospectId, productId }) {
     stage: 'nuevo', score: 55, messages: [],
     drafts: [{
       id: uid('drf'), channel: prospect.email ? 'email' : 'formulario', language: 'es',
-      subject: `Lámparas Xalapa para ${prospect.name}`, body, status: 'listo', source: 'manual', guardVersion: 2, createdAt: now,
+      subject: `Lámparas Xalapa para ${prospect.name}`, body, status: 'listo', source: XALAPA_OUTREACH_SOURCE, guardVersion: 2, createdAt: now,
     }],
     nextStep: 'Revisar la propuesta y usar el canal publicado por la empresa.',
     createdAt: now, updatedAt: now, lastActivityAt: now,
@@ -279,6 +349,19 @@ async function saveXalapaProspect({ channel, prospectId, productId }) {
   threads.unshift(thread);
   await store.set('threads', threads);
   return { threadId: thread.id, existing: false };
+}
+
+async function queueXalapaPresentation(threadId, publishedEmail) {
+  const thread = store.find('threads', threadId);
+  if (!thread || !publishedEmail || normalizeEmail(publishedEmail) !== normalizeEmail(thread.contact?.email)
+    || !hasDocumentedOptIn(thread.contact) || ['perdido', 'ganado'].includes(thread.stage)
+    || thread.optOut || (thread.messages || []).length) return false;
+  const draft = (thread.drafts || []).find((entry) => entry.source === XALAPA_OUTREACH_SOURCE
+    && entry.channel === 'email' && entry.status === 'listo' && !entry.xalapaAuto);
+  if (!draft) return false;
+  draft.xalapaAuto = { state: 'queued', kind: 'outreach', recipient: normalizeEmail(publishedEmail), productId: thread.productId };
+  await store.set('threads', store.get('threads'));
+  return true;
 }
 
 function threadSummary(thread, suppressions = []) {
@@ -578,7 +661,7 @@ const notifier = new Notifier({
     const result = await askTeam({ question, agentId: chooseAssistant(question), store, history, channel, images });
     return result.answer;
   },
-  actions: { createMission, sendThreadMessage, createQuote, analyzeThread },
+  actions: { createMission, sendThreadMessage, createQuote, analyzeThread, startXalapaSearch, xalapaStatusText },
 });
 notifier.start();
 
@@ -639,6 +722,8 @@ async function pollGmailInbox() {
           messageId: msg.messageId,
           inReplyTo: msg.inReplyTo,
           references: msg.references,
+          replyAllowed: msg.replyAllowed,
+          sourceId: `gmail:${account}:${msg.uid}`,
         });
         if (msg.uid > maxUid) maxUid = msg.uid;
       } catch (error) {
@@ -691,6 +776,9 @@ async function processInboundEmail(inbound) {
   if (!isValidEmail(email)) throw new Error('El remitente no es un email válido.');
   let thread = findThreadForEmail(email, inbound);
   if (!thread) thread = await createInboundThread(inbound, email);
+  const key = mailReference(inbound.messageId);
+  if ((thread.messages || []).some((m) => m.direction === 'in'
+    && ((key && mailReference(m.messageId) === key) || (inbound.sourceId && m.sourceId === inbound.sourceId)))) return thread;
   const now = nowISO();
   const message = {
     id: uid('msg'),
@@ -701,12 +789,41 @@ async function processInboundEmail(inbound) {
     at: now,
     status: 'recibido',
     ...(inbound.messageId ? { messageId: inbound.messageId } : {}),
+    ...(inbound.sourceId ? { sourceId: inbound.sourceId } : {}),
+    ...(inbound.replyAllowed ? { xalapaRecipientVerified: true } : {}),
     ...(inbound.inReplyTo ? { inReplyTo: inbound.inReplyTo } : {}),
     ...(inbound.references?.length ? { references: inbound.references.join(' ') } : {}),
   };
   thread.messages = [...(thread.messages || []), message];
   thread.lastActivityAt = now;
   thread.updatedAt = now;
+  const inquiry = store.settings().sales?.xalapaAuto && !isSuppressed(email, threadSuppressions(thread), thread.contact?.company)
+    ? classifyXalapaInquiry({ thread, inbound: { ...inbound, text: message.body }, products: store.get('products'), email }) : null;
+  if (inquiry) {
+    message.xalapaRequest = true;
+    const repeat = (thread.drafts || []).find((d) => d.xalapaAuto?.kind === inquiry.kind
+      && d.xalapaAuto.productId === (inquiry.product?.id || null)
+      && ['queued', 'sending', 'sent', 'review'].includes(d.xalapaAuto.state)
+      && Date.now() - Date.parse(d.createdAt) < 2 * 3600000);
+    if (inquiry.product) thread.productId = inquiry.product.id;
+    thread.inboxTriage = 'accepted';
+    if (!repeat) {
+      const draft = makeXalapaReply({ inquiry, inbound, message, email });
+      thread.drafts = [draft, ...(thread.drafts || [])];
+    } else if (repeat.xalapaAuto.state === 'queued') {
+      repeat.xalapaAuto.inboundId = message.id;
+    }
+    thread.stage = inquiry.kind === 'quote' ? 'negociando' : 'interesado';
+    thread.xalapaRequest = { kind: inquiry.kind, at: now, quantity: inquiry.quantity, productId: inquiry.product?.id || null };
+    thread.nextStep = inquiry.kind === 'quote' ? 'Solicitud por cantidad. Ver detalle en Bandeja.'
+      : inquiry.kind === 'checkout' ? 'Enviar la ficha de compra de GALAPA.' : 'Confirmar el modelo de lámpara.';
+    await store.set('threads', store.get('threads'));
+    if (!repeat && inquiry.kind === 'quote') {
+      void notifier.notify(`Xalapa · nuevo pedido de cotización\n${thread.contact?.company || 'Cliente'}${inquiry.product ? ` · ${inquiry.product.name}` : ''}${inquiry.quantity ? ` · ${inquiry.quantity} unidades` : ''}. Ver Bandeja.`, { kind: 'xalapa' }).catch(() => {});
+    }
+    void processXalapaMail();
+    return thread;
+  }
   if (needsInboxTriage(thread)) {
     await store.set('threads', store.get('threads'));
     return thread;
@@ -730,6 +847,106 @@ async function processInboundEmail(inbound) {
     } catch { /* la respuesta ya quedó guardada */ }
   }
   return thread;
+}
+
+const xalapaAutoAuthorization = Symbol('xalapaAutoAuthorization');
+let xalapaMailBusy = false;
+let galapaOrderSyncBusy = false;
+setInterval(processXalapaMail, 15000).unref();
+setInterval(pollGalapaOrders, 120000).unref();
+setTimeout(pollGalapaOrders, 8000).unref();
+setTimeout(() => {
+  void processXalapaMail();
+  const pending = store.get('meta').xalapaPendingHunts || {};
+  const entries = Object.entries(pending);
+  if (entries.length === 2 && entries[0][1] === entries[1][1]) {
+    void startXalapaSearch('todos', entries[0][1]).catch((error) => console.error('[Lucian]', error.message));
+  } else {
+    for (const [channel, productId] of entries) void startXalapaSearch(channel, productId).catch((error) => console.error('[Lucian]', error.message));
+  }
+}, 2000).unref();
+
+async function pollGalapaOrders() {
+  const config = store.settings().sales?.tiendanube;
+  if (galapaOrderSyncBusy || !config?.storeId || !config.token) return;
+  galapaOrderSyncBusy = true;
+  const old = store.get('meta');
+  const previous = old.xalapaStoreSync?.storeId === config.storeId ? old.xalapaOrders || [] : [];
+  const cursor = old.xalapaStoreSync?.storeId === config.storeId ? old.xalapaStoreSync?.checkedAt : '';
+  const stillCurrent = () => {
+    const current = store.settings().sales?.tiendanube;
+    return current?.storeId === config.storeId && current.token === config.token;
+  };
+  try {
+    const record = await syncGalapaOrders({ config, products: store.get('products'), previous, checkedAt: cursor });
+    if (!stillCurrent()) return;
+    await store.setMeta({ xalapaOrders: record.orders, xalapaStoreSync: { status: 'ok', storeId: config.storeId, checkedAt: record.at } });
+    const paidBefore = new Set(previous.filter((item) => item.payment === 'paid').map((item) => item.id));
+    const paid = record.orders.filter((item) => item.payment === 'paid' && !paidBefore.has(item.id));
+    if (cursor && paid.length) {
+      const numbers = paid.slice(0, 6).map((item) => `#${item.number}`).join(', ');
+      await notifier.notify(`GALAPA · ${paid.length} ${paid.length === 1 ? 'pedido pagado' : 'pedidos pagados'}\n${numbers}`, { kind: 'xalapa' }).catch(() => {});
+    }
+  } catch (error) {
+    if (stillCurrent()) await store.setMeta({ xalapaStoreSync: {
+      status: 'error', storeId: config.storeId, checkedAt: cursor, reason: truncate(error.message, 180),
+    } }).catch(() => {});
+  } finally {
+    galapaOrderSyncBusy = false;
+  }
+}
+
+async function processXalapaMail() {
+  const settings = store.settings();
+  if (xalapaMailBusy || !settings.sales?.xalapaAuto || settings.email?.provider !== 'gmail'
+    || !settings.email.smtpUser || !settings.email.smtpPassword) return;
+  xalapaMailBusy = true;
+  try {
+    const threads = store.get('threads');
+    const items = threads.flatMap((thread) => (thread.drafts || [])
+      .filter((draft) => ['queued', 'sending'].includes(draft.xalapaAuto?.state))
+      .map((draft) => ({ thread, draft })));
+    const eligible = items.sort((a, b) => Date.parse(a.draft.createdAt) - Date.parse(b.draft.createdAt))
+      .filter(({ draft }) => !draft.xalapaAuto.retryAt || Date.parse(draft.xalapaAuto.retryAt) <= Date.now());
+    for (const { thread, draft } of eligible.slice(0, 4)) {
+      if (!store.settings().sales?.xalapaAuto) break;
+      const job = draft.xalapaAuto;
+      if (draft.status === 'enviado') {
+        job.state = 'sent';
+      } else if (draft.status !== 'listo' || !allowsXalapaAutoMail(thread, draft, store.get('products'))
+        || isSuppressed(thread.contact?.email, threadSuppressions(thread), thread.contact?.company)) {
+        job.state = 'review';
+        job.note = 'Cambió el destinatario, el permiso, la disponibilidad o el estado del mensaje.';
+      } else if (job.state === 'sending') {
+        job.state = 'review';
+        job.note = 'El envío se interrumpió. Revisá Gmail antes de volver a enviarlo.';
+      } else if (!sendingThreads.has(thread.id)) {
+        job.state = 'sending';
+        await store.set('threads', threads);
+        try {
+          await sendThreadMessage(thread.id, { draftId: draft.id, channel: 'gmail', automated: true }, xalapaAutoAuthorization);
+        } catch (error) {
+          if (draft.status === 'enviado') throw error;
+          if (error.status === 400 && /cupo|l[ií]mite|calentamiento/i.test(error.message)) {
+            job.state = 'queued';
+            job.retryAt = new Date(Date.now() + 3600000).toISOString();
+          } else {
+            job.state = 'review';
+            job.note = error.status === 502 ? 'Gmail no confirmó el envío. Revisá Enviados antes de reintentar.' : truncate(error.message, 170);
+          }
+        }
+      }
+      if (job.state === 'review' && draft.status === 'listo') {
+        draft.status = 'revisar';
+        draft.reviewNote = job.note;
+      }
+      await store.set('threads', threads);
+    }
+  } catch (error) {
+    console.error('[Lucian] Envíos Xalapa:', error.message);
+  } finally {
+    xalapaMailBusy = false;
+  }
 }
 
 /* Una campaña de catálogo puede dejar misiones en cola durante horas. Si
@@ -1656,17 +1873,17 @@ async function recordQuotePayment(threadId, quoteId, body) {
 
 const sendingThreads = new Set();
 
-async function sendThreadMessage(threadId, body) {
+async function sendThreadMessage(threadId, body, authorization) {
   if (sendingThreads.has(threadId)) throw new HttpError(409, 'Ya hay un envío en curso para esta conversación.');
   sendingThreads.add(threadId);
   try {
-    return await dispatchThreadMessage(threadId, body);
+    return await dispatchThreadMessage(threadId, body, authorization);
   } finally {
     sendingThreads.delete(threadId);
   }
 }
 
-async function dispatchThreadMessage(threadId, body) {
+async function dispatchThreadMessage(threadId, body, authorization) {
   const threads = store.get('threads');
   const thread = threads.find((t) => t.id === threadId);
   if (!thread) throw new HttpError(404, 'Conversación no encontrada.');
@@ -1687,6 +1904,10 @@ async function dispatchThreadMessage(threadId, body) {
     throw new HttpError(400, 'Ese borrador está en revisión. Editalo y marcalo como aprobado antes de enviarlo.');
   }
   if (draft.status !== 'listo') throw new HttpError(400, 'Ese borrador ya fue enviado o descartado.');
+  const xalapaAutomated = authorization === xalapaAutoAuthorization
+    && draft.xalapaAuto?.state === 'sending' && allowsXalapaAutoMail(thread, draft, store.get('products'));
+  if (authorization === xalapaAutoAuthorization && !xalapaAutomated) throw new HttpError(409, 'Hay que revisar el envío de Xalapa.');
+  if (['queued', 'sending'].includes(draft.xalapaAuto?.state) && !xalapaAutomated) throw new HttpError(409, 'Este mensaje está en la cola de Xalapa.');
 
   const settings = store.settings();
   const channel = ['resend', 'webhook', 'gmail', 'manual'].includes(body.channel) ? body.channel : 'manual';
@@ -1711,7 +1932,7 @@ async function dispatchThreadMessage(threadId, body) {
   if (channel !== 'manual' && (thread.messages || []).some(message => message.direction === 'out' && ['bounced', 'suppressed', 'complained'].includes(message.deliveryStatus))) {
     throw new HttpError(409, 'Hay un rebote, supresión o queja confirmada para este contacto. Revisá su dirección y permisos antes de volver a enviar.');
   }
-  if (body.automated === true && !hasDocumentedOptIn(thread.contact)) {
+  if (body.automated === true && !xalapaAutomated && !hasDocumentedOptIn(thread.contact)) {
     throw new HttpError(400, 'El piloto automático exige consentimiento documentado del destinatario.');
   }
   const company = thread.contact?.company || '';
@@ -1725,7 +1946,9 @@ async function dispatchThreadMessage(threadId, body) {
   // Hilo de correo: se guarda el Message-ID propio y se responde al último
   // mensaje entrante. Sin esto, el webhook no puede saber a qué producto
   // pertenece una respuesta cuando el comprador tiene varios hilos abiertos.
-  const previousInbound = lastInboundMessage(thread);
+  const previousInbound = draft.xalapaAuto?.inboundId
+    ? (thread.messages || []).find((entry) => entry.id === draft.xalapaAuto.inboundId)
+    : lastInboundMessage(thread);
   if (channel === 'resend' && !hasDocumentedOptIn(thread.contact)) {
     throw new HttpError(400, 'Resend exige consentimiento explícito documentado. Editá el contacto y registrá la evidencia antes de enviar.');
   }
@@ -1792,11 +2015,14 @@ async function dispatchThreadMessage(threadId, body) {
     ...(message.inReplyTo ? { inReplyTo: message.inReplyTo } : {}),
     ...(message.references ? { references: message.references } : {}),
     ...(delivery?.id ? { providerId: delivery.id } : {}),
+    ...(delivery?.id && draft.xalapaAuto ? { xalapaKind: draft.xalapaAuto.kind } : {}),
+    ...(delivery?.id && !draft.xalapaAuto && draft.source === XALAPA_OUTREACH_SOURCE ? { xalapaKind: 'outreach' } : {}),
   };
   thread.messages = [...(thread.messages || []), sent];
   draft.status = 'enviado';
   draft.sentAt = now;
   draft.sentChannel = channel;
+  if (draft.xalapaAuto) draft.xalapaAuto.state = 'sent';
   if (draft.quoteId) {
     const quote = (thread.quotes || []).find((item) => item.id === draft.quoteId);
     if (quote && quote.status === 'borrador') {
@@ -1808,7 +2034,11 @@ async function dispatchThreadMessage(threadId, body) {
   if (thread.stage === 'nuevo') thread.stage = 'contactado';
   thread.lastActivityAt = now;
   thread.updatedAt = now;
-  if (draft.source === 'seguimiento') {
+  if (draft.xalapaAuto && draft.xalapaAuto.kind !== 'outreach') {
+    thread.nextStep = draft.xalapaAuto.kind === 'checkout' ? 'Ficha de compra enviada. GALAPA procesa el pedido.'
+      : draft.xalapaAuto.kind === 'quote' ? 'Solicitud recibida. Revisar el pedido por cantidad.' : 'Esperar que el cliente confirme el modelo.';
+    thread.nextFollowUp = null;
+  } else if (draft.source === 'seguimiento') {
     // Un seguimiento cuenta una sola vez y agenda el siguiente paso.
     // El paso 3 cierra la secuencia: no se vuelve a escribir.
     thread.followUpCount = Number(thread.followUpCount || 0) + 1;
@@ -1852,16 +2082,8 @@ function findThreadForEmail(email, inbound = null) {
   const threads = store.get('threads');
 
   if (inbound) {
-    const refs = new Set([
-      ...(Array.isArray(inbound.references) ? inbound.references : []),
-      ...(inbound.inReplyTo ? [inbound.inReplyTo] : []),
-    ].map((item) => String(item || '').trim()).filter(Boolean));
-    if (refs.size) {
-      const exact = threads.find((thread) => normalizeEmail(thread.contact?.email) === target && (thread.messages || []).some((message) => (
-        message.direction === 'out' && message.messageId && refs.has(message.messageId)
-      )));
-      if (exact) return exact;
-    }
+    const exact = threads.find((thread) => normalizeEmail(thread.contact?.email) === target && repliesToThread(thread, inbound));
+    if (exact) return exact;
 
     const subject = normalizeSubject(inbound.subject);
     if (subject) {
@@ -3018,14 +3240,30 @@ async function handle(req, res) {
     json(res, 200, xalapaSearchState());
     return;
   }
+  if (pathname === '/api/xalapa/store' && method === 'PUT') {
+    const body = await readJson(req);
+    const current = store.settings().sales?.tiendanube;
+    const storeId = asString(body?.storeId).trim();
+    const token = asString(body?.token).trim() || (storeId === current?.storeId ? current.token : '');
+    if (!/^\d{1,18}$/.test(storeId) || !token || /[\r\n]/.test(token) || token.length > 512) {
+      throw new HttpError(400, 'Completá el ID de tienda y el token de lectura de pedidos.');
+    }
+    const config = { storeId, token };
+    let record;
+    try {
+      record = await syncGalapaOrders({ config, products: store.get('products') });
+    } catch (error) {
+      throw new HttpError(400, error.message);
+    }
+    await store.saveSettings({ sales: { tiendanube: config } });
+    await store.setMeta({ xalapaOrders: record.orders, xalapaStoreSync: { status: 'ok', storeId, checkedAt: record.at } });
+    json(res, 200, xalapaSearchState());
+    return;
+  }
   if (pathname === '/api/xalapa/search' && method === 'POST') {
     const body = await readJson(req);
     const channel = asString(body?.channel, 'todos');
-    if (channel !== 'todos' && !Object.hasOwn(XALAPA_SEGMENTS, channel)) throw new HttpError(400, 'Elegí un canal de búsqueda.');
-    if (!xalapaProducts(store.get('products')).length) throw new HttpError(400, 'Para buscar compradores, activá una lámpara en el catálogo GALAPA.');
-    const search = searchProviderInfo(store.settings());
-    if (search.provider === 'none' || !search.ready) throw new HttpError(400, 'La búsqueda está desactivada. Revisá Ajustes → Búsqueda.');
-    json(res, 202, startXalapaSearch(channel));
+    json(res, 202, await startXalapaSearch(channel, asString(body?.productId)));
     return;
   }
   if (pathname === '/api/xalapa/prospect' && method === 'POST') {
@@ -3344,8 +3582,13 @@ async function handle(req, res) {
     if (!thread) throw new HttpError(404, 'Conversación no encontrada.');
     const draft = (thread.drafts || []).find((d) => d.id === draftId);
     if (!draft) throw new HttpError(404, 'Borrador no encontrado.');
+    if (draft.xalapaAuto?.state === 'sending') throw new HttpError(409, 'Esperá a que termine el envío de Xalapa.');
     if (method === 'PATCH') {
       const body = await readJson(req);
+      if (draft.xalapaAuto?.state === 'queued') {
+        if (body.status !== 'descartado') throw new HttpError(409, 'El mensaje está en la cola de Xalapa.');
+        draft.xalapaAuto.state = 'cancelled';
+      }
       const beforeEdit = {
         subject: draft.subject,
         body: draft.body,

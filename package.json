@@ -28,7 +28,7 @@
     "test:scale": "node tools/test-scale.mjs",
     "test:gmail-transports": "node tools/test-gmail-transports.mjs",
     "test:send-domains": "node tools/test-send-domains.mjs",
-    "test:sales-launch": "node tools/test-sales-launch.mjs",
+    "test:sales-launch": "node tools/test-sales-launch.mjs && node tools/test-xalapa-pilot.mjs",
     "test:sales-launch-http": "node tools/test-sales-launch-http.mjs",
     "test:product-filters": "node tools/test-product-filters.mjs",
     "test:galapa-catalog": "node tools/test-galapa-catalog.mjs",
