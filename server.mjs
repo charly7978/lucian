@@ -198,6 +198,14 @@ function missionSummary(mission) {
   };
 }
 
+function needsInboxTriage(thread) {
+  return thread.inboxTriage === 'pending' || (
+    !thread.inboxTriage && thread.source === 'Respuesta entrante'
+    && !['negociando', 'ganado'].includes(thread.stage)
+    && !(thread.messages || []).some((msg) => msg.direction === 'out')
+  );
+}
+
 function threadSummary(thread, suppressions = []) {
   const messages = thread.messages || [];
   const last = messages[messages.length - 1] || null;
@@ -235,6 +243,7 @@ function threadSummary(thread, suppressions = []) {
     stage: thread.stage,
     score: thread.score || 0,
     source: thread.source,
+    needsTriage: needsInboxTriage(thread),
     nextStep: thread.nextStep,
     nextFollowUp: thread.nextFollowUp,
     lastActivityAt: thread.lastActivityAt || thread.updatedAt,
@@ -249,6 +258,9 @@ function threadSummary(thread, suppressions = []) {
     unverifiedReason: thread.unverifiedReason || '',
     verification: thread.verification || null,
     messageCount: messages.length,
+    sentByProvider: messages.filter((msg) => msg.direction === 'out' && msg.status === 'enviado'
+      && ['gmail', 'resend', 'webhook'].includes(msg.provider) && msg.providerId && !msg.deliveryNote
+      && !['bounced', 'suppressed', 'complained', 'failed'].includes(msg.deliveryStatus)).length,
     awaitingReply: last?.direction === 'in',
     lastMessage: last ? { direction: last.direction, body: truncate(last.body, 180), at: last.at, subject: last.subject } : null,
     draftPreview: preview ? {
@@ -620,6 +632,10 @@ async function processInboundEmail(inbound) {
   thread.messages = [...(thread.messages || []), message];
   thread.lastActivityAt = now;
   thread.updatedAt = now;
+  if (needsInboxTriage(thread)) {
+    await store.set('threads', store.get('threads'));
+    return thread;
+  }
   const optOut = await registerOptOut(thread, `${inbound.subject || ''}\n${message.body || ''}`, 'imap');
   if (!optOut && thread.stage === 'contactado') thread.stage = 'respondio';
   await store.set('threads', store.get('threads'));
@@ -669,6 +685,7 @@ function statePayload() {
   const products = store.get('products');
   const missions = store.get('missions');
   const threads = store.get('threads');
+  const salesThreads = threads.filter((thread) => !needsInboxTriage(thread));
   const content = store.get('content');
   const learnings = store.get('learnings');
   const suppressions = store.get('suppressions');
@@ -742,9 +759,9 @@ function statePayload() {
         ? { limit: domainInfo.capacity, used: domainInfo.used, remaining: domainInfo.remaining, warmup: false, day: null }
         : {}),
     },
-    sales: buildSales(threads, products, settings.brand?.currency || 'USD'),
-    campaigns: buildCampaignBoard(missions, threads, products),
-    salesAgenda: buildSalesAgenda({ threads, products, suppressions }),
+    sales: buildSales(salesThreads, products, settings.brand?.currency || 'USD'),
+    campaigns: buildCampaignBoard(missions, salesThreads, products),
+    salesAgenda: buildSalesAgenda({ threads: salesThreads, products, suppressions }),
     catalogHealth: buildCatalogHealth(products),
     channelReadiness: buildChannelReadiness(products),
     salesLaunch: supervisedMissionPreflight({ products, missions, settings, aiReady: isAIReady(settings), searchInfo: searchProviderInfo(settings) }),
@@ -1562,10 +1579,23 @@ async function recordQuotePayment(threadId, quoteId, body) {
   return { payment, quote, totals: quotePaymentTotals(quote), alreadyRecorded: false };
 }
 
+const sendingThreads = new Set();
+
 async function sendThreadMessage(threadId, body) {
+  if (sendingThreads.has(threadId)) throw new HttpError(409, 'Ya hay un envío en curso para esta conversación.');
+  sendingThreads.add(threadId);
+  try {
+    return await dispatchThreadMessage(threadId, body);
+  } finally {
+    sendingThreads.delete(threadId);
+  }
+}
+
+async function dispatchThreadMessage(threadId, body) {
   const threads = store.get('threads');
   const thread = threads.find((t) => t.id === threadId);
   if (!thread) throw new HttpError(404, 'Conversación no encontrada.');
+  if (needsInboxTriage(thread)) throw new HttpError(400, 'Confirmá que sea una consulta de venta antes de enviar un correo.');
   const drafts = thread.drafts || [];
   let draft;
   if (body.draftId) {
@@ -1752,7 +1782,7 @@ function findThreadForEmail(email, inbound = null) {
       ...(inbound.inReplyTo ? [inbound.inReplyTo] : []),
     ].map((item) => String(item || '').trim()).filter(Boolean));
     if (refs.size) {
-      const exact = threads.find((thread) => (thread.messages || []).some((message) => (
+      const exact = threads.find((thread) => normalizeEmail(thread.contact?.email) === target && (thread.messages || []).some((message) => (
         message.direction === 'out' && message.messageId && refs.has(message.messageId)
       )));
       if (exact) return exact;
@@ -1776,9 +1806,6 @@ function findThreadForEmail(email, inbound = null) {
 }
 
 async function createInboundThread(inbound, email) {
-  const settings = store.settings();
-  const latestMission = store.get('missions').find((m) => m.productId);
-  const product = store.find('products', latestMission?.productId) || store.get('products')[0];
   const domain = email.split('@')[1] || '';
   const company = domain.split('.')[0].replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Contacto entrante';
   const nameMatch = String(inbound.from).match(/^\s*"?([^"<]+)"?\s*</);
@@ -1786,26 +1813,27 @@ async function createInboundThread(inbound, email) {
   const thread = {
     id: uid('thr'),
     demo: false,
-    missionId: latestMission?.id || null,
-    productId: product?.id || null,
+    missionId: null,
+    productId: null,
+    inboxTriage: 'pending',
     contact: {
       name: nameMatch ? nameMatch[1].trim() : 'Contacto',
       company,
       role: '',
       email,
-      emailStatus: 'publico',
+      emailStatus: 'desconocido',
       country: '',
       city: '',
       website: '',
-      type: 'tienda',
+      type: '',
     },
     stage: 'respondio',
     score: 55,
     source: 'Respuesta entrante',
-    notes: 'Hilo creado automáticamente desde el webhook de correo.',
+    notes: '',
     drafts: [],
     messages: [],
-    nextStep: 'Leer la respuesta y decidir el siguiente paso.',
+    nextStep: 'Confirmar si el correo es una consulta de venta.',
     nextFollowUp: null,
     lastActivityAt: now,
     createdAt: now,
@@ -1813,7 +1841,6 @@ async function createInboundThread(inbound, email) {
   };
   store.get('threads').unshift(thread);
   await store.set('threads', store.get('threads'));
-  await store.activity('reply', `Respuesta entrante de ${email} sin hilo previo.`, { threadId: thread.id });
   return thread;
 }
 
@@ -3017,7 +3044,7 @@ async function handle(req, res) {
     if (method === 'GET') {
       const suppressed = isSuppressed(thread.contact?.email, threadSuppressions(thread), thread.contact?.company);
       json(res, 200, {
-        thread: { ...thread, suppressed },
+        thread: { ...thread, suppressed, needsTriage: needsInboxTriage(thread) },
         product: store.find('products', thread.productId),
         mission: missionSummary(store.find('missions', thread.missionId) || {}),
       });
@@ -3027,6 +3054,7 @@ async function handle(req, res) {
       const body = await readJson(req);
       const threads = store.get('threads');
       const target = threads.find((t) => t.id === id);
+      const acceptInbound = body.acceptInbound === true && needsInboxTriage(target);
       if (body.stage !== undefined) {
         if (!['nuevo', 'contactado', 'respondio', 'interesado', 'negociando', 'ganado', 'perdido'].includes(body.stage)) {
           throw new HttpError(400, 'Etapa inválida.');
@@ -3090,6 +3118,13 @@ async function handle(req, res) {
           }
         }
         target.contact = contact;
+      }
+      if (acceptInbound) {
+        // Los correos antiguos sin hilo heredaban el último producto de la cola.
+        target.missionId = null;
+        target.productId = null;
+        target.inboxTriage = 'accepted';
+        target.nextStep = 'Responder la consulta.';
       }
       target.updatedAt = nowISO();
       target.lastActivityAt = target.lastActivityAt || target.updatedAt;

@@ -628,6 +628,7 @@ details[open] > .disclosure-label .icon { transform: rotate(180deg); }
 }
 .home-heading > div { min-width: 0; overflow-wrap: anywhere; }
 .home-campaign { padding: clamp(16px, 2.5vw, 26px); box-shadow: none; }
+.sales-next { margin-bottom: 18px; }
 .home-campaign .section-title { font-size: clamp(23px, 3vw, 31px); }
 .home-campaign .campaign-progress { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 14px; }
 .campaign-progress, .home-channel-list { margin: 0; }
@@ -770,7 +771,7 @@ details[open] > .disclosure-label .icon { transform: rotate(180deg); }
   padding: 1rem;
   margin-bottom: .75rem;
 }
-.catalog-head { position: relative; z-index: 1; }
+.catalog-head, .inbox-page-head { position: relative; z-index: 1; }
 .page-action-menu { position: relative; }
 .action-options {
   position: absolute;

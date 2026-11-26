@@ -545,7 +545,7 @@ function updateShell() {
   const countMap = {
     products: counts.products,
     activeMissions: counts.activeMissions,
-    drafts: arr(S.state.threads).filter((thread) => !thread.demo && (thread.awaitingReply || num(thread.reviewCount) > 0)).length,
+    drafts: arr(S.state.threads).filter((thread) => !thread.demo && !thread.needsTriage && !thread.suppressed && (thread.awaitingReply || num(thread.reviewCount) > 0 || num(thread.draftCount) > 0)).length,
     sold: S.state.sales?.sold || 0,
   };
   $$('[data-count]').forEach((el) => {
@@ -712,10 +712,18 @@ function renderPanel() {
   const { brand, flags, settings } = S.state;
   const products = arr(S.state.products).filter((product) => !product.demo);
   const available = products.filter((product) => product.status === 'listo' && product.storefront?.available).length;
-  const threads = arr(S.state.threads).filter((thread) => !thread.demo);
-  const drafts = threads.reduce((total, thread) => total + num(thread.reviewCount), 0);
-  const replies = threads.filter((thread) => thread.awaitingReply).length;
+  const threads = arr(S.state.threads).filter((thread) => !thread.demo && !thread.needsTriage);
+  const open = threads.filter((thread) => !thread.suppressed && !['ganado', 'perdido'].includes(thread.stage));
+  const drafts = open.reduce((total, thread) => total + num(thread.reviewCount), 0);
+  const replies = open.filter((thread) => thread.awaitingReply).length;
+  const sent = threads.reduce((total, thread) => total + num(thread.sentByProvider), 0);
   const sales = num(S.state.sales?.sold);
+  const ready = open.filter((thread) => num(thread.draftCount) > 0).length;
+  const next = replies ? ['Responder consultas', '#/bandeja?filtro=responder']
+    : ready ? ['Abrir propuestas listas', '#/bandeja?filtro=listos']
+    : drafts ? ['Revisar propuestas', '#/bandeja?filtro=revisar']
+    : threads.some((thread) => thread.missionId && thread.stage === 'nuevo') ? ['Ver prospectos', '#/bandeja?filtro=nuevos']
+    : ['Abrir catálogo', '#/productos'];
   const campaigns = arr(S.state.campaigns).filter((campaign) => !campaign.demo);
   const campaign = campaigns.find((item) => item.active || item.queued) || campaigns[0];
   const mission = arr(S.state.missions).find((item) => !item.demo && ['running', 'queued'].includes(item.status));
@@ -728,12 +736,21 @@ function renderPanel() {
   ];
   const stats = [
     ['Artículos en venta', available, 'box', '#/productos'],
-    ['Borradores por aprobar', drafts, 'mail', '#/bandeja?filtro=revisar'],
-    ['Conversaciones por responder', replies, 'message', '#/bandeja?filtro=responder'],
+    ['Prospectos registrados', threads.filter((thread) => thread.missionId).length, 'target', '#/bandeja?filtro=prospectos'],
+    ['Envíos registrados por correo', sent, 'send', '#/bandeja?filtro=enviados'],
     ['Ventas registradas', sales, 'dollar', '#/ventas'],
   ];
 
   return `
+    <section class="panel home-campaign sales-next" aria-labelledby="sales-next-title">
+      <div class="home-heading">
+        <div>
+          <h2 class="section-title" id="sales-next-title">Próximo paso</h2>
+          <p class="section-sub">${replies} por responder · ${ready} conversaciones con propuesta lista · ${drafts} propuestas por revisar</p>
+        </div>
+        <a class="btn btn-primary" href="${next[1]}">${next[0]} ${icon('arrowRight')}</a>
+      </div>
+    </section>
     <section class="home-summary" aria-label="Resumen de ventas">
       ${stats.map(([label, value, iconName, href]) => `
         <a class="home-metric" href="${href}"><span>${icon(iconName)} ${label}</span><strong>${value}</strong></a>
@@ -745,7 +762,7 @@ function renderPanel() {
           <h2 class="section-title" id="home-campaign-title">${campaign ? `Campaña ${esc(campaign.name)}` : mission ? esc(mission.name) : 'Campañas'}</h2>
           <p class="section-sub">${campaign ? `${campaign.buyersRecorded} ${campaign.buyersRecorded === 1 ? 'conversación vinculada' : 'conversaciones vinculadas'}` : mission ? 'Misión en curso' : 'Todavía no hay campañas reales.'}</p>
         </div>
-        ${campaign ? `<a class="btn btn-primary" href="${campaignUrl}">Ver campaña ${icon('arrowRight')}</a>`
+        ${campaign ? `<a class="btn btn-ghost" href="${campaignUrl}">Ver campaña ${icon('arrowRight')}</a>`
           : mission ? `<a class="btn btn-primary" href="#/misiones/${encodeURIComponent(mission.id)}">Ver misión ${icon('arrowRight')}</a>`
           : products.length ? '<a class="btn btn-primary" href="#/productos">Ir al catálogo</a>'
           : `<button class="btn btn-primary" type="button" data-action="new-product">${icon('plus')} Cargar un producto</button>`}
@@ -2723,17 +2740,26 @@ function artifactLearning(a) {
 const INBOX_FILTERS = [
   ['todos', 'Todos'],
   ['responder', 'Para responder'],
+  ['listos', 'Listos para enviar'],
   ['revisar', 'Por aprobar'],
+  ['enviados', 'Enviados por correo'],
+  ['prospectos', 'Prospectos'],
+  ['sin-clasificar', 'Correo sin clasificar'],
   ['calientes', 'Calientes'],
   ['ventas', 'Ventas'],
   ['nuevos', 'Nuevos'],
 ];
 
 function threadMatchesFilter(thread, filter) {
+  if (filter === 'sin-clasificar') return Boolean(thread.needsTriage);
+  if (thread.needsTriage) return false;
+  if (filter === 'listos') return !thread.demo && !thread.suppressed && num(thread.draftCount) > 0;
+  if (filter === 'enviados') return !thread.demo && num(thread.sentByProvider) > 0;
+  if (filter === 'prospectos') return !thread.demo && Boolean(thread.missionId);
   if (filter === 'calientes') return ['interesado', 'negociando'].includes(thread.stage);
-  if (filter === 'responder') return Boolean(thread.awaitingReply);
+  if (filter === 'responder') return !thread.demo && !thread.suppressed && !['ganado', 'perdido'].includes(thread.stage) && Boolean(thread.awaitingReply);
   if (filter === 'borradores') return num(thread.draftCount) > 0;
-  if (filter === 'revisar') return num(thread.reviewCount) > 0 || num(thread.blockedCount) > 0;
+  if (filter === 'revisar') return !thread.demo && !thread.suppressed && num(thread.reviewCount) > 0;
   if (filter === 'ventas') return thread.stage === 'ganado';
   if (filter === 'nuevos') return thread.stage === 'nuevo';
   return true;
@@ -2781,13 +2807,13 @@ function threadRowsHTML() {
       <div class="thread-preview ${thread.lastMessage?.direction === 'in' ? 'in' : ''}">${esc(thread.awaitingReply ? 'Te escribió: ' : '')}${esc(thread.lastMessage?.body || thread.draftPreview?.body || thread.nextStep || 'Sin mensajes todavía.')}</div>
       <div class="thread-badges">
         ${demoBadge(thread.demo)}
-        ${!thread.demo && !thread.suppressed ? '<span class="badge badge-ok">Comprador real</span>' : ''}
+        ${thread.needsTriage ? '<span class="badge badge-neutral">Sin clasificar</span>' : thread.verification?.webUrl && !thread.suppressed ? '<span class="badge badge-neutral">Con fuente web</span>' : ''}
         ${thread.unverified ? '<span class="badge badge-warn">Sin verificar</span>' : ''}
         ${thread.suppressed ? '<span class="badge badge-danger">No contactar</span>' : ''}
         ${thread.draftCount ? `<span class="badge badge-amber">${thread.draftCount} listo${thread.draftCount === 1 ? '' : 's'}</span>` : ''}
         ${thread.reviewCount ? `<span class="badge badge-warn">${thread.reviewCount} por aprobar</span>` : ''}
         ${thread.blockedCount ? `<span class="badge badge-danger">${thread.blockedCount} bloqueado${thread.blockedCount === 1 ? '' : 's'}</span>` : ''}
-        ${thread.awaitingReply ? '<span class="badge badge-ok">Te escribió</span>' : ''}
+        ${thread.awaitingReply && !thread.needsTriage && !thread.suppressed ? '<span class="badge badge-ok">Te escribió</span>' : ''}
         ${thread.stage === 'ganado' ? '<span class="badge badge-ok">Venta ganada</span>' : ''}
         ${thread.nextFollowUp ? `<span class="badge badge-neutral">${icon('calendar')} ${esc(dateShort(thread.nextFollowUp))}</span>` : ''}
       </div>
@@ -2796,8 +2822,7 @@ function threadRowsHTML() {
 }
 
 function renderInbox(id) {
-  const threads = arr(S.state?.threads);
-  const totalDrafts = threads.reduce((acc, t) => acc + num(t.draftCount), 0);
+  const threads = arr(S.state?.threads).filter((thread) => threadMatchesFilter(thread, S.ui.inboxFilter));
   const fresh = id && S.thread?.thread?.id === id;
   const busy = id && S.threadLoading === id;
   const failed = id && S.threadError?.id === id;
@@ -2809,7 +2834,7 @@ function renderInbox(id) {
   else if (!fresh) detail = threadSkeleton();
   else detail = threadDetailHTML(S.thread);
 
-  return `<div class="page-head">
+  return `<div class="page-head inbox-page-head">
     <div class="page-head-main">
       <h2 class="page-title">Mensajes y borradores</h2>
     </div>
@@ -2817,8 +2842,10 @@ function renderInbox(id) {
       ${S.state.flags?.email && S.state.settings?.email?.provider === 'gmail' ? `<button class="btn btn-ghost btn-sm" type="button" data-action="check-inbox">${icon('refresh')} Revisar correos</button>` : ''}
       <a class="btn btn-ghost btn-sm" href="/api/export/threads.csv" download>${icon('download')} Exportar CSV</a>
       ${pendingResendCount() ? `<button class="btn btn-accent btn-sm" type="button" data-action="prepare-resends">${icon('send')} Preparar reenvíos (${pendingResendCount()})</button>` : ''}
-      ${threads.length ? `<button class="btn btn-danger btn-sm" type="button" data-action="delete-all-threads">${icon('trash')} Borrar todas (${threads.length})</button>` : ''}
-      <a class="btn btn-primary btn-sm" href="#/misiones/nueva">${icon('plus')} Nueva misión</a>
+      ${S.state.threads.length ? `<details class="page-action-menu">
+        <summary class="btn btn-ghost btn-sm disclosure-label">Administrar ${icon('chevronDown')}</summary>
+        <div class="action-options"><button class="btn btn-danger btn-sm" type="button" data-action="delete-all-threads">${icon('trash')} Borrar todas (${S.state.threads.length})</button></div>
+      </details>` : ''}
     </div>
   </div>
 
@@ -2826,11 +2853,10 @@ function renderInbox(id) {
     <aside class="inbox-list ${id ? 'hide-mobile' : ''}">
       <div class="inbox-head">
         <div class="between"><h2>Conversaciones</h2><span class="badge badge-neutral">${threads.length}</span></div>
-        <p class="tiny muted" style="margin-top:2px">${threads.length} conversaciones · ${threads.filter((t) => t.awaitingReply).length} te escribieron · ${threads.reduce((a, t) => a + num(t.reviewCount), 0)} por aprobar · ${threads.filter((t) => t.stage === 'ganado').length} ventas</p>
         <div class="search-field" style="margin-top:10px">${icon('search')}<input class="input" id="inbox-search" type="search" value="${attr(S.ui.inboxQuery || '')}" placeholder="Buscar empresa, persona o país”¦" aria-label="Buscar conversaciones"></div>
-        <div class="inbox-filters" id="inbox-filters">
-          ${INBOX_FILTERS.map(([value, label]) => `<button class="chip ${S.ui.inboxFilter === value ? 'active' : ''}" type="button" data-action="inbox-filter" data-filter="${value}">${label}</button>`).join('')}
-        </div>
+        <select class="select mt-2" id="inbox-filter-select" aria-label="Filtrar conversaciones">
+          ${INBOX_FILTERS.map(([value, label]) => `<option value="${value}" ${S.ui.inboxFilter === value ? 'selected' : ''}>${label}</option>`).join('')}
+        </select>
       </div>
       <div class="inbox-scroll" id="thread-list">${threadRowsHTML()}</div>
     </aside>
@@ -2857,6 +2883,17 @@ function threadDetailHTML(data) {
   const product = data.product || arr(S.state.products).find((p) => p.id === thread.productId);
   const mission = data.mission && data.mission.id ? data.mission : null;
   const messages = [...arr(thread.messages)].sort((a, b) => new Date(a.at || 0) - new Date(b.at || 0));
+  if (thread.needsTriage) {
+    return `<div class="thread-body">
+      <div class="thread-section-head">
+        <a class="section-link" href="#/bandeja?filtro=sin-clasificar">Volver al correo sin clasificar</a>
+        ${thread.suppressed ? '' : `<button class="btn btn-primary btn-sm" type="button" data-action="accept-inbound" data-id="${attr(thread.id)}">Es una consulta de venta</button>`}
+      </div>
+      <h3 class="section-title">${esc(contact.company || contact.email || 'Correo entrante')}</h3>
+      <p class="section-sub">${esc(contact.email || '')}</p>
+      <div class="conversation mt-3">${messages.map((message) => messageBubbleHTML(message, thread)).join('')}</div>
+    </div>`;
+  }
   const readyDrafts = arr(thread.drafts).filter((d) => d.status === 'listo');
   const reviewDrafts = arr(thread.drafts).filter((d) => d.status === 'revisar');
   const blockedDrafts = arr(thread.drafts).filter((d) => d.status === 'bloqueado');
@@ -2867,7 +2904,7 @@ function threadDetailHTML(data) {
       <a class="icon-btn bordered" href="#/bandeja" aria-label="Volver a la bandeja" title="Volver">${icon('arrowLeft')}</a>
       <span class="avatar lg">${esc(initials(contact.company || contact.name || '?'))}</span>
       <div style="min-width:0;flex:1">
-        <div class="thread-hero-name">${esc(contact.company || 'Contacto')} ${demoBadge(thread.demo)} ${!thread.demo && !suppressed ? '<span class="badge badge-ok">Comprador real</span>' : ''} ${thread.unverified ? '<span class="badge badge-warn">Sin verificar</span>' : ''} ${suppressed ? '<span class="badge badge-danger">No contactar</span>' : ''} ${thread.awaitingReply ? '<span class="badge badge-ok">Te escribió</span>' : ''}</div>
+        <div class="thread-hero-name">${esc(contact.company || 'Contacto')} ${demoBadge(thread.demo)} ${thread.unverified ? '<span class="badge badge-warn">Sin verificar</span>' : ''} ${suppressed ? '<span class="badge badge-danger">No contactar</span>' : ''} ${thread.awaitingReply ? '<span class="badge badge-ok">Te escribió</span>' : ''}</div>
         <div class="thread-hero-sub">
           <span>${esc(contact.name || 'Sin nombre')}${contact.role ? ` · ${esc(contact.role)}` : ''}</span>
           ${contact.email ? `<a href="mailto:${attr(contact.email)}">${esc(contact.email)}</a>` : '<span style="color:var(--danger)">Sin email</span>'}
@@ -6249,18 +6286,24 @@ async function handleAction(action, el) {
       }, 90);
       return;
     }
-    case 'inbox-filter': {
-      S.ui.inboxFilter = el.dataset.filter || 'todos';
-      $$('#inbox-filters .chip').forEach((chip) => chip.classList.toggle('active', chip.dataset.filter === S.ui.inboxFilter));
-      applyInboxList();
-      return;
-    }
     case 'inbox-reset':
       S.ui.inboxFilter = 'todos';
       S.ui.inboxQuery = '';
       render();
       return;
     case 'reload-thread': await loadThread(el.dataset.id, { force: true }); return;
+    case 'accept-inbound': {
+      el.disabled = true;
+      try {
+        await api(`/api/threads/${encodeURIComponent(el.dataset.id)}`, { method: 'PATCH', body: { acceptInbound: true } });
+        S.ui.inboxFilter = 'responder';
+        await loadState({ silent: true, render: false });
+        await loadThread(el.dataset.id, { force: true });
+      } finally {
+        el.disabled = false;
+      }
+      return;
+    }
     case 'edit-contact': {
       if (!S.thread?.thread) return;
       openContactModal(S.thread.thread);
@@ -6415,6 +6458,12 @@ function onGlobalClick(event) {
 
 function onGlobalChange(event) {
   const target = event.target;
+  if (target.id === 'inbox-filter-select') {
+    S.ui.inboxFilter = target.value;
+    render();
+    $('#inbox-filter-select')?.focus();
+    return;
+  }
   if (target.id === 'thread-stage') {
     updateThreadStage(target.dataset.threadId, target.value);
     return;

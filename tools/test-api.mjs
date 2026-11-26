@@ -204,6 +204,7 @@ console.log('inbound', inbound);
 const afterInbound = await api('/api/state');
 const newThread = afterInbound.threads.find((t) => t.contact?.email === 'marta@luzdeautor.test');
 console.log('new inbound thread', newThread?.contact?.company, newThread?.stage, newThread?.messageCount);
+if (!newThread || !newThread.needsTriage || newThread.missionId || newThread.productId) process.exitCode = 1;
 console.log('intel countries', (await api('/api/intel')).countries.length);
 
 /* 10. Importación de catálogo por CSV. */
@@ -284,6 +285,14 @@ if (!quoteThread) {
     method: 'PATCH',
     body: JSON.stringify({ status: 'listo' }),
   });
+  await expectStatus('correo sin clasificar protegido', 400, () => api(`/api/threads/${quoteThread.id}/send`, {
+    method: 'POST',
+    body: JSON.stringify({ draftId: quoteCreated.draft.id, channel: 'manual', confirm: true }),
+  }));
+  await api(`/api/threads/${quoteThread.id}`, {
+    method: 'PATCH', body: JSON.stringify({ acceptInbound: true }),
+  });
+  if ((await api(`/api/threads/${quoteThread.id}`)).thread.needsTriage) process.exitCode = 1;
   const quoteSend = await api(`/api/threads/${quoteThread.id}/send`, {
     method: 'POST',
     body: JSON.stringify({ draftId: quoteCreated.draft.id, channel: 'manual', confirm: true }),
