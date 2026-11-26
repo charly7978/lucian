@@ -9,7 +9,7 @@ import { exec } from 'node:child_process';
 import { Store, maskSettings, settingsFlags, SECRET_PATHS } from './lib/store.mjs';
 import {
   asArray, asNumber, asObject, asString, clamp, dataUrlToBuffer, localDayKey, nowISO,
-  sniffImage, toCsv, truncate, uid,
+  normalizeDomain as websiteDomain, sniffImage, toCsv, truncate, uid,
 } from './lib/util.mjs';
 import { isAIReady, listModels, resolveAIConfig, testAI, PROVIDERS } from './lib/ai.mjs';
 import { searchProviderInfo, searchWebDetailed } from './lib/search.mjs';
@@ -48,7 +48,7 @@ import { buildCampaignBoard } from './lib/campaign-board.mjs';
 import { buildOfferKit, buildBulkOfferRows, buildChannelReadiness } from './lib/sales-offers.mjs';
 import { buildPublicCatalog } from './lib/public-catalog.mjs';
 import { galapaProductUrl, syncGalapaCatalog } from './lib/galapa-catalog.mjs';
-import { XALAPA_SEGMENTS, findXalapaProspects, xalapaProducts } from './lib/xalapa-sales.mjs';
+import { XALAPA_SEARCH_VERSION, XALAPA_SEGMENTS, findXalapaProspects, xalapaProducts } from './lib/xalapa-sales.mjs';
 
 import { obtainResendDeliveryReport, applyResendDeliveryReport } from './lib/resend-delivery.mjs';
 
@@ -218,7 +218,8 @@ function startXalapaSearch(channel) {
   const keys = channel === 'todos' ? Object.keys(XALAPA_SEGMENTS) : [channel];
   for (const key of keys) {
     const previous = xalapaSearchState().results[key];
-    if (xalapaSearches.has(key) || (previous?.status === 'found' && Date.now() - Date.parse(previous.at) < XALAPA_REFRESH_MS)) continue;
+    if (xalapaSearches.has(key) || (previous?.version === XALAPA_SEARCH_VERSION && previous.status === 'found'
+      && Date.now() - Date.parse(previous.at) < XALAPA_REFRESH_MS)) continue;
     xalapaSearches.add(key);
     void (async () => {
       try {
@@ -246,11 +247,12 @@ async function saveXalapaProspect({ channel, prospectId, productId }) {
   if (!product) throw new HttpError(400, 'Elegí una lámpara disponible en GALAPA.');
   const threads = store.get('threads');
   const suppressions = store.get('suppressions').filter((item) => !item.demo);
-  if (isSuppressed(prospect.email, suppressions, prospect.name)) {
+  if (isSuppressed(prospect.email, suppressions, prospect.name)
+    || suppressions.some((item) => item.domain && websiteDomain(item.domain) === prospectId)) {
     throw new HttpError(409, 'Este contacto está marcado para no contactar.');
   }
   const previous = threads.find((thread) => !thread.demo && !needsInboxTriage(thread)
-    && (normalizeDomain(thread.contact?.website) === prospectId
+    && (websiteDomain(thread.contact?.website) === prospectId || websiteDomain(thread.verification?.webUrl) === prospectId
       || (prospect.email && normalizeEmail(thread.contact?.email) === normalizeEmail(prospect.email))));
   if (previous) return { threadId: previous.id, existing: true };
   const now = nowISO();

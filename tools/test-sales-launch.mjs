@@ -105,6 +105,17 @@ assert.equal(reached.length, 3);
 assert.equal(result.prospects.length, 1);
 assert.equal(result.prospects[0].email, 'compras@hotel-prueba.test');
 assert.equal(result.prospects[0].contactUrl, 'https://hotel-prueba.test/contacto');
+const wholesale = await findXalapaProspects({}, 'mayoristas', {
+  search: async () => ({ results: [{ url: 'https://lighting-prueba.test/' }, { url: 'https://mixed-prueba.test/' }] }),
+  inspect: async (origin) => ({
+    reachable: true, pages: [origin], title: origin.includes('mixed') ? 'Bazar' : 'Iluminación de prueba',
+    sample: origin.includes('mixed')
+      ? `Venta mayorista Buenos Aires. ${'Artículos de cocina. '.repeat(10)} Lámparas.`
+      : 'Venta mayorista de lámparas en Buenos Aires.',
+    emails: [],
+  }),
+});
+assert.deepEqual(wholesale.prospects.map((item) => item.id), ['lighting-prueba.test']);
 assert.equal((await findXalapaProspects({}, 'mayoristas', {
   search: async () => ({ results: [] }),
 })).status, 'unavailable');

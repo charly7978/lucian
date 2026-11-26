@@ -727,7 +727,7 @@ function renderPanel() {
   const next = replies ? ['Responder consultas', '#/bandeja?filtro=responder']
     : ready ? ['Abrir propuestas listas', '#/bandeja?filtro=listos']
     : drafts ? ['Revisar propuestas', '#/bandeja?filtro=revisar']
-    : threads.some((thread) => thread.missionId && thread.stage === 'nuevo') ? ['Ver prospectos', '#/bandeja?filtro=nuevos']
+    : threads.some((thread) => isSalesProspect(thread) && thread.stage === 'nuevo') ? ['Ver prospectos', '#/bandeja?filtro=prospectos']
     : ['Abrir catálogo', '#/productos'];
   const campaigns = arr(S.state.campaigns).filter((campaign) => !campaign.demo);
   const campaign = campaigns.find((item) => item.active || item.queued) || campaigns[0];
@@ -741,7 +741,7 @@ function renderPanel() {
   ];
   const stats = [
     ['Artículos en venta', available, 'box', '#/productos'],
-    ['Prospectos registrados', threads.filter((thread) => thread.missionId).length, 'target', '#/bandeja?filtro=prospectos'],
+    ['Prospectos registrados', threads.filter(isSalesProspect).length, 'target', '#/bandeja?filtro=prospectos'],
     ['Envíos registrados por correo', sent, 'send', '#/bandeja?filtro=enviados'],
     ['Ventas registradas', sales, 'dollar', '#/ventas'],
   ];
@@ -2904,12 +2904,16 @@ const INBOX_FILTERS = [
   ['nuevos', 'Nuevos'],
 ];
 
+function isSalesProspect(thread) {
+  return !thread.demo && (Boolean(thread.missionId) || thread.source === 'Prospección Xalapa');
+}
+
 function threadMatchesFilter(thread, filter) {
   if (filter === 'sin-clasificar') return Boolean(thread.needsTriage);
   if (thread.needsTriage) return false;
   if (filter === 'listos') return !thread.demo && !thread.suppressed && num(thread.draftCount) > 0;
   if (filter === 'enviados') return !thread.demo && num(thread.sentByProvider) > 0;
-  if (filter === 'prospectos') return !thread.demo && Boolean(thread.missionId);
+  if (filter === 'prospectos') return isSalesProspect(thread);
   if (filter === 'calientes') return ['interesado', 'negociando'].includes(thread.stage);
   if (filter === 'responder') return !thread.demo && !thread.suppressed && !['ganado', 'perdido'].includes(thread.stage) && Boolean(thread.awaitingReply);
   if (filter === 'borradores') return num(thread.draftCount) > 0;
