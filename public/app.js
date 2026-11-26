@@ -517,6 +517,7 @@ function navigate(hash) {
 
 const VIEW_META = {
   panel: 'Inicio',
+  buscar: 'Vender Xalapa',
   productos: 'Productos',
   misiones: 'Campañas',
   ventas: 'Ventas',
@@ -532,7 +533,7 @@ function updateShell() {
   if (!S.state) return;
   const { view } = S.route;
   $$('[data-nav]').forEach((el) => {
-    const active = el.dataset.nav === view;
+    const active = el.dataset.nav === view || (view === 'buscar' && el.dataset.nav === 'panel');
     if (active && !el.classList.contains('active')) {
       const tools = el.closest('.nav-more');
       if (tools) tools.open = true;
@@ -575,6 +576,8 @@ function render({ live = false } = {}) {
   const next = routeParts();
   const changedView = next.view !== S.route.view;
   const navigated = changedView || next.id !== S.route.id;
+  const enteredXalapaSearch = next.view === 'buscar' && next.query.get('canal') !== 'directo'
+    && (changedView || S.route.query?.get('canal') === 'directo');
   const inboxFilter = next.query.get('filtro');
   if (next.view === 'bandeja' && inboxFilter && (changedView || inboxFilter !== S.route.query?.get('filtro'))) {
     if (INBOX_FILTERS.some(([value]) => value === inboxFilter)) {
@@ -591,6 +594,7 @@ function render({ live = false } = {}) {
   try {
     switch (next.view) {
       case 'panel': html = renderPanel(); break;
+      case 'buscar': html = renderXalapa(); break;
       case 'productos': html = next.id ? renderProductRoute(next.id) : renderProducts(); break;
       case 'misiones': html = next.id === 'nueva' ? renderWizard() : next.id ? renderMissionView(next.id) : renderMissions(); break;
       case 'ventas': html = renderVentas(); break;
@@ -626,6 +630,7 @@ function render({ live = false } = {}) {
   if (elapsed) updateMissionElapsed(elapsed);
   if (changedView) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   bindView(next);
+  if (enteredXalapaSearch && !S.ui.xalapaStarting) refreshXalapa();
   if (changedView && next.view === 'conexiones') fetchConnections();
 }
 
@@ -742,13 +747,25 @@ function renderPanel() {
   ];
 
   return `
+    <section class="panel home-campaign sales-next" aria-labelledby="xalapa-title">
+      <div class="home-heading">
+        <div>
+          <h2 class="section-title" id="xalapa-title">Vender lámparas Xalapa</h2>
+          <p class="section-sub">Encontrá hoteles y comercios de iluminación en Buenos Aires y GBA.</p>
+        </div>
+        <div class="cluster">
+          <button class="btn btn-primary" type="button" data-action="xalapa-search" data-channel="todos">${icon('search')} Buscar compradores</button>
+          <a class="btn btn-ghost" href="#/buscar?canal=directo">Venta directa y redes</a>
+        </div>
+      </div>
+    </section>
     <section class="panel home-campaign sales-next" aria-labelledby="sales-next-title">
       <div class="home-heading">
         <div>
           <h2 class="section-title" id="sales-next-title">Próximo paso</h2>
           <p class="section-sub">${replies} por responder · ${ready} conversaciones con propuesta lista · ${drafts} propuestas por revisar</p>
         </div>
-        <a class="btn btn-primary" href="${next[1]}">${next[0]} ${icon('arrowRight')}</a>
+        <a class="btn btn-ghost" href="${next[1]}">${next[0]} ${icon('arrowRight')}</a>
       </div>
     </section>
     <section class="home-summary" aria-label="Resumen de ventas">
@@ -779,6 +796,143 @@ function renderPanel() {
       </dl>
       ${missingBrand ? '<p class="small"><a class="section-link" href="#/ajustes?tab=marca">Completar datos de la marca</a></p>' : ''}
     </section>`;
+}
+
+const XALAPA_CHANNELS = [['hoteles', 'Hoteles'], ['mayoristas', 'Mayoristas y profesionales']];
+const GALAPA_STOREFRONT = 'https://galapa.com.ar/productos';
+
+function visibleXalapaProducts() {
+  return arr(S.state.products).filter((p) => !p.demo && p.status === 'listo' && p.storefront?.available
+    && safeUrl(p.storefront.url) && num(p.price) > 0);
+}
+
+function renderXalapa() {
+  const products = visibleXalapaProducts();
+  const direct = S.route.query.get('canal') === 'directo';
+  const selected = products.find((p) => p.id === S.ui.xalapaProduct);
+  const snapshot = S.ui.xalapaSearch || { results: {}, running: [] };
+  const starting = S.ui.xalapaStarting;
+  const searching = (key) => starting === 'todos' || starting === key || snapshot.running.includes(key);
+  const productPicker = `<label class="field xalapa-product-picker">
+    <span>${direct ? 'Qué querés compartir' : 'Lámpara para presentar'}</span>
+    <select class="select" id="xalapa-product">
+      ${direct ? '<option value="">Colección completa</option>' : ''}
+      ${products.map((p) => `<option value="${attr(p.id)}" ${p.id === selected?.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}
+    </select>
+  </label>`;
+
+  if (direct) {
+    const link = selected ? safeUrl(selected.storefront.url) : GALAPA_STOREFRONT;
+    const message = selected
+      ? `${selected.name} de Xalapa. Consultá el precio y la disponibilidad en GALAPA: ${link}`
+      : `Descubrí las lámparas Xalapa. Elegí tu modelo y comprá en GALAPA: ${link}`;
+    return `<div class="page-head">
+      <div><h2 class="page-title">Venta directa y redes</h2><p class="page-sub">Compartí la ficha de una lámpara o la colección. La compra se hace en GALAPA.</p></div>
+      <a class="section-link" href="#/buscar">${icon('arrowLeft')} Buscar compradores</a>
+    </div>
+    <section class="panel xalapa-direct">
+      ${productPicker}
+      <p>${esc(message)}</p>
+      <div class="cluster">
+        <a class="btn btn-primary" href="https://wa.me/?text=${encodeURIComponent(message)}" target="_blank" rel="noopener noreferrer">Compartir por WhatsApp</a>
+        <button class="btn btn-ghost" type="button" data-action="xalapa-copy" data-copy="${attr(message)}">${icon('copy')} Copiar para redes</button>
+        <a class="section-link" href="${attr(link)}" target="_blank" rel="noopener noreferrer">Abrir en GALAPA ${icon('external')}</a>
+      </div>
+    </section>`;
+  }
+
+  return `<div class="page-head xalapa-head">
+    <div><h2 class="page-title">Buscar compradores</h2><p class="page-sub">Hoteles y comercios de iluminación en Buenos Aires y GBA.</p></div>
+    <div class="page-actions">
+      <button class="btn btn-primary" type="button" data-action="xalapa-search" data-channel="todos" ${products.length && !XALAPA_CHANNELS.every(([key]) => searching(key)) ? '' : 'disabled'}>${icon('search')} Buscar en ambos canales</button>
+      <a class="btn btn-ghost" href="#/buscar?canal=directo">Venta directa y redes</a>
+    </div>
+  </div>
+  ${products.length ? productPicker : '<p class="small">Activá una lámpara en <a href="#/productos">Productos</a> para empezar.</p>'}
+  ${S.ui.xalapaError ? `<p class="field-error mt-2" role="alert">${esc(S.ui.xalapaError)}</p>` : ''}
+  ${XALAPA_CHANNELS.map(([key, label]) => {
+    const result = snapshot.results[key];
+    const busy = searching(key);
+    const prospects = arr(result?.prospects);
+    const status = busy ? 'Buscando y comprobando sitios…'
+      : prospects.length ? `${prospects.length} ${prospects.length === 1 ? 'sitio comprobado' : 'sitios comprobados'} · ${dateTime(result.at)}`
+      : result?.status === 'empty' ? 'La búsqueda no encontró sitios que cumplieran los criterios.'
+      : result ? 'El motor no devolvió resultados en este intento. Podés reintentar.'
+      : 'Todavía no se hizo una búsqueda.';
+    return `<section class="section xalapa-results" aria-labelledby="xalapa-${key}">
+      <div class="section-head">
+        <div><h3 class="section-title" id="xalapa-${key}">${label}</h3><p class="section-sub" role="status">${esc(status)}</p></div>
+        <button class="btn btn-ghost btn-sm" type="button" data-action="xalapa-search" data-channel="${key}" ${busy || !products.length ? 'disabled' : ''}>Buscar ${key === 'hoteles' ? 'hoteles' : 'mayoristas'}</button>
+      </div>
+      ${prospects.length ? `<ul class="xalapa-prospects">
+        ${prospects.map((prospect) => `<li>
+          <div>
+            <strong>${esc(prospect.name)}</strong>
+            <p class="small muted">${esc(prospect.evidence)}${prospect.email ? ' · Correo publicado' : ''}</p>
+          </div>
+          <div class="cluster">
+            <a class="btn btn-ghost btn-sm" href="${attr(safeUrl(prospect.contactUrl))}" target="_blank" rel="noopener noreferrer">Ver fuente ${icon('external')}</a>
+            <button class="btn btn-primary btn-sm" type="button" data-action="xalapa-contact" data-channel="${key}" data-id="${attr(prospect.id)}" ${products.length ? '' : 'disabled'}>Contactar</button>
+          </div>
+        </li>`).join('')}
+      </ul>` : ''}
+    </section>`;
+  }).join('')}`;
+}
+
+function scheduleXalapaRefresh() {
+  clearTimeout(S.ui.xalapaTimer);
+  if (S.route.view === 'buscar' && S.route.query.get('canal') !== 'directo' && S.ui.xalapaSearch?.running.length) {
+    S.ui.xalapaTimer = setTimeout(refreshXalapa, 2500);
+  }
+}
+
+async function refreshXalapa() {
+  if (S.route.view !== 'buscar' || S.route.query.get('canal') === 'directo') return;
+  const version = S.ui.xalapaSearchVersion;
+  try {
+    const snapshot = await api('/api/xalapa/search', { silent: true });
+    if (!S.ui.xalapaStarting && version === S.ui.xalapaSearchVersion) {
+      S.ui.xalapaSearch = snapshot;
+      S.ui.xalapaError = '';
+    }
+  } catch (error) {
+    S.ui.xalapaError = error.message;
+  }
+  if (S.route.view === 'buscar' && S.route.query.get('canal') !== 'directo') render({ live: true });
+  scheduleXalapaRefresh();
+}
+
+async function startXalapaSearch(channel) {
+  if (S.ui.xalapaStarting) return;
+  S.ui.xalapaSearchVersion = (S.ui.xalapaSearchVersion || 0) + 1;
+  S.ui.xalapaStarting = channel;
+  S.ui.xalapaError = '';
+  if (S.route.view !== 'buscar' || S.route.query.get('canal') === 'directo') navigate('#/buscar');
+  else render();
+  try {
+    S.ui.xalapaSearch = await api('/api/xalapa/search', { method: 'POST', body: { channel }, silent: true });
+  } catch (error) {
+    S.ui.xalapaError = error.message;
+  } finally {
+    S.ui.xalapaStarting = '';
+    if (S.route.view === 'buscar') render({ live: true });
+    scheduleXalapaRefresh();
+  }
+}
+
+async function openXalapaContact(button) {
+  button.disabled = true;
+  try {
+    const productId = $('#xalapa-product')?.value;
+    const { threadId } = await api('/api/xalapa/prospect', {
+      method: 'POST', body: { channel: button.dataset.channel, prospectId: button.dataset.id, productId },
+    });
+    await loadState({ silent: true, render: false });
+    navigate(`#/bandeja/${encodeURIComponent(threadId)}?filtro=todos`);
+  } finally {
+    button.disabled = false;
+  }
 }
 
 function statCard(label, value, iconName, foot, href, extra = '') {
@@ -6133,6 +6287,9 @@ async function handleAction(action, el) {
       return;
     }
     case 'toggle-mobile-nav': toggleMobileNav(); return;
+    case 'xalapa-search': await startXalapaSearch(el.dataset.channel); return;
+    case 'xalapa-contact': await openXalapaContact(el); return;
+    case 'xalapa-copy': await copyToClipboard(el.dataset.copy, 'Mensaje copiado.'); return;
     case 'reload-state': await loadState(); return;
     case 'new-product': openProductModal(); return;
     case 'offer-kit': openOfferKitModal(el.dataset.id || null); return;
@@ -6458,6 +6615,14 @@ function onGlobalClick(event) {
 
 function onGlobalChange(event) {
   const target = event.target;
+  if (target.id === 'xalapa-product') {
+    S.ui.xalapaProduct = target.value;
+    if (S.route.query.get('canal') === 'directo') {
+      render({ live: true });
+      $('#xalapa-product')?.focus();
+    }
+    return;
+  }
   if (target.id === 'inbox-filter-select') {
     S.ui.inboxFilter = target.value;
     render();

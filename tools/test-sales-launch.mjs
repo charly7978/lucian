@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { runScheduledB2B, scheduledB2BPlan, supervisedMissionPreflight } from '../lib/sales-launch.mjs';
 import { verifyProspectArtifact } from '../lib/agents.mjs';
+import { findXalapaProspects, xalapaProducts } from '../lib/xalapa-sales.mjs';
 const now = Date.parse('2026-11-20T22:00:00Z');
 const product = (id, p = {}) => ({ id, name: `Lampara ${id}`, photos: [{file: 'foto.jpg'}], price: 100, ...p });
 const data = { now, products: [product('A'), product('B'), product('C', {photos:[]}), product('D', { status:'archivado'})],
@@ -64,3 +65,47 @@ const verified = await verifyProspectArtifact({ compradores: [
 assert.equal(verified.compradores.length, 0);
 assert.equal(verified.descartados.length, 2);
 console.log('OK: prospección B2B optativa, límite de 24 h, disparos simultáneos y filtro de compradores.');
+
+const storefront = { url: 'https://galapa.com.ar/productos/xalapa-uno/', available: true };
+assert.deepEqual(xalapaProducts([
+  product('real', { status: 'listo', storefront }),
+  product('demo', { status: 'listo', storefront, demo: true }),
+  product('foreign', { status: 'listo', storefront: { ...storefront, url: 'https://otro.test/productos/xalapa-uno/' } }),
+  product('empty', { status: 'listo', storefront: { ...storefront, available: false } }),
+]).map((item) => item.id), ['real']);
+
+const reached = [];
+const result = await findXalapaProspects({}, 'hoteles', {
+  search: async () => ({
+    engine: 'motor de prueba',
+    results: [
+      { url: 'https://booking.com/hotel/ar/foo' },
+      { url: 'https://hotel-prueba.test/reservas' },
+      { url: 'https://hotel-prueba.test/contacto' },
+      { url: 'https://redireccion.test/' },
+      { url: 'https://otro-negocio.test/' },
+    ],
+  }),
+  inspect: async (origin) => {
+    reached.push(origin);
+    if (origin.includes('redireccion')) return {
+      reachable: true, pages: ['https://booking.com/hotels'], title: 'Hotel', sample: 'Habitaciones Buenos Aires', emails: [],
+    };
+    if (origin.includes('otro-negocio')) return { reachable: true, pages: [origin], title: 'Tienda', sample: 'Indumentaria de Buenos Aires', emails: [] };
+    return {
+      reachable: true, pages: [origin, origin + '/contacto'], title: 'Hotel Buenos Aires | Sitio oficial',
+      sample: 'Hotel boutique. Habitaciones y reservas en Buenos Aires.',
+      emails: [{ email: 'compras@falsohotel-prueba.test', source: origin }, { email: 'compras@hotel-prueba.test', source: origin + '/contacto' }],
+    };
+  },
+});
+assert.equal(result.status, 'found');
+assert.equal(result.checked, 3);
+assert.equal(reached.length, 3);
+assert.equal(result.prospects.length, 1);
+assert.equal(result.prospects[0].email, 'compras@hotel-prueba.test');
+assert.equal(result.prospects[0].contactUrl, 'https://hotel-prueba.test/contacto');
+assert.equal((await findXalapaProspects({}, 'mayoristas', {
+  search: async () => ({ results: [] }),
+})).status, 'unavailable');
+console.log('OK: búsqueda Xalapa con sitios verificables, contacto publicado, deduplicación y catálogo activo.');

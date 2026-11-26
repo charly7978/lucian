@@ -629,6 +629,21 @@ details[open] > .disclosure-label .icon { transform: rotate(180deg); }
 .home-heading > div { min-width: 0; overflow-wrap: anywhere; }
 .home-campaign { padding: clamp(16px, 2.5vw, 26px); box-shadow: none; }
 .sales-next { margin-bottom: 18px; }
+.xalapa-product-picker { width: min(100%, 380px); }
+.xalapa-direct { max-width: 760px; }
+.xalapa-direct p { margin-block: 16px; overflow-wrap: anywhere; }
+.xalapa-prospects { padding: 0; margin: 0; list-style: none; border-top: 1px solid var(--line); }
+.xalapa-prospects li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 9px 18px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.xalapa-prospects li p { margin-top: 3px; }
+.xalapa-prospects li > div:first-child { min-width: 0; overflow-wrap: anywhere; }
 .home-campaign .section-title { font-size: clamp(23px, 3vw, 31px); }
 .home-campaign .campaign-progress { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 14px; }
 .campaign-progress, .home-channel-list { margin: 0; }

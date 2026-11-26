@@ -48,6 +48,7 @@ import { buildCampaignBoard } from './lib/campaign-board.mjs';
 import { buildOfferKit, buildBulkOfferRows, buildChannelReadiness } from './lib/sales-offers.mjs';
 import { buildPublicCatalog } from './lib/public-catalog.mjs';
 import { galapaProductUrl, syncGalapaCatalog } from './lib/galapa-catalog.mjs';
+import { XALAPA_SEGMENTS, findXalapaProspects, xalapaProducts } from './lib/xalapa-sales.mjs';
 
 import { obtainResendDeliveryReport, applyResendDeliveryReport } from './lib/resend-delivery.mjs';
 
@@ -204,6 +205,78 @@ function needsInboxTriage(thread) {
     && !['negociando', 'ganado'].includes(thread.stage)
     && !(thread.messages || []).some((msg) => msg.direction === 'out')
   );
+}
+
+const xalapaSearches = new Set();
+const XALAPA_REFRESH_MS = 10 * 60 * 1000;
+
+function xalapaSearchState() {
+  return { results: store.get('meta').xalapaProspects || {}, running: [...xalapaSearches] };
+}
+
+function startXalapaSearch(channel) {
+  const keys = channel === 'todos' ? Object.keys(XALAPA_SEGMENTS) : [channel];
+  for (const key of keys) {
+    const previous = xalapaSearchState().results[key];
+    if (xalapaSearches.has(key) || (previous?.status === 'found' && Date.now() - Date.parse(previous.at) < XALAPA_REFRESH_MS)) continue;
+    xalapaSearches.add(key);
+    void (async () => {
+      try {
+        const result = await findXalapaProspects(store.settings(), key);
+        await store.setMeta({ xalapaProspects: { ...xalapaSearchState().results, [key]: result } });
+      } catch (error) {
+        console.error('[Lucian] Búsqueda Xalapa:', error.message);
+        await store.setMeta({
+          xalapaProspects: { ...xalapaSearchState().results, [key]: { at: nowISO(), status: 'error', prospects: [] } },
+        }).catch(() => {});
+      } finally {
+        xalapaSearches.delete(key);
+      }
+    })();
+  }
+  return xalapaSearchState();
+}
+
+async function saveXalapaProspect({ channel, prospectId, productId }) {
+  const result = Object.hasOwn(XALAPA_SEGMENTS, channel) && xalapaSearchState().results[channel];
+  const prospect = result?.prospects?.find((item) => item.id === prospectId);
+  if (!prospect) throw new HttpError(404, 'Volvé a buscar para actualizar los datos del contacto.');
+  const products = xalapaProducts(store.get('products'));
+  const product = productId ? products.find((item) => item.id === productId) : products[0];
+  if (!product) throw new HttpError(400, 'Elegí una lámpara disponible en GALAPA.');
+  const threads = store.get('threads');
+  const suppressions = store.get('suppressions').filter((item) => !item.demo);
+  if (isSuppressed(prospect.email, suppressions, prospect.name)) {
+    throw new HttpError(409, 'Este contacto está marcado para no contactar.');
+  }
+  const previous = threads.find((thread) => !thread.demo && !needsInboxTriage(thread)
+    && (normalizeDomain(thread.contact?.website) === prospectId
+      || (prospect.email && normalizeEmail(thread.contact?.email) === normalizeEmail(prospect.email))));
+  if (previous) return { threadId: previous.id, existing: true };
+  const now = nowISO();
+  const url = galapaProductUrl(product.storefront.url);
+  const reason = channel === 'hoteles' ? 'proyectos de iluminación y decoración del hotel' : 'su catálogo y proyectos de iluminación';
+  const body = `Hola, equipo de ${prospect.name}.\n\nLes escribimos de Xalapa. Diseñamos lámparas y las vendemos en la tienda GALAPA. Les compartimos ${product.name} como referencia para ${reason}.\n\nFicha con precio y disponibilidad: ${url}\n\n¿Con quién podríamos conversar sobre compras o un pedido por cantidad? Si les interesa, podemos preparar una cotización para su proyecto.\n\nSaludos,\nXalapa`;
+  const thread = {
+    id: uid('thr'), demo: false, missionId: null, productId: product.id,
+    contact: {
+      company: prospect.name, email: prospect.email, website: prospect.contactUrl,
+      emailStatus: prospect.email ? 'publico' : 'desconocido', country: 'Argentina',
+      type: channel === 'hoteles' ? 'hotel' : 'iluminación profesional',
+    },
+    source: 'Prospección Xalapa', notes: prospect.evidence,
+    verification: { webUrl: prospect.website, webEstado: 'activo', emailEstado: prospect.email ? 'publico' : 'desconocido', emailFuente: prospect.email ? prospect.contactUrl : '', at: result.at },
+    stage: 'nuevo', score: 55, messages: [],
+    drafts: [{
+      id: uid('drf'), channel: prospect.email ? 'email' : 'formulario', language: 'es',
+      subject: `Lámparas Xalapa para ${prospect.name}`, body, status: 'listo', source: 'manual', guardVersion: 2, createdAt: now,
+    }],
+    nextStep: 'Revisar la propuesta y usar el canal publicado por la empresa.',
+    createdAt: now, updatedAt: now, lastActivityAt: now,
+  };
+  threads.unshift(thread);
+  await store.set('threads', threads);
+  return { threadId: thread.id, existing: false };
 }
 
 function threadSummary(thread, suppressions = []) {
@@ -2937,6 +3010,26 @@ async function handle(req, res) {
       json(res, 200, { ok: true, mission: missionSummary(mission) });
       return;
     }
+  }
+
+  if (pathname === '/api/xalapa/search' && method === 'GET') {
+    json(res, 200, xalapaSearchState());
+    return;
+  }
+  if (pathname === '/api/xalapa/search' && method === 'POST') {
+    const body = await readJson(req);
+    const channel = asString(body?.channel, 'todos');
+    if (channel !== 'todos' && !Object.hasOwn(XALAPA_SEGMENTS, channel)) throw new HttpError(400, 'Elegí un canal de búsqueda.');
+    if (!xalapaProducts(store.get('products')).length) throw new HttpError(400, 'Para buscar compradores, activá una lámpara en el catálogo GALAPA.');
+    const search = searchProviderInfo(store.settings());
+    if (search.provider === 'none' || !search.ready) throw new HttpError(400, 'La búsqueda está desactivada. Revisá Ajustes → Búsqueda.');
+    json(res, 202, startXalapaSearch(channel));
+    return;
+  }
+  if (pathname === '/api/xalapa/prospect' && method === 'POST') {
+    const body = await readJson(req);
+    json(res, 200, await saveXalapaProspect(asObject(body)));
+    return;
   }
 
   if (pathname === '/api/threads' && method === 'POST') {
