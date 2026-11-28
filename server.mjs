@@ -16,7 +16,7 @@ import { searchProviderInfo, searchWebDetailed } from './lib/search.mjs';
 import { hunterAccount } from './lib/hunter.mjs';
 import {
   activeSendDomains, assertCanSend, buildEml, chooseSendDomain, composeEmail, dailyLimitInfo,
-  detectOptOut, emailDomain, emlFilename, isSharedEmailDomain, isSuppressed, isValidEmail,
+  detectOptOut, emailDomain, emlFilename, hasConfiguredEmailProvider, isSharedEmailDomain, isSuppressed, isValidEmail,
   normalizeCompany, normalizeDomain, normalizeEmail, normalizeSendDomains, parseEmailEvent,
   parseInbound, sendDomainStatus, sendWithResend, sendWithWebhook, sendWithGmail, testResend,
   validateSendDomains,
@@ -28,7 +28,7 @@ import {
 import { DEPTHS, STEPS } from './lib/prompts.mjs';
 import { clearDemo, seedDemo } from './lib/demo.mjs';
 import { generateJson } from './lib/ai.mjs';
-import { Outbox } from './lib/outbox.mjs';
+import { Outbox, permitsQueuedDraft, stageBlocksOutreach } from './lib/outbox.mjs';
 import { productReadiness } from './lib/readiness.mjs';
 import { buildQuote, quoteLanguage, quoteNumber, quoteTotals, quoteTotalsMulti, roundMoney, validUntilDate } from './lib/quotes.mjs';
 import { createZip, readZip } from './lib/zip.mjs';
@@ -37,8 +37,8 @@ import { diagnoseConnections, testConnection, getAiFailoverState, resetAiFailove
 import { startAutopilot, runAutopilot, getAutopilotState } from './lib/autopilot.mjs';
 import { verifyMetaSignature, hasDocumentedOptIn, resendIdempotencyKey } from './lib/security.mjs';
 import {
-  POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch, policyConfig,
-  policyFingerprint, policyStatus, revokePolicyPatch,
+  POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch, clearDraftApproval, isPolicyActive,
+  policyConfig, policyFingerprint, policyStatus, revokePolicyPatch,
 } from './lib/policy.mjs';
 import { buildSalesAgenda, buildCatalogHealth } from './lib/sales-ops.mjs';
 import { runScheduledB2B, scheduledB2BPlan, supervisedMissionPreflight } from './lib/sales-launch.mjs';
@@ -665,12 +665,13 @@ const notifier = new Notifier({
 });
 notifier.start();
 
+const outboxAuthorization = Symbol('outboxAuthorization');
 const outbox = new Outbox({
   store,
-  deliver: async ({ threadId, draftId, sendDomain }) => {
+  deliver: async ({ threadId, draftId, sendDomain, outboxId }) => {
     const settings = store.settings();
     if (!outbox.canAutopilot(settings)) throw new Error('El piloto de correo está pausado o falta configurar el proveedor.');
-    return sendThreadMessage(threadId, { draftId, channel: settings.email.provider, automated: true, sendDomain });
+    return sendThreadMessage(threadId, { draftId, channel: settings.email.provider, automated: true, sendDomain, outboxId }, outboxAuthorization);
   },
   notify: notifier,
 });
@@ -713,7 +714,9 @@ async function pollGmailInbox() {
       const current = store.settings().email;
       if (current.provider !== 'gmail' || current.smtpUser !== email.smtpUser || current.imapEnabled === false) break;
       try {
-        await processInboundEmail({
+        if (msg.deliveryEvents) {
+          for (const event of msg.deliveryEvents) await handleEmailEvent(event);
+        } else await processInboundEmail({
           from: msg.from,
           to: msg.to,
           subject: msg.subject,
@@ -761,9 +764,9 @@ const autopilotDeps = {
 };
 startAutopilot(store, notifier, (line) => console.log(line), autopilotDeps);
 
-async function scheduleB2BThread(thread, draftId) {
+async function schedulePolicyThread(thread, draftId) {
   const mission = store.find('missions', thread.missionId);
-  if (mission?.b2bFocus) {
+  if (mission?.b2bFocus || mission?.campaignPolicy) {
     await outbox.scheduleMission(mission, { threadId: thread.id, draftId });
   }
 }
@@ -927,7 +930,9 @@ async function processXalapaMail() {
           await sendThreadMessage(thread.id, { draftId: draft.id, channel: 'gmail', automated: true }, xalapaAutoAuthorization);
         } catch (error) {
           if (draft.status === 'enviado') throw error;
-          if (error.status === 400 && /cupo|l[ií]mite|calentamiento/i.test(error.message)) {
+          if (error?.outboxPaused) {
+            job.state = 'queued';
+          } else if (error.status === 400 && /cupo|l[ií]mite|calentamiento/i.test(error.message)) {
             job.state = 'queued';
             job.retryAt = new Date(Date.now() + 3600000).toISOString();
           } else {
@@ -1285,7 +1290,7 @@ async function updateProduct(id, body) {
    Misiones
    ───────────────────────────────────────────────────────────── */
 
-async function createMission(body, { b2bFocus = false } = {}) {
+async function createMission(body, { b2bFocus = false, campaignPolicy = '' } = {}) {
   const settings = store.settings();
   const product = store.find('products', asString(body.productId));
   if (!product) throw new HttpError(400, 'Elegí un producto válido para lanzar la misión.');
@@ -1350,6 +1355,7 @@ async function createMission(body, { b2bFocus = false } = {}) {
     mode: demo ? 'demo' : 'real',
     manualReviewOnly: !demo && body.manualReviewOnly === true,
     ...(b2bFocus ? { b2bFocus } : {}),
+    ...(campaignPolicy ? { campaignPolicy } : {}),
     requestedMode,
     productId: product.id,
     priceSnapshot: { price: Number(effectiveProduct.price) || 0, currency: product.currency || 'USD', capturedAt: now, source: campaignPrice === null ? 'catalog' : 'campaign' },
@@ -1424,9 +1430,20 @@ function previewCatalogCampaign(body = {}) {
   const ready = items.filter(p => p.ready);
   const maxProspects = clamp(asNumber(body.maxProspects,8),1,40);
   const candidate = ready; // Todas las fichas aptas, sin tandas arbitrarias.
+  const policy = policyConfig(settings);
+  const automationReasons = [];
+  if (mode === 'real') {
+    if (body.manualReviewOnly === true) automationReasons.push('Elegiste revisión supervisada para esta campaña.');
+    if (!isPolicyActive(settings)) automationReasons.push('Activá la política única en Ajustes → Política única.');
+    const uncovered = finalMarkets.filter(market => !policy.markets.includes(market));
+    if (uncovered.length) automationReasons.push(`Usá los mercados autorizados o agregá ${uncovered.join(', ')} a tu política.`);
+    if (maxProspects > policy.maxProspects) automationReasons.push(`El límite autorizado es de ${policy.maxProspects} prospectos por lámpara. Reducí el alcance o actualizá tu política.`);
+    if (asString(body.tone || settings.mission.tone).trim() !== policy.tone) automationReasons.push('Usá el tono de la política vigente o actualizá la política.');
+  }
+  const campaignPolicy = mode === 'real' && !automationReasons.length ? settings.policy.fingerprint : '';
   const snapshot = crypto.createHash('sha256').update(JSON.stringify({
     items:items.map(x=>[x.productId,x.basePrice,x.price,x.currency,x.ready,x.reasons]),
-    markets:finalMarkets,mode, skipRecent:body.skipRecent===true, maxProspects, goal:body.goal,
+    markets:finalMarkets,mode,campaignPolicy,manualReviewOnly:body.manualReviewOnly===true, skipRecent:body.skipRecent===true, maxProspects, goal:body.goal,
     audience:body.audience, tone:body.tone, depth:body.depth,
     strategy:body.marketStrategy, campaign:body.name, notes:body.notes, cta:body.cta, valueProposition:body.valueProposition, budget:body.budget, buyerProfile:body.buyerProfile,
   })).digest('hex');
@@ -1437,11 +1454,15 @@ function previewCatalogCampaign(body = {}) {
   if (!candidate.length) reasons.push('No quedan lámparas listas en esta tanda.');
   return {
     canStart: !reasons.length, reasons, snapshot, mode, markets:finalMarkets,
+    automatedOutreach: Boolean(campaignPolicy), automationReasons,
     selected:items.length, eligible:ready.length, blocked:items.length-ready.length,
     overriddenPrices:items.filter(x=>x.priceOverridden).length,
     willStart:candidate.length, estimatedMaxProspects:candidate.length*maxProspects,
     candidates:candidate, skipped:items.filter(x=>!x.ready), remaining:0, parallelMissions:2,
-    note:'Todas las lámparas aptas se incorporan a la cola. Dos misiones simultáneas por defecto para estabilidad. Las misiones reales requieren un modelo de IA; la simulación solo se activa en modo Demo. No se envían mensajes; búsquedas e IA pueden consumir créditos.'
+    note: campaignPolicy
+      ? 'Los correos que cumplan la política vigente y tengan permiso documentado podrán salir automáticamente con un proveedor habilitado.'
+      : mode === 'demo' ? 'La demostración no envía mensajes.'
+        : 'Esta campaña requiere revisión supervisada. La vista previa detalla qué condiciones faltan para automatizarla.',
   };
 }
 
@@ -1475,6 +1496,7 @@ async function createCampaign(body = {}) {
     throw new HttpError(400, 'Los agentes solo funcionan con un modelo de IA. Configurá un proveedor en Ajustes → Inteligencia artificial, o elegí explícitamente el modo Demo para simular.');
   }
   const active = new Set(store.get('missions').filter((mission) => ['running', 'queued'].includes(mission.status)).map((mission) => mission.productId));
+  const campaignPolicy = plan.automatedOutreach ? settings.policy.fingerprint : '';
   const markets = [...new Set(asArray(body.markets).map((market) => asString(market).trim()).filter(Boolean))];
   const finalMarkets = markets.length ? markets : asArray(settings.mission.markets);
   if (!finalMarkets.length) {
@@ -1527,7 +1549,7 @@ async function createCampaign(body = {}) {
         depth,
         campaignId,
         campaignName,
-        manualReviewOnly: !demo,
+        manualReviewOnly: !demo && !campaignPolicy,
         maxProspects: clamp(asNumber(body.maxProspects,8),1,40),
         goal: asString(body.goal || 'conseguir-mayoristas').slice(0,100),
         budget: asNumber(body.budget,0),
@@ -1543,9 +1565,11 @@ async function createCampaign(body = {}) {
             : 'Usar el precio y la moneda del catálogo; no inventar descuentos.',
           galapaProductUrl(product.storefront?.url) ? `Ficha oficial de compra: ${product.storefront.url}` : '',
           'No inventar plazos, disponibilidad, homologaciones ni datos de contacto.',
-          'Todos los compradores y borradores necesitan revisión humana. No enviar automáticamente.',
+          campaignPolicy
+            ? 'Los envíos elegibles quedan sujetos a la política vigente y al consentimiento documentado.'
+            : 'Todos los compradores y borradores necesitan revisión humana. No enviar automáticamente.',
         ].join('\n'),
-      });
+      }, { campaignPolicy });
       created.push({ id: mission.id, name: mission.name, productId: product.id, markets: mission.markets, priceSnapshot: mission.priceSnapshot });
       active.add(product.id);
     } catch (error) {
@@ -1555,7 +1579,7 @@ async function createCampaign(body = {}) {
 
   if (!created.length) throw new HttpError(400, 'No se pudo crear ninguna misión. Revisá los productos y los mercados.');
   await store.activity('mission', `Campaña creada: ${campaignName}. ${created.length} misiones en cola.`, { campaignId });
-  return { campaignId, name: campaignName, strategy, markets: finalMarkets, created, skipped };
+  return { campaignId, name: campaignName, strategy, markets: finalMarkets, created, skipped, automatedOutreach: Boolean(campaignPolicy) };
 }
 
 async function retryMission(id) {
@@ -1872,12 +1896,16 @@ async function recordQuotePayment(threadId, quoteId, body) {
 }
 
 const sendingThreads = new Set();
+let pendingDispatch = Promise.resolve();
 
 async function sendThreadMessage(threadId, body, authorization) {
   if (sendingThreads.has(threadId)) throw new HttpError(409, 'Ya hay un envío en curso para esta conversación.');
   sendingThreads.add(threadId);
   try {
-    return await dispatchThreadMessage(threadId, body, authorization);
+    // Todas las vías consultan y consumen el mismo cupo de correo.
+    const dispatch = pendingDispatch.then(() => dispatchThreadMessage(threadId, body, authorization));
+    pendingDispatch = dispatch.catch(() => {});
+    return await dispatch;
   } finally {
     sendingThreads.delete(threadId);
   }
@@ -1911,6 +1939,20 @@ async function dispatchThreadMessage(threadId, body, authorization) {
 
   const settings = store.settings();
   const channel = ['resend', 'webhook', 'gmail', 'manual'].includes(body.channel) ? body.channel : 'manual';
+  if (authorization === outboxAuthorization) {
+    const item = outbox.items().find(entry => entry.id === body.outboxId);
+    if (item?.status !== 'pending' || !outbox.canAutopilot(settings) || channel !== settings.email.provider
+      || !permitsQueuedDraft(draft, store.find('missions', thread.missionId), settings)) {
+      throw Object.assign(new HttpError(409, 'El envío automático quedó pausado.'), { outboxPaused: true });
+    }
+    if (stageBlocksOutreach(thread, item.kind)
+      || (item.email && normalizeEmail(item.email) !== normalizeEmail(thread.contact?.email))) {
+      throw new HttpError(400, 'El borrador queda en revisión porque cambió la conversación o el destinatario.');
+    }
+  }
+  if (xalapaAutomated && (!settings.sales?.xalapaAuto || settings.email?.provider !== 'gmail')) {
+    throw Object.assign(new HttpError(409, 'El envío automático de Xalapa quedó pausado.'), { outboxPaused: true });
+  }
   /* Cada envío real se decide en un dominio verificado. La cola elige el
      dominio con menos uso del día; un envío manual respeta el remitente
      configurado. Nunca se mezcla un From de un dominio con un Message-ID de
@@ -2155,10 +2197,16 @@ async function handleEmailEvent(event) {
     const related = threads
       .filter((thread) => normalizeEmail(thread.contact?.email) === email)
       .sort((a, b) => threadSortKey(b) - threadSortKey(a));
-    const thread = related[0] || null;
+    const matchesOriginal = message => message.direction === 'out'
+      && event.messageId && String(message.messageId || '').replace(/^<|>$/g, '') === event.messageId;
+    const thread = event.strictMessageMatch
+      ? related.find(thread => (thread.messages || []).some(matchesOriginal))
+      : related[0] || null;
+    if (event.strictMessageMatch && !thread) continue;
 
     if (thread) {
-      const outbound = [...(thread.messages || [])].reverse().find((message) => (
+      const outbound = [...(thread.messages || [])].reverse().find((message) => event.strictMessageMatch
+        ? matchesOriginal(message) : (
         message.direction === 'out'
         && (
           (event.messageId && (message.messageId === event.messageId || message.providerId === event.messageId))
@@ -2803,24 +2851,22 @@ async function handle(req, res) {
 
   if (pathname === '/api/policy/approve' && method === 'POST') {
     const settings = store.settings();
-    const config = policyConfig(settings);
     const patch = approvePolicyPatch(settings);
     const saved = await store.saveSettings({ policy: patch }, { allowPolicyApproval: true });
-    const canAutopilot = (config.provider === 'resend' && Boolean(saved.email?.resendKey))
-      || (config.provider === 'webhook' && Boolean(saved.email?.webhookUrl));
     let autopilotEnabled = false;
-    if (canAutopilot && !saved.email?.autopilot) {
+    if (hasConfiguredEmailProvider(saved) && !saved.email?.autopilot) {
       await store.saveSettings({ email: { autopilot: true } });
       autopilotEnabled = true;
     }
     const applied = await applyPolicyToThreads(store, store.settings());
-    await outbox.enqueueAllReady({ b2bOnly: true });
+    const queue = await outbox.enqueueAllReady({ policyOnly: true });
     notifier.refresh();
     await store.activity('settings', `Política única aprobada (v${POLICY_VERSION}): ${applied.approved} borrador(es) aprobados sin revisión individual.`);
     json(res, 200, {
       ok: true,
       autopilotEnabled,
       applied,
+      queue,
       policy: policyStatus(store.settings(), store),
     });
     return;
@@ -2836,8 +2882,8 @@ async function handle(req, res) {
 
   if (pathname === '/api/policy/apply' && method === 'POST') {
     const applied = await applyPolicyToThreads(store, store.settings());
-    await outbox.enqueueAllReady({ b2bOnly: true });
-    json(res, 200, { ok: true, ...applied, policy: policyStatus(store.settings(), store) });
+    const queue = await outbox.enqueueAllReady({ policyOnly: true });
+    json(res, 200, { ok: true, ...applied, queue, policy: policyStatus(store.settings(), store) });
     return;
   }
 
@@ -3462,7 +3508,7 @@ async function handle(req, res) {
       target.updatedAt = nowISO();
       target.lastActivityAt = target.lastActivityAt || target.updatedAt;
       await store.set('threads', threads);
-      if (permissionGranted) await scheduleB2BThread(target);
+      if (permissionGranted) await schedulePolicyThread(target);
       json(res, 200, { thread: target });
       return;
     }
@@ -3620,6 +3666,7 @@ async function handle(req, res) {
           if (isSuppressed(thread.contact?.email, threadSuppressions(thread), thread.contact?.company)) {
             throw new HttpError(400, 'Ese contacto está en la lista de no contactar: no se puede aprobar un envío.');
           }
+          clearDraftApproval(draft);
           draft.approvedAt = nowISO();
           draft.approvedBy = 'dueño';
           draft.approvedReviewKind = draft.reviewKind || '';
@@ -3630,17 +3677,16 @@ async function handle(req, res) {
       }
       // Editar el texto de un borrador ya aprobado invalida la aprobación:
       // no se puede enviar un texto que el dueño no aprobó tal cual.
-      if (contentEdited && body.status === undefined && draft.approvedAt && draft.status === 'listo') {
+      if (contentEdited && !approved && draft.approvedAt && draft.status === 'listo') {
         draft.status = 'revisar';
         draft.reviewNote = 'El borrador cambió después de tu aprobación. Revisá el texto nuevo y aprobalo de nuevo.';
-        delete draft.approvedAt;
-        delete draft.approvedBy;
-        delete draft.approvedReviewKind;
+        clearDraftApproval(draft);
       }
+      if (['revisar', 'descartado'].includes(draft.status)) clearDraftApproval(draft);
       draft.updatedAt = nowISO();
       thread.updatedAt = nowISO();
       await store.set('threads', threads);
-      if (approved) await scheduleB2BThread(thread, draft.id);
+      if (approved) await schedulePolicyThread(thread, draft.id);
       json(res, 200, { draft, thread });
       return;
     }

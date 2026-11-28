@@ -1,4 +1,7 @@
-﻿const base = 'http://127.0.0.1:4399';
+﻿import { createServer } from 'node:http';
+import assert from 'node:assert/strict';
+
+const base = 'http://127.0.0.1:4399';
 
 async function waitUp() {
   for (let i = 0; i < 40; i += 1) {
@@ -393,6 +396,58 @@ if (!quoteThread) {
     method: 'PUT',
     body: JSON.stringify({ ai: { provider: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4.1-mini' } }),
   });
+}
+
+/* Dos conversaciones comparten el cupo del mismo remitente. */
+{
+  let deliveries = 0;
+  const webhook = createServer((req, res) => {
+    req.resume();
+    deliveries += 1;
+    setTimeout(() => {
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ id: 'test-delivery' }));
+    }, 175);
+  });
+  await new Promise(resolve => webhook.listen(0, '127.0.0.1', resolve));
+  try {
+    await api('/api/settings', {
+      method: 'PUT',
+      body: JSON.stringify({
+        email: {
+          provider: 'webhook',
+          webhookUrl: `http://127.0.0.1:${webhook.address().port}`,
+          sendDomains: [{ domain: 'cupo.test', from: 'ventas@cupo.test', dailyLimit: 1 }],
+        },
+      }),
+    });
+    const drafts = [];
+    for (const address of ['compras@local-a.test', 'compras@local-b.test']) {
+      const { threadId } = await api('/api/webhooks/email', {
+        method: 'POST',
+        body: JSON.stringify({ from: address, to: 'hola@lucian.test', subject: 'Consulta', text: 'Hola, quisiera saber más.' }),
+      });
+      await api(`/api/threads/${threadId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ acceptInbound: true }),
+      });
+      const { draft } = await api(`/api/threads/${threadId}/drafts`, {
+        method: 'POST',
+        body: JSON.stringify({ subject: 'Información de lámparas', body: 'Hola. Gracias por consultar por nuestras lámparas.' }),
+      });
+      drafts.push({ threadId, draftId: draft.id });
+    }
+    const sends = await Promise.allSettled(drafts.map(({ threadId, draftId }) => api(`/api/threads/${threadId}/send`, {
+      method: 'POST',
+      body: JSON.stringify({ draftId, channel: 'webhook' }),
+    })));
+    assert.equal(deliveries, 1);
+    assert.equal(sends.filter(send => send.status === 'fulfilled').length, 1);
+    assert.match(sends.find(send => send.status === 'rejected').reason.message, /cupo|límite/);
+    console.log('envíos concurrentes respetan el cupo de un remitente');
+  } finally {
+    await new Promise(resolve => webhook.close(resolve));
+  }
 }
 
 await api('/api/demo', { method: 'DELETE' });

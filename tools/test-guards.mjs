@@ -10,7 +10,7 @@ import {
   selectRelevantLearnings,
 } from '../lib/agents.mjs';
 import {
-  assertCanSend, buildEml, detectOptOut, isOptOutText, isSuppressed, parseEmailEvent, parseInbound, sentToday, stripQuotedText,
+  assertCanSend, buildEml, composeEmail, detectOptOut, isOptOutText, isSuppressed, parseEmailEvent, parseInbound, sentToday, stripQuotedText,
 } from '../lib/email.mjs';
 import { buildQuote, quoteNumber, quoteTotals, validUntilDate } from '../lib/quotes.mjs';
 
@@ -39,6 +39,25 @@ const settings = {
   email: { provider: 'manual', from: 'Lucian <hola@lucian.test>' },
 };
 const product = { id: 'prod_test', name: 'Aurora 01' };
+
+{
+  const contact = { contact: { email: 'compras@tienda.test', company: 'Tienda' } };
+  for (const sample of [
+    { subject: 'Apertura del mensaje', body: 'Hola [nombre]' },
+    { subject: 'Aurora para tu tienda', body: 'Hola {{company}}, te comparto Aurora.' },
+    { subject: 'Propuesta', body: 'Encaje: más de 60 años en Recoleta' },
+    { subject: 'Propuesta', body: '' },
+  ]) {
+    let rejected = false;
+    try { composeEmail(contact, sample, settings); } catch { rejected = true; }
+    ok(rejected, 'rechaza contenido sin completar antes de preparar el correo');
+  }
+  const ready = composeEmail(contact, {
+    subject: 'Ficha de Aurora',
+    body: 'Hola. Aurora mide [20 cm] y podés verla en https://lucian.test/aurora.',
+  }, settings);
+  ok(ready.text.includes('[20 cm]'), 'permite medidas entre corchetes y enlaces en un mensaje completo');
+}
 
 function buyer(nombre, email, extra = {}) {
   return {

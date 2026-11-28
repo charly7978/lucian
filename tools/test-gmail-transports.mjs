@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
-import { fetchNewEmails, readGmailInboxCursor } from '../lib/imap.mjs';
+import { fetchNewEmails, parseRawEmail, readGmailInboxCursor } from '../lib/imap.mjs';
 import { sendWithGmailSmtp, testGmailSmtp } from '../lib/smtp.mjs';
 import { maskSettings } from '../lib/store.mjs';
 
@@ -68,5 +68,48 @@ const cursor = fixture('* OK Gmail listo\r\n', command => {
 }, { binary: true });
 assert.equal(await readGmailInboxCursor({ user, appPassword }, cursor.connect), 0);
 assert.equal(cursor.commands.length, 2, 'Leer el cursor no abre correos existentes');
+
+const deliveryReport = (recipientFields, { replyId = 'lucian-original@example.test', originalId = replyId } = {}) => [
+  'From: Mail Delivery Subsystem <mailer-daemon@googlemail.com>',
+  'To: integration@example.test',
+  'Subject: Delivery Status Notification (Failure)',
+  'Message-ID: <delivery-report@googlemail.com>',
+  ...(replyId ? [`In-Reply-To: <${replyId}>`] : []),
+  'Auto-Submitted: auto-replied',
+  'Content-Type: multipart/report; boundary="delivery"; report-type=delivery-status',
+  '', '--delivery', 'Content-Type: text/plain', '',
+  'Address not found. This report is not a buyer asking about lamps.',
+  '--delivery', 'Content-Type: message/delivery-status', '',
+  'Reporting-MTA: dns; googlemail.com', '',
+  ...recipientFields,
+  '--delivery', 'Content-Type: text/rfc822-headers', '',
+  ...(originalId ? [`Message-ID: <${originalId}>`] : []),
+  'To: buyer@example.test', '', '--delivery--', '',
+].join('\r\n');
+const failedFields = [
+  'Final-Recipient: rfc822; buyer@example.test',
+  'Action: failed', 'Status: 5.1.1',
+  'Diagnostic-Code: smtp; 550 5.1.1 The email account does not exist.', '',
+];
+const failed = parseRawEmail(deliveryReport(failedFields));
+assert.deepEqual(failed.deliveryEvents, [{
+  kind: 'bounce', hard: true, emails: ['buyer@example.test'],
+  messageId: 'lucian-original@example.test', strictMessageMatch: true,
+  reason: 'smtp; 550 5.1.1 The email account does not exist.',
+}]);
+assert.equal(failed.replyAllowed, false, 'Un informe de entrega no permite respuesta automática');
+const delayed = parseRawEmail(deliveryReport([
+  'Final-Recipient: rfc822; buyer@example.test', 'Action: delayed', 'Status: 4.2.2', '',
+]));
+assert.equal(delayed.deliveryEvents[0].kind, 'delayed');
+assert.equal(delayed.deliveryEvents[0].hard, false, 'Un retraso no suprime una dirección');
+assert.deepEqual(parseRawEmail(deliveryReport(failedFields, {replyId:'unrelated@example.test', originalId:'original@example.test'})).deliveryEvents, []);
+assert.deepEqual(parseRawEmail(deliveryReport(failedFields, {replyId:'', originalId:''})).deliveryEvents, []);
+assert.deepEqual(parseRawEmail(deliveryReport(['Final-Recipient: rfc822; victim@example.test', 'Action: delayed', 'Status: 5.1.1', ''])).deliveryEvents, []);
+const ordinary = parseRawEmail([
+  'From: Buyer <buyer@example.test>', 'Subject: Consulta',
+  'Content-Type: text/plain', '', ...failedFields,
+].join('\r\n'));
+assert.equal(ordinary.deliveryEvents, undefined, 'Un texto común que menciona un rebote no se interpreta como informe de entrega');
 assert.notEqual(maskSettings({ email: { smtpPassword: appPassword } }).email.smtpPassword, appPassword);
-console.log('OK Gmail: autenticación SMTP realista, rechazo, envío, lectura IMAP por UID, UTF-8 y credencial enmascarada.');
+console.log('OK Gmail: SMTP, IMAP por UID, UTF-8, credencial enmascarada e informes de entrega correlacionados.');

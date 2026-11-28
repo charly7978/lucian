@@ -7,7 +7,7 @@ aprobación individual de cada borrador.
 ## Cómo se usa
 
 1. En **Ajustes → Correo**, configurá el proveedor de envío real (Resend con
-   dominio verificado, o webhook). Sin esto los borradores se aprueban solos
+   dominio verificado, Gmail con contraseña de aplicación, o webhook). Sin esto los borradores se aprueban solos
    pero nadie los envía.
 2. En **Ajustes → Misiones y Correo**, definí mercados, tono, prospectos por
    misión, límite diario y espaciado. Esa es tu política.
@@ -19,12 +19,14 @@ aprobación individual de cada borrador.
 
 Botones del panel:
 
-- **Aprobar / Reaprobar**: firma la política vigente. Si activás el piloto de
-  envío y el proveedor lo permite, también enciende el piloto automático.
-- **Aplicar a borradores existentes**: pasa por la política los borradores que
-  ya estaban en revisión, sin repetir misiones.
-- **Desactivar**: vuelve a la aprobación borrador por borrador. No toca lo ya
-  enviado ni las aprobaciones previas.
+- **Aprobar una vez**: firma la política, aplica sus reglas a los mensajes
+  existentes elegibles y los pone en cola. Con Gmail, Resend o webhook
+  configurados también activa el piloto de correo.
+- **Desactivar**: pausa los envíos pendientes sujetos a esa política.
+- La vista previa de cada campaña indica si usa la política vigente.
+  Su tono y sus mercados deben estar autorizados y sus prospectos por
+  lámpara deben respetar el límite aprobado. La vista previa explica
+  las diferencias que requieren actualizar la política.
 
 También hay API: `GET /api/policy`, `POST /api/policy/approve`,
 `POST /api/policy/apply`, `POST /api/policy/revoke`.
