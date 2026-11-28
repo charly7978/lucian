@@ -4,6 +4,7 @@ import fsSync from 'node:fs';
 process.env.LUCIAN_DATA_DIR = fsSync.mkdtempSync(path.join(os.tmpdir(), 'lucian-policy-test-'));
 
 import { Store } from '../lib/store.mjs';
+import { Outbox } from '../lib/outbox.mjs';
 import {
   AUTO_APPROVABLE_KINDS, POLICY_VERSION, applyPolicyToThreads, approvePolicyPatch,
   isPolicyActive, maybeAutoApproveDraft, policyConfig, policyFingerprint,
@@ -156,6 +157,92 @@ function thread(contact = { email: 'compras@hotel-ejemplo.com', company: 'Hotel 
   const after = store.settings();
   ok(after.policy.enabled === false && !after.policy.fingerprint, 'un PUT normal no activa la política');
   ok(after.policy.autoApproveKinds.length === AUTO_APPROVABLE_KINDS.length, 'los tipos auto-aprobables se conservan');
+}
+
+{
+  const settings = approved(baseSettings());
+  settings.email.autopilot = true;
+  const optedIn = thread({
+    email: 'compras@hotel-ejemplo.com',
+    permission: { status: 'opted_in', evidence: 'Solicitud de catálogo registrada', capturedAt: new Date().toISOString() },
+  });
+  optedIn.stage = 'nuevo';
+  optedIn.drafts = [
+    draft('conocimiento'),
+    draft('directorio', { id: 'human-approved', status: 'listo' }),
+  ];
+  maybeAutoApproveDraft(optedIn.drafts[0], optedIn, settings);
+  const noConsent = { ...thread(), id: 'thr_2', stage: 'nuevo', drafts: [
+    draft('conocimiento', { id: 'no-consent' }),
+  ] };
+  maybeAutoApproveDraft(noConsent.drafts[0], noConsent, settings);
+  const data = { threads: [optedIn, noConsent], outbox: [] };
+  const outbox = new Outbox({
+    store: { settings: () => settings, get: key => data[key], set: async (key, value) => { data[key] = value; } },
+    deliver: async () => { throw new Error('No debe intentar enviar con la política revocada'); },
+  });
+  const result = await outbox.enqueueAllReady({ policyOnly: true });
+  ok(result.queued === 1 && data.outbox[0].draftId === 'drf_1', 'encola el mensaje autorizado de una campaña común y exige permiso documentado');
+  ok((await outbox.enqueueAllReady({ policyOnly: true })).queued === 0, 'repetir la aplicación de la política no duplica la cola');
+  Object.assign(settings.policy, revokePolicyPatch());
+  await outbox.processQueue(settings);
+  ok(data.outbox[0].status === 'pending' && data.outbox[0].attempts === 0, 'revocar la política pausa el mensaje en cola sin intentar enviarlo');
+}
+
+{
+  const options = baseSettings();
+  options.email = { ...options.email, provider: 'gmail', smtpUser: 'ventas@mi-tienda.com', smtpPassword: 'prueba', autopilot: true };
+  options.policy.allowRedteamRisk = true;
+  let settings = approved(options);
+  const contact = thread({
+    email: 'compras@hotel-ejemplo.com',
+    permission: { status: 'opted_in', evidence: 'Solicitud de catálogo registrada', capturedAt: new Date().toISOString() },
+  });
+  const warning = draft('redteam', { id: 'riesgo' });
+  const buyer = draft('directorio', { id: 'comprador' });
+  const followup = draft('', { id: 'seguimiento', source: 'seguimiento', status: 'listo' });
+  const xalapa = draft('', { id: 'xalapa', source: 'propuesta Xalapa', status: 'listo', xalapaAuto: { state: 'queued' } });
+  const campaignDraft = draft('directorio', { id: 'campana' });
+  const campaignContact = { ...contact, id: 'campaign-thread', missionId: 'campaign', stage: 'nuevo', drafts: [campaignDraft] };
+  contact.stage = 'contactado';
+  contact.missionId = 'b2b';
+  contact.drafts = [warning, buyer, followup, xalapa];
+  for (const item of [warning, buyer]) maybeAutoApproveDraft(item, contact, settings);
+  maybeAutoApproveDraft(campaignDraft, campaignContact, settings);
+  const data = {
+    threads: [contact, campaignContact],
+    missions: [{ id: 'b2b', b2bFocus: true }, { id: 'campaign', campaignPolicy: settings.policy.fingerprint }],
+    outbox: [],
+    meta: {},
+  };
+  const delivered = [];
+  const store = {
+    settings: () => settings, get: key => data[key],
+    set: async (key, value) => { data[key] = value; },
+    setMeta: async patch => Object.assign(data.meta, patch),
+    activity: async () => {},
+  };
+  const outbox = new Outbox({ store, deliver: async ({ draftId }) => delivered.push(draftId) });
+  ok(outbox.canAutopilot() && !policyStatus(settings).warnings.length, 'Gmail configurado puede operar bajo la política');
+  ok(!outbox.canAutopilot({ ...settings, email: { ...settings.email, smtpPassword: '' } }), 'Gmail sin contraseña de aplicación no puede operar');
+  ok((await outbox.enqueueAllReady()).queued === 4, 'Gmail encola los borradores elegibles sin incorporar la cola dedicada de Xalapa');
+  for (const item of data.outbox) item.runAt = new Date(0).toISOString();
+  Object.assign(settings.policy, revokePolicyPatch());
+  await outbox.processQueue(settings);
+  ok(delivered.length === 0 && data.outbox.every(item => item.status === 'pending'), 'revocar también pausa los seguimientos de la política');
+  settings = approved({
+    ...settings,
+    email: { ...settings.email, followUps: false },
+    policy: { ...settings.policy, allowRedteamRisk: false },
+  });
+  await outbox.processQueue(settings);
+  ok(delivered.length === 0, 'una firma nueva no reactiva aprobaciones anteriores');
+  ok((await applyPolicyToThreads(store)).approved === 1, 'se reevalúan las aprobaciones vigentes bajo la nueva política');
+  ok(warning.status === 'revisar' && !warning.autoApproved && !warning.policyFingerprint, 'el riesgo ahora prohibido vuelve a revisión');
+  ok(buyer.status === 'listo' && buyer.policyFingerprint === settings.policy.fingerprint, 'el mensaje aún elegible recibe la firma nueva');
+  ok(campaignDraft.status === 'revisar', 'la campaña conserva como límite la política con la que se lanzó');
+  await outbox.processQueue(settings);
+  ok(delivered.join() === 'comprador', 'la cola despacha solo borradores elegibles con la política vigente');
 }
 
 for (const dir of dirs) {

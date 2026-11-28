@@ -446,14 +446,14 @@ function closeModal(silent = false) {
   }
 }
 
-function confirmAction({ title, message, details = '', confirmLabel = 'Confirmar', danger = false }) {
+function confirmAction({ title, message, details = '', confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', danger = false }) {
   return new Promise((resolve) => {
     confirmResolve = resolve;
     openModal({
       title,
       size: 'modal-sm',
       body: `<p style="font-size:13.5px;line-height:1.6;color:var(--ink-2)">${nl2br(message)}</p>${details ? `<div class="artifact-callout ${danger ? 'danger' : 'warn'} mt-3">${nl2br(details)}</div>` : ''}`,
-      footer: `<button class="btn btn-ghost" type="button" data-action="confirm-no">Cancelar</button>
+      footer: `<button class="btn btn-ghost" type="button" data-action="confirm-no">${esc(cancelLabel)}</button>
         <button class="btn ${danger ? 'btn-danger-solid' : 'btn-primary'}" type="button" data-action="confirm-yes">${esc(confirmLabel)}</button>`,
       onMount: () => { confirmResolve = resolve; },
     });
@@ -718,17 +718,22 @@ function renderPanel() {
   const products = arr(S.state.products).filter((product) => !product.demo);
   const available = products.filter((product) => product.status === 'listo' && product.storefront?.available).length;
   const threads = arr(S.state.threads).filter((thread) => !thread.demo && !thread.needsTriage);
-  const open = threads.filter((thread) => !thread.suppressed && !['ganado', 'perdido'].includes(thread.stage));
-  const drafts = open.reduce((total, thread) => total + num(thread.reviewCount), 0);
-  const replies = open.filter((thread) => thread.awaitingReply).length;
+  const open = threads.filter(isOpenSalesThread);
+  const drafts = threads.filter(thread => threadMatchesFilter(thread, 'revisar'))
+    .reduce((total, thread) => total + num(thread.reviewCount), 0);
+  const replies = threads.filter(threadNeedsReply).length;
   const sent = threads.reduce((total, thread) => total + num(thread.sentByProvider), 0);
-  const sales = num(S.state.sales?.sold);
-  const ready = open.filter((thread) => num(thread.draftCount) > 0).length;
+  const sales = arr(S.state.sales?.won).filter(sale => num(sale.paymentReceived) > 0).length;
+  const offerProduct = products.find(product => product.status === 'listo' && product.storefront?.available)
+    || products.find(product => product.status === 'listo' && !product.storefront);
+  const policy = S.state.policy || {};
+  const ready = threads.filter(thread => threadMatchesFilter(thread, 'listos')).length;
   const next = replies ? ['Responder consultas', '#/bandeja?filtro=responder']
+    : !policy.active ? ['Configurar aprobación única', '#/ajustes?tab=politica']
     : ready ? ['Abrir propuestas listas', '#/bandeja?filtro=listos']
     : drafts ? ['Revisar propuestas', '#/bandeja?filtro=revisar']
-    : threads.some((thread) => isSalesProspect(thread) && thread.stage === 'nuevo') ? ['Ver prospectos', '#/bandeja?filtro=prospectos']
-    : ['Abrir catálogo', '#/productos'];
+    : open.some((thread) => isSalesProspect(thread) && thread.stage === 'nuevo') ? ['Ver prospectos', '#/bandeja?filtro=prospectos']
+    : offerProduct ? null : ['Abrir catálogo', '#/productos'];
   const campaigns = arr(S.state.campaigns).filter((campaign) => !campaign.demo);
   const campaign = campaigns.find((item) => item.active || item.queued) || campaigns[0];
   const mission = arr(S.state.missions).find((item) => !item.demo && ['running', 'queued'].includes(item.status));
@@ -743,10 +748,22 @@ function renderPanel() {
     ['Artículos en venta', available, 'box', '#/productos'],
     ['Prospectos registrados', threads.filter(isSalesProspect).length, 'target', '#/bandeja?filtro=prospectos'],
     ['Envíos registrados por correo', sent, 'send', '#/bandeja?filtro=enviados'],
-    ['Ventas registradas', sales, 'dollar', '#/ventas'],
+    ['Pedidos con cobro registrado', sales, 'dollar', '#/ventas'],
   ];
 
   return `
+    <section class="panel home-campaign sales-next" aria-labelledby="sales-next-title">
+      <div class="home-heading">
+        <div>
+          <h2 class="section-title" id="sales-next-title">${replies ? 'Respondé a tus compradores' : 'Próximo paso'}</h2>
+          <p class="section-sub">${replies} por responder · ${ready} conversaciones con propuesta lista · ${drafts} propuestas por revisar</p>
+        </div>
+        ${next ? `<a class="btn btn-primary" href="${next[1]}">${next[0]} ${icon('arrowRight')}</a>`
+          : `<button class="btn btn-primary" type="button" data-action="offer-kit" data-id="${attr(offerProduct.id)}">Preparar una oferta ${icon('arrowRight')}</button>`}
+      </div>
+      ${replies && !policy.active ? '<p class="small mt-2"><a class="section-link" href="#/ajustes?tab=politica">Configurar aprobación única</a></p>' : ''}
+      ${arr(policy.warnings).map(warning => `<p class="small mt-2">${esc(warning)}</p>`).join('')}
+    </section>
     <section class="panel home-campaign sales-next" aria-labelledby="xalapa-title">
       <div class="home-heading">
         <div>
@@ -754,18 +771,9 @@ function renderPanel() {
           <p class="section-sub">Encontrá hoteles y comercios de iluminación en Buenos Aires y GBA.</p>
         </div>
         <div class="cluster">
-          <button class="btn btn-primary" type="button" data-action="xalapa-search" data-channel="todos">${icon('search')} Buscar compradores</button>
+          <button class="btn btn-ghost" type="button" data-action="xalapa-search" data-channel="todos">${icon('search')} Buscar compradores</button>
           <a class="btn btn-ghost" href="#/buscar?canal=directo">Venta directa y redes</a>
         </div>
-      </div>
-    </section>
-    <section class="panel home-campaign sales-next" aria-labelledby="sales-next-title">
-      <div class="home-heading">
-        <div>
-          <h2 class="section-title" id="sales-next-title">Próximo paso</h2>
-          <p class="section-sub">${replies} por responder · ${ready} conversaciones con propuesta lista · ${drafts} propuestas por revisar</p>
-        </div>
-        <a class="btn btn-ghost" href="${next[1]}">${next[0]} ${icon('arrowRight')}</a>
       </div>
     </section>
     <section class="home-summary" aria-label="Resumen de ventas">
@@ -1626,6 +1634,9 @@ function openCampaignModal(productIds = null, { galapa = false } = {}) {
   if (!products.length) { toast('Primero elegí alguna lámpara activa.', 'error'); return; }
   const settings = S.state.settings || {};
   const markets = galapa ? ['Argentina'] : arr(settings.mission?.markets).filter(Boolean);
+  const policy = S.state.policy;
+  const policyProspectLimit = policy?.active ? policy.config?.maxProspects : null;
+  const prospectLimit = Math.min(8, policyProspectLimit || 8);
   const goals = [
     ['conseguir-mayoristas','Conseguir mayoristas y tiendas de diseño'],
     ['vender-directo','Venta directa de piezas'],
@@ -1650,7 +1661,7 @@ function openCampaignModal(productIds = null, { galapa = false } = {}) {
   </div>`).join('');
   openModal({
     title: galapa ? 'Campaña del catálogo GALAPA' : 'Campaña de catálogo',
-    subtitle: `${products.length} lámpara${products.length === 1 ? '' : 's'} seleccionada${products.length === 1 ? '' : 's'} · todas las aptas en cola · aprobación previa`,
+    subtitle: `${products.length} lámpara${products.length === 1 ? '' : 's'} seleccionada${products.length === 1 ? '' : 's'} · todas las aptas en cola`,
     size: 'modal-lg',
     body: `<form id="campaign-form" autocomplete="off">
       <input type="hidden" name="productIds" value="${attr(products.map(p => p.id).join(','))}">
@@ -1667,7 +1678,7 @@ function openCampaignModal(productIds = null, { galapa = false } = {}) {
       <div class="form-grid">
         <div class="field full"><label>Valor real que queremos destacar</label><textarea class="textarea" name="valueProposition" rows="2" placeholder="Ej.: producción propia, series cortas, personalización según proyecto"></textarea><p class="field-hint">Solo indicá atributos comprobables. Los agentes no deben inventar certificaciones, materiales ni descuentos.</p></div>
         <div class="field full"><label>Qué le vamos a pedir al comprador</label><select class="select" name="cta"><option value="Solicitar permiso para compartir el catálogo">Pedir permiso para compartir catálogo</option><option value="Invitar a una reunión breve">Solicitar reunión breve</option><option value="Proponer muestras o presupuesto personalizado">Ofrecer muestras o presupuesto</option><option value="Consultar interés en una colección para distribución">Consultar interés en distribución</option></select></div>
-        <div class="field full"><label>Estilo de comunicación</label><select class="select" name="tone"><option value="cercano, experto, sin presión">Profesional y cercano</option><option value="sobrio y directo, sin vueltas">Directo y concreto</option><option value="cálido y narrativo, con historia">Narrativo y artesanal</option><option value="técnico y preciso, para estudios">Técnico para estudios de arquitectura</option></select></div>
+        <div class="field full"><label>Estilo de comunicación</label><select class="select" name="tone">${policy?.active ? '<option value="">Usar el tono de la política vigente</option>' : ''}<option value="cercano, experto, sin presión">Profesional y cercano</option><option value="sobrio y directo, sin vueltas">Directo y concreto</option><option value="cálido y narrativo, con historia">Narrativo y artesanal</option><option value="técnico y preciso, para estudios">Técnico para estudios de arquitectura</option></select></div>
         <div class="field full"><label>Restricciones e instrucciones especiales</label><textarea class="textarea" name="notes" rows="3" placeholder="No ofrecer instalación. No prometer fechas fijas. No ofrecer descuentos sin autorización."></textarea></div>
       </div></div>
       <div class="form-section"><p class="form-section-title">3. Precio exclusivo por lámpara (opcional)</p>
@@ -1685,12 +1696,12 @@ function openCampaignModal(productIds = null, { galapa = false } = {}) {
         <div class="field"><label>Modo</label><select class="select" name="mode"><option value="real">Real: busca compradores verificables</option><option value="demo">Demostración: sin investigación real</option></select></div>
         <div class="field"><label>Profundidad</label><select class="select" name="depth"><option value="rapida">Rápida</option><option value="estandar" selected>Estándar</option><option value="profunda">Profunda / red team</option></select></div>
         <div class="field full"><label>Cobertura de la campaña</label><p class="field-hint"><b>Se incluirán todas las lámparas seleccionadas y aptas.</b> No hay tandas de 6. Lucian las organiza en una cola que ejecuta dos misiones a la vez para no saturar los proveedores.</p></div>
-        <div class="field"><label>Prospectos por lámpara (motor: hasta 40)</label><input class="input" name="maxProspects" type="number" min="1" max="40" value="8"></div>
+        <div class="field"><label for="campaign-prospects">Prospectos por lámpara</label><input class="input" id="campaign-prospects" name="maxProspects" type="number" min="1" max="40" value="${prospectLimit}">${policyProspectLimit ? `<p class="field-hint">Hasta ${num(policyProspectLimit)} para enviar con la política vigente.</p>` : ''}</div>
         <div class="field"><label>Presupuesto de referencia en tu moneda (opcional)</label><input class="input" name="budget" type="number" min="0" step="0.01" value="0"><p class="field-hint">Anotación para agentes; no impone límites al proveedor de IA.</p></div>
         <div class="field full"><label><input type="checkbox" name="skipRecent" checked> Evitar repetir una lámpara prospectada durante los últimos 7 días</label><p class="field-hint">Desmarcá para permitir repetirla. Las solicitudes de baja y el control de destinatarios siguen vigentes.</p></div>
       </div></div>
       <div class="artifact-callout mt-3"><b>Productos elegidos (${products.length})</b>${esc(truncate(productsText,900))}. Los cambios de precios en esta ventana se aplican solamente a la campaña; podés usar Editar en Productos para cambiar los precios normales.</div>
-      <div class="artifact-callout mt-3"><b>Seguridad</b>La vista previa no consume créditos ni envía mensajes. Lanzar sí puede consumir IA y búsquedas. Todos los mensajes para clientes reales quedan pendientes de revisión; no se activa el piloto automático.</div>
+      <div class="artifact-callout mt-3"><b>Seguridad</b>La vista previa no consume créditos ni envía mensajes. Lanzar sí puede consumir IA y búsquedas. La vista previa indica si la campaña permite envíos según tu política vigente o si queda supervisada.</div>
     </form>`,
     footer: `<button class="btn btn-ghost" type="button" data-action="close-modal">Cancelar</button><button class="btn btn-primary" type="button" data-action="launch-campaign">Revisar campaña antes de lanzar</button>`,
     onMount: root => bindCampaignPricing(root),
@@ -1756,9 +1767,16 @@ function campaignResetPrices() {
   toast('Se restablecieron los precios del catálogo en esta campaña.');
 }
 
-async function launchCampaign() {
+async function launchCampaign(button) {
   const form = $('#campaign-form');
-  if (!form) return;
+  if (!form || button.disabled || !$('#campaign-prospects', form).reportValidity()) return;
+  const campaignDialog = form.closest('.modal-backdrop');
+  const restoreCampaign = () => {
+    const root = $('#modal-root');
+    if (root.firstElementChild) return;
+    root.append(campaignDialog);
+    document.body.classList.add('modal-open');
+  };
   const fd = new FormData(form);
   const markets = String(fd.get('markets') || '').split(/[,;\n]+/).map(m=>m.trim()).filter(Boolean);
   const body = {
@@ -1773,30 +1791,45 @@ async function launchCampaign() {
     skipRecent: fd.get('skipRecent') === 'on',
     budget: Number(fd.get('budget') || 0),
     maxProspects: Number(fd.get('maxProspects') || 8),
-    manualReviewOnly: true,
   };
+  button.disabled = true;
   try {
     body.priceOverrides = campaignPriceOverridesFromForm(form);
     const response = await api('/api/campaigns/preview', { method:'POST', body });
+    if (!form.isConnected) return;
     const plan = response.plan;
     const why = arr(plan.reasons).join(' · ');
     if (!plan.canStart) { toast(why || 'La campaña no puede iniciar.', 'error'); return; }
     const products = arr(plan.candidates).map(p=>`${p.name} — ${money(p.price,p.currency)}${p.priceOverridden ? ' (precio especial)' : ''}`).join('\n');
+    const skipped = arr(plan.skipped).map(item => `${item.name}: ${arr(item.reasons).join(', ')}`);
+    const delivery = [plan.note, ...arr(plan.automationReasons)].filter(Boolean).join('\n');
+    const details = [delivery, `Mercados: ${plan.markets.join(', ')}.${plan.mode === 'real' ? ' Pueden usarse créditos externos.' : ''}`, products];
+    if (skipped.length) details.push(`Lámparas excluidas\n${skipped.join('\n')}`);
+    const missionCount = `${plan.willStart} ${plan.willStart === 1 ? 'misión' : 'misiones'}`;
+    const selectedCount = `${plan.selected} ${plan.selected === 1 ? 'lámpara' : 'lámparas'}`;
     const confirmed = await confirmAction({
-      title: `Revisar ${plan.willStart} misiones`,
-      message: `Seleccionaste ${plan.selected} lámparas. Se prepararán ${plan.willStart} misiones en cola y se buscarán hasta ${plan.estimatedMaxProspects} prospectos potenciales, según resultados disponibles. ${plan.blocked} no cumplen las condiciones y se detallan aparte.`,
-      details: `${products}\n\nMercados: ${plan.markets.join(', ')}. Pueden usarse créditos externos. No se envían mensajes automáticamente.`,
-      confirmLabel: 'Autorizar misión supervisada',
+      title: `Revisar ${missionCount}`,
+      message: `Seleccionaste ${selectedCount}. En cola: ${missionCount}. Se buscarán hasta ${plan.estimatedMaxProspects} prospectos, según los resultados disponibles.${plan.blocked ? ` Exclusiones: ${plan.blocked}.` : ''}`,
+      details: details.join('\n\n'),
+      confirmLabel: 'Lanzar campaña',
+      cancelLabel: 'Volver a editar',
     });
+    restoreCampaign();
     if (!confirmed) return;
     const result = await api('/api/campaigns', { method:'POST', body:{ ...body, confirm:true, snapshot:plan.snapshot } });
-    closeModal(true);
+    if (form.isConnected) closeModal(true);
     S.ui.selectedProducts=[];
     await loadState({silent:true,render:false});
     navigate('#/misiones');
     const count=result.campaign?.created?.length || 0;
-    toast(`Campaña creada: ${count} misión${count===1?'':'es'} real${count===1?'':'es'}, con revisión obligatoria.`);
-  } catch (error) { toast(error.message || 'No se pudo iniciar la campaña.', 'error'); }
+    const launchMode = plan.mode === 'demo' ? 'demostración' : result.campaign?.automatedOutreach ? 'política de envío vigente' : 'revisión supervisada';
+    toast(`Campaña creada · ${count} en cola · ${launchMode}.`);
+  } catch (error) {
+    toast(error.message || 'No se pudo iniciar la campaña.', 'error');
+  } finally {
+    button.disabled = false;
+    if (form.isConnected) button.focus();
+  }
 }
 
 function openPublicCatalogModal() {
@@ -2957,16 +2990,25 @@ function isSalesProspect(thread) {
   return !thread.demo && (Boolean(thread.missionId) || thread.source === 'Prospección Xalapa');
 }
 
+function isOpenSalesThread(thread) {
+  return !thread.demo && !thread.needsTriage && !thread.suppressed && !thread.optOut
+    && !['ganado', 'perdido'].includes(thread.stage);
+}
+
+function threadNeedsReply(thread) {
+  return isOpenSalesThread(thread) && Boolean(thread.awaitingReply);
+}
+
 function threadMatchesFilter(thread, filter) {
   if (filter === 'sin-clasificar') return Boolean(thread.needsTriage);
   if (thread.needsTriage) return false;
-  if (filter === 'listos') return !thread.demo && !thread.suppressed && num(thread.draftCount) > 0;
+  if (filter === 'listos') return !thread.demo && !thread.suppressed && !thread.optOut && num(thread.draftCount) > 0;
   if (filter === 'enviados') return !thread.demo && num(thread.sentByProvider) > 0;
   if (filter === 'prospectos') return isSalesProspect(thread);
   if (filter === 'calientes') return ['interesado', 'negociando'].includes(thread.stage);
-  if (filter === 'responder') return !thread.demo && !thread.suppressed && !['ganado', 'perdido'].includes(thread.stage) && Boolean(thread.awaitingReply);
+  if (filter === 'responder') return threadNeedsReply(thread);
   if (filter === 'borradores') return num(thread.draftCount) > 0;
-  if (filter === 'revisar') return !thread.demo && !thread.suppressed && num(thread.reviewCount) > 0;
+  if (filter === 'revisar') return !thread.demo && !thread.suppressed && !thread.optOut && num(thread.reviewCount) > 0;
   if (filter === 'ventas') return thread.stage === 'ganado';
   if (filter === 'nuevos') return thread.stage === 'nuevo';
   return true;
@@ -2985,8 +3027,8 @@ function filteredThreads() {
   });
   // Lo que necesita tu decisión va primero: respuestas reales y borradores por aprobar.
   return base.sort((a, b) => {
-    const ra = (a.awaitingReply ? 1000 : 0) + (num(a.reviewCount) > 0 ? 500 : 0) + num(a.score);
-    const rb = (b.awaitingReply ? 1000 : 0) + (num(b.reviewCount) > 0 ? 500 : 0) + num(b.score);
+    const ra = (threadNeedsReply(a) ? 1000 : 0) + (num(a.reviewCount) > 0 ? 500 : 0) + num(a.score);
+    const rb = (threadNeedsReply(b) ? 1000 : 0) + (num(b.reviewCount) > 0 ? 500 : 0) + num(b.score);
     if (rb !== ra) return rb - ra;
     return new Date(b.lastActivityAt || 0) - new Date(a.lastActivityAt || 0);
   });
@@ -5101,9 +5143,9 @@ function settingsPolicyHTML() {
     </div>
     <div class="form-section">
       <div class="cluster">
-        <button class="btn btn-primary" type="button" data-action="policy-approve">${icon('wand')} ${active ? 'Reaprobar política' : 'Aprobar política'}</button>
-        <button class="btn btn-ghost" type="button" data-action="policy-apply">${icon('refresh')} Aplicar a borradores existentes</button>
-        <button class="btn btn-ghost" type="button" data-action="policy-revoke">${icon('shield')} Desactivar</button>
+        ${active
+          ? `<button class="btn btn-ghost" type="button" data-action="policy-revoke">${icon('shield')} Desactivar</button>`
+          : `<button class="btn btn-primary" type="button" data-action="policy-approve">${icon('wand')} ${changed ? 'Aprobar cambios' : 'Aprobar una vez'}</button>`}
       </div>
     </div>`;
 }
@@ -5151,7 +5193,7 @@ function settingsEmailHTML() {
       <p class="form-section-title">Piloto automático · opcional</p>
       <p class="form-section-sub">Cuando lo activás, Lucian envía solo los borradores que ya pasaron cumplimiento y red team, respetando el límite diario y el calentamiento. Si algo no cuadra, ese mensaje se detiene y te avisa.</p>
       <div class="form-grid">
-        <div class="field full"><label class="switch"><input type="checkbox" name="emailAutopilot" ${email.autopilot ? 'checked' : ''}><span class="track"></span><span>Enviar automáticamente los borradores listos</span></label><p class="field-hint">Requiere Resend o webhook. En modo manual no se activa: marcar como enviado sin enviar sería un engaño.</p></div>
+        <div class="field full"><label class="switch"><input type="checkbox" name="emailAutopilot" ${email.autopilot ? 'checked' : ''}><span class="track"></span><span>Enviar automáticamente los borradores listos</span></label><p class="field-hint">Requiere Gmail con envío configurado, Resend o un webhook de envío.</p></div>
         <div class="field"><label for="email-spacing">Minutos entre envíos</label><input class="input" id="email-spacing" name="autopilotSpacingMin" type="number" min="1" max="120" value="${attr(email.autopilotSpacingMin || 5)}"><p class="field-hint">Un ritmo humano reduce el riesgo de spam.</p></div>
         <div class="field"><label class="switch" style="margin-top:24px"><input type="checkbox" name="emailFollowUps" ${email.followUps !== false ? 'checked' : ''}><span class="track"></span><span>Preparar seguimientos</span></label><p class="field-hint">Día 4 y día 10. Se detienen si hay respuesta o baja.</p></div>
         <div class="field"><label class="switch" style="margin-top:24px"><input type="checkbox" name="emailPostSales" ${email.postSales !== false ? 'checked' : ''}><span class="track"></span><span>Postventa (fidelización)</span></label><p class="field-hint">Al marcar ganado: agradecimiento al día 3, feedback al día 30 y reorden al día 90. Sin piloto quedan “Por aprobar”.</p></div>
@@ -5170,7 +5212,7 @@ function settingsEmailHTML() {
     ${testResultBox('resend')}
     ${testResultBox('email')}
     <div class="artifact-callout ${email.autopilot ? 'warn' : ''} mt-3"><b>${email.autopilot ? 'El piloto automático está activo' : 'Nada se envía solo'}</b>${email.autopilot ? 'Solo salen borradores aprobados por las guardas, con cupo y pausas. Podés apagarlo en cualquier momento.' : 'Cada mensaje pasa por tu revisión. Los contactos de ejemplo terminan en example.com y están bloqueados para envíos reales.'}</div>`;
-  return settingsForm('correo', 'Cómo salen los mensajes', 'Empezá en manual. Cuando tengas dominio propio y confianza, conectá Resend o tu webhook.', body, 'El cupo se controla por dominio de envío; los envíos manuales no lo consumen.');
+  return settingsForm('correo', 'Cómo salen los mensajes', 'Elegí Gmail, Resend o tu webhook para enviar desde Lucian.', body, 'El cupo se controla por dominio de envío; los envíos manuales no lo consumen.');
 }
 
 function settingsNotifyHTML() {
@@ -6288,9 +6330,7 @@ async function approveUniquePolicy() {
   try {
     const result = await api('/api/policy/approve', { method: 'POST' });
     await refreshAfterPolicy();
-    toast(result.autopilotEnabled
-      ? 'Política aprobada y piloto de envío activado.'
-      : `Política aprobada: ${num(result.applied?.approved)} borradores aprobados. Revisá Correo para activar el envío.`);
+    toast(`Política aprobada. ${num(result.queue?.queued)} mensajes puestos en cola. ${result.queue?.reason || ''}`.trim());
   } catch (error) {
     toast(error.message, 'error');
   }
@@ -6299,7 +6339,7 @@ async function approveUniquePolicy() {
 async function revokeUniquePolicy() {
   const confirmed = await confirmAction({
     title: 'Desactivar política única',
-    message: 'Volvés a aprobar cada borrador en la Bandeja. Los correos ya enviados no se tocan y los borradores auto-aprobados mantienen su aprobación.',
+    message: 'Volvés a aprobar cada borrador en la Bandeja. Los envíos pendientes sujetos a la política quedan pausados.',
     confirmLabel: 'Desactivar',
     danger: true,
   });
@@ -6308,16 +6348,6 @@ async function revokeUniquePolicy() {
     await api('/api/policy/revoke', { method: 'POST' });
     await refreshAfterPolicy();
     toast('Política única desactivada.');
-  } catch (error) {
-    toast(error.message, 'error');
-  }
-}
-
-async function applyUniquePolicy() {
-  try {
-    const result = await api('/api/policy/apply', { method: 'POST' });
-    await refreshAfterPolicy();
-    toast(`${num(result.approved)} borrador(es) aprobados por la política vigente.`);
   } catch (error) {
     toast(error.message, 'error');
   }
@@ -6402,14 +6432,13 @@ async function handleAction(action, el) {
       }
       return;
     }
-    case 'launch-campaign': await launchCampaign(); return;
+    case 'launch-campaign': await launchCampaign(el); return;
     case 'stop-campaign-pending': await stopCampaignPending(el.dataset.id); return;
     case 'campaign-apply-percent': campaignSetPercent(); return;
     case 'campaign-reset-prices': campaignResetPrices(); return;
     case 'launch-supervised-agents': await launchSupervisedAgents(); return;
     case 'policy-approve': await approveUniquePolicy(); return;
     case 'policy-revoke': await revokeUniquePolicy(); return;
-    case 'policy-apply': await applyUniquePolicy(); return;
     case 'edit-product': openProductModal(el.dataset.id); return;
     case 'delete-product': await deleteProduct(el.dataset.id); return;
     case 'save-product': await saveProduct(); return;

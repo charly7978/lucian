@@ -43,8 +43,25 @@ try {
   assert.equal(prev.remaining,0);
   assert.equal(prev.estimatedMaxProspects,5400);
   assert.equal(prev.markets.length,7);
+  assert.equal(prev.automatedOutreach,false);
   assert.ok(!prev.canStart,'Sin IA configurada solo se puede previsualizar, no iniciar');
   await request('/api/campaigns',{...body, confirm:true,snapshot:prev.snapshot},409);
+  const policySettings = await fetch(origin+'/api/settings', {
+    method:'PUT', headers:{'content-type':'application/json'},
+    body:JSON.stringify({mission:{markets:['Argentina']}}),
+  });
+  assert.equal(policySettings.status,200);
+  await request('/api/policy/approve',{});
+  const covered = {...body,markets:['Argentina'],maxProspects:8};
+  const approvedPlan = (await request('/api/campaigns/preview',covered)).plan;
+  assert.equal(approvedPlan.automatedOutreach,true);
+  const outsidePolicy = (await request('/api/campaigns/preview',{...covered,markets:['España'],maxProspects:40})).plan;
+  assert.equal(outsidePolicy.automatedOutreach,false);
+  assert.ok(outsidePolicy.automationReasons.some(reason=>reason.includes('España')));
+  assert.ok(outsidePolicy.automationReasons.some(reason=>reason.includes('prospectos')));
+  assert.equal((await request('/api/campaigns/preview',{...covered,manualReviewOnly:true})).plan.automatedOutreach,false);
+  await request('/api/policy/revoke',{});
+  assert.notEqual((await request('/api/campaigns/preview',covered)).plan.snapshot,approvedPlan.snapshot);
   assert.equal((await request('/api/missions')).missions.length,0);
   const pricePreview=(await request('/api/products/bulk/preview',{productIds:ids,action:'percent-price',value:300})).plan;
   assert.equal(pricePreview.count,135);
