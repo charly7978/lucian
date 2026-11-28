@@ -17,10 +17,12 @@ assert.equal(supervisedMissionPreflight({...data, aiReady:false}).canStart, fals
 assert.equal(supervisedMissionPreflight({...data, settings:{mission:{markets:[]}}}).canStart, false);
 assert.equal(supervisedMissionPreflight({...data, searchInfo:{provider:'none',ready:true}}).canStart, false);
 assert.equal(supervisedMissionPreflight({...data, searchInfo:{}}).canStart, false);
-let recent = {productId:'A',demo:false,status:'done',createdAt: new Date(now-2*86400000).toISOString()};
+const recent = {productId:'A',demo:false,status:'done',markets:['Argentina'],createdAt: new Date(now-2*86400000).toISOString()};
 plan = supervisedMissionPreflight({...data, missions:[recent]});
 assert.equal(plan.candidate.id, 'B');
-plan = supervisedMissionPreflight({...data, missions:[{...recent,status:'running'}]});
+assert.equal(plan.recent, 1);
+assert.equal(supervisedMissionPreflight({...data, missions:[{...recent, markets: undefined}]}).candidate.id, 'B');
+plan = supervisedMissionPreflight({...data, missions:[{...recent,status:'running',markets:['España']}]});
 assert.equal(plan.canStart, false);
 assert.ok(plan.reasons.some(x => x.includes('Ya hay una misión')));
 plan = supervisedMissionPreflight({...data, missions:[{...recent,createdAt:new Date(now-8*86400000).toISOString()}]});
@@ -31,7 +33,18 @@ assert.equal(supervisedMissionPreflight({...data,products:[product('C',{photos:[
 assert.ok(plan.guarantee.includes('NO envía'));
 console.log('OK: preflight IA, busqueda, mercados, fichas, misiones activas y deduplicacion por 7 dias.');
 
-const automatic = { ...data, settings: { mission: { scheduledB2B: true, markets: ['Argentina', 'España'], maxProspects: 6 } } };
+const automatic = {
+  ...data,
+  missions: ['A', 'B'].map(productId => ({ ...recent, productId, markets: ['España', ' Mexico ', 'Estados Unidos'] })),
+  settings: { mission: { scheduledB2B: true, markets: ['España', 'México', 'Estados Unidos', 'Argentina'], maxProspects: 6 } },
+};
+plan = supervisedMissionPreflight(automatic);
+assert.equal(plan.eligible, 2);
+assert.equal(plan.recent, 0);
+assert.deepEqual(plan.markets, ['Argentina']);
+assert.deepEqual(scheduledB2BPlan(automatic).markets, ['Argentina']);
+const argentinaCovered = { ...automatic, missions: [...automatic.missions, recent, { ...recent, productId: 'B' }] };
+assert.equal(scheduledB2BPlan(argentinaCovered).canStart, false);
 assert.deepEqual(scheduledB2BPlan(data), { enabled: false });
 assert.equal(scheduledB2BPlan(automatic, new Date(now - 3600000).toISOString()).canStart, false);
 assert.equal(scheduledB2BPlan({ ...automatic, aiReady: false }).canStart, false);
